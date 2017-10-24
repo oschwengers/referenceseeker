@@ -1,5 +1,5 @@
 # ReferenceSeeker: Fast determination of reference genomes.
-Author: Oliver Schwengers (oliver.schwengers@computatinal.bio.uni-giessen.de)
+Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 
 
 ## Contents
@@ -8,7 +8,7 @@ Author: Oliver Schwengers (oliver.schwengers@computatinal.bio.uni-giessen.de)
 - Installation
 - Usage
 - Examples
-- Database
+- Databases
 - Dependencies
 - Citation
 
@@ -41,10 +41,10 @@ tab separated to STDOUT comprising the following columns:
 
 
 ## Installation
-To setup refseekr just do the followng:
+To setup ReferenceSeeker just do the following:
 1. clone the latest version of the repository
-2. set REFERENCE_SEEKER_HOME environment variable to the repository directory
-3. download and extract the database or create it yourself
+2. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
+3. download and extract the databases or create one yourself
 
 Example:
 ```
@@ -72,22 +72,28 @@ Usage:
 ## Examples
 Simple:
 ```
-refseekr --db <REFERENCE_SEEKER_DB> --genome <GENOME>
+referenceseekr.py --db <REFERENCE_SEEKER_DB> --genome <GENOME>
 ```
 
 Expert: creating scaffolds with verbose output using defined # of CPUs:
 ```
-refseekr --db <REFERENCE_SEEKER_DB> --genome <GENOME> --scaffolds --output scaffolds.fasta --verbose --cpus 8
+referenceseekr.py --db <REFERENCE_SEEKER_DB> --genome <GENOME> --scaffolds --output scaffolds.fasta --verbose --cpus 8
 ```
 
 With Docker:
 ```
-docker pull oschwengers/refseekr:latest
-docker run -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseekr:latest --genome <GENOME>
+docker pull oschwengers/referenceseekr:latest
+docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseekr:latest --genome <GENOME>
+```
+
+With Docker shell script:
+```
+docker pull oschwengers/referenceseekr:latest
+referenceseekr.sh <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 
-## Database
+## Databases
 ReferenceSeeker depends on custom kmer databases build on NCBI RefSeq as well as
 finished reference genomes in fasta format.
 These databases can be downloaded HERE: (type, size zipped, size unzipped)
@@ -122,4 +128,4 @@ ReferenceSeeker has been tested against aforementioned versions.
 
 
 ## Citation
-Manuscript is submitted for publication.
+Manuscript is in preparation.
