@@ -200,9 +200,9 @@ results = sorted( tmp_results, key=lambda k: -(k['ani']*k['conservedDna']) )
 
 # print results to STDOUT
 if( args.verbose ): print( 'ANIs:' )
-if( args.scaffolds  and  len(results) > 20 ): results = results[:20] # reduce # of references to 20
 for result in results:
-    print( '%s\t%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['dist'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
+    print( '%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
+    #print( '%s\t%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['dist'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
 
 
 # create scaffolds based on draft genome and detected references
@@ -210,9 +210,10 @@ if( args.scaffolds ):
     if( args.verbose ): print( 'create scaffolds...' )
     # copy first 20 references to tmp file
     tmpDir = tempfile.mkdtemp()
+    if( len(results) > 20 ): results = results[:20]
     for result in results:
         os.symlink( dbPath + '/' + result['id'] + '.fna', tmpDir + '/' + result['id'] + '.fna' )
-    os.putenv( 'PATH', REFERENCE_SEEKER_HOME+'/share/mummer:' + os.getenv( 'PATH' ) )
+    os.putenv( 'PATH', REFERENCE_SEEKER_HOME+'/share/mummer/:' + os.getenv( 'PATH' ) )
     sp.check_call( [ 'java', '-jar', REFERENCE_SEEKER_HOME+'/share/medusa/medusa.jar',
         '-f', tmpDir,
         '-i', genomePath, # assembled alignments
@@ -229,14 +230,15 @@ if( args.scaffolds ):
 
     # parse MeDuSa output and print results
     medusaResultPath = genomePath + '_SUMMARY'
-    with open( medusaResultPath, 'r' ) as medusaResultFile:
-        medusaResult = medusaResultFile.read()
-        mg = re.search( 'singletons = (\d+), multi-contig scaffold = (\d+)', medusaResult )
-        noContigs   = mg.group(1)
-        noScaffolds = mg.group(2)
-        mg = re.search( 'from (\d+) initial fragments', medusaResult )
-        noInitContigs = mg.group(1)
-        if( args.verbose ): print( '\tordered ' + noInitContigs + ' initial contigs' )
-        if( args.verbose ): print( '\t# new scaffolds:' + noScaffolds )
-        if( args.verbose ): print( '\t# new contigs:' + noContigs )
-    os.remove( medusaResultPath )
+    if( os.path.isfile( medusaResultPath ) ):
+        with open( medusaResultPath, 'r' ) as medusaResultFile:
+            medusaResult = medusaResultFile.read()
+            mg = re.search( 'singletons = (\d+), multi-contig scaffold = (\d+)', medusaResult )
+            noContigs   = mg.group(1)
+            noScaffolds = mg.group(2)
+            mg = re.search( 'from (\d+) initial fragments', medusaResult )
+            noInitContigs = mg.group(1)
+            if( args.verbose ): print( '\tordered ' + noInitContigs + ' initial contigs' )
+            if( args.verbose ): print( '\t# new scaffolds:' + noScaffolds )
+            if( args.verbose ): print( '\t# new contigs:' + noContigs )
+        os.remove( medusaResultPath )
