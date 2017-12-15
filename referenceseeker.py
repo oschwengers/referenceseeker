@@ -116,7 +116,7 @@ def compute_ani( refGenome ):
     genomeLength = 0
     for fm in dnaFragments.values():
         genomeLength += fm['length']
-    conservedDna = float(alignmentSum) / float(genomeLength)
+    conservedDna = (float(alignmentSum) / float(genomeLength)) if genomeLength > 0 else 0
 
     # calc average nucleotide identity
     aniMatches = 0
@@ -125,7 +125,7 @@ def compute_ani( refGenome ):
         if( ((float(fm['alignmentLength']-fm['noNonIdentities'])/float(fm['length'])) > 0.3 )  and  ( (float(fm['alignmentLength'])/float(fm['length'])) >= 0.7) ):
             niSum += float(fm['alignmentLength']-fm['noNonIdentities'])/float(fm['alignmentLength'])
             aniMatches += 1
-    ani = 0 if aniMatches == 0 else niSum / float(aniMatches)
+    ani = (niSum / float(aniMatches)) if aniMatches > 0 else 0
 
     shutil.rmtree( tmpDir )
 
