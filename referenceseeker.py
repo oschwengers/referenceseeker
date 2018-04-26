@@ -17,6 +17,7 @@ parser.add_argument( '--genome', '-g', required=True, help='Target draft genome'
 parser.add_argument( '--scaffolds', '-s', action='store_const', default=False, const=True, help='Build scaffolds via MeDuSa (Bosi, Donati et al. 2015) based on detected references' )
 parser.add_argument( '--output', '-o', required=False, help='Output fasta file for built scaffolds' )
 parser.add_argument( '--cpus', '-c', required=False, type=int, help='Number of cpus to use (default = all available)' )
+parser.add_argument( '--unfiltered', '-u', action='store_const', default=False, const=True, help='Skip kmer prefilter' )
 parser.add_argument( '--verbose', '-v', action='store_const', default=False, const=True, help='Print verbose information' )
 args = parser.parse_args()
 
@@ -46,6 +47,9 @@ if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPat
 
 noCpus = int(args.cpus) if args.cpus else mp.cpu_count()
 if( args.verbose ): print( '# cpus: ' + str(noCpus) )
+
+if( args.unfiltered ): __MASH_THRESHOLD__ = '1.0'
+if( args.verbose ): print( 'kmer prefilter threshold: ' + __MASH_THRESHOLD__ )
 
 fhFNULL = open( os.devnull, 'w' )
 
