@@ -9,6 +9,7 @@ import tempfile
 import subprocess as sp
 from Bio import SeqIO
 import multiprocessing as mp
+from itertools import repeat
 
 
 parser = argparse.ArgumentParser( description='Fast determination of finished reference genomes.' )
@@ -23,6 +24,7 @@ args = parser.parse_args()
 
 
 __MASH_THRESHOLD__ = '0.01'
+__MIN_FRAGMENT_SIZE__ = 100
 
 
 # check parameters & environment variables
@@ -53,29 +55,9 @@ if( args.verbose ): print( 'kmer prefilter threshold: ' + __MASH_THRESHOLD__ )
 
 fhFNULL = open( os.devnull, 'w' )
 
-def compute_ani( refGenome ):
+def compute_ani( dnaFragmentsPath, dnaFragments, refGenome ):
     reference = dbPath + '/' + refGenome['id'] + '.fna'
-    # build and write DNA fragemnts of length 1020
-    dnaFragmentIdx = 1
-    dnaFragments = {}
     tmpDir = tempfile.mkdtemp()
-    dnaFragmentsPath = tmpDir + '/dna-fragments.fasta'
-    with open( dnaFragmentsPath, 'w' ) as fhDnaFragmentsPath:
-        for record in SeqIO.parse( refGenome['query'], 'fasta' ):
-            sequence = record.seq
-            while( len(sequence) > 1020 ):
-                dnaFragment = sequence[:1020]
-                fhDnaFragmentsPath.write( '>' + str(dnaFragmentIdx) + '\n' )
-                fhDnaFragmentsPath.write( str(dnaFragment) + '\n' )
-                dnaFragments[ dnaFragmentIdx ] = { 'id': dnaFragmentIdx, 'length': len( dnaFragment ) }
-                sequence = sequence[1020:]
-                dnaFragmentIdx += 1
-            dnaFragment = sequence
-            fhDnaFragmentsPath.write( '>' + str(dnaFragmentIdx) + '\n' )
-            fhDnaFragmentsPath.write( str(dnaFragment) + '\n' )
-            dnaFragments[ dnaFragmentIdx ] = { 'id': dnaFragmentIdx, 'length': len( dnaFragment ) }
-            sequence = sequence[1020:]
-            dnaFragmentIdx += 1
 
     # perform global alignments via nucmer
     sp.check_call( [ REFERENCE_SEEKER_HOME + '/share/mummer/nucmer',
@@ -183,13 +165,35 @@ with open( dbPath + '/db.tsv', 'r' ) as fhDbPath:
             cols = line.strip().split( '\t' )
             accessionId = cols[0]
             if( accessionId in accessionIds ):
-                refGenomes.append( { 'id': accessionId, 'tax': cols[1], 'name': cols[2], 'query': genomePath, 'dist': mashDistances[ accessionId ] } )
+                refGenomes.append( { 'id': accessionId, 'tax': cols[1], 'name': cols[2], 'dist': mashDistances[ accessionId ] } )
+
+
+# Build dna fragments
+dnaFragments = {}
+dnaFragmentsPath = cwdPath + '/dna-fragments.fasta'
+dnaFragmentIdx = 1
+with open( dnaFragmentsPath, 'w' ) as fhDnaFragmentsPath:
+    for record in SeqIO.parse( genomePath, 'fasta' ):
+        sequence = record.seq
+        while( len(sequence) > (1020 + __MIN_FRAGMENT_SIZE__) ): # forestall fragments shorter than MIN_FRAGMENT_SIZE
+            dnaFragment = sequence[:1020]
+            fhDnaFragmentsPath.write( '>' + str(dnaFragmentIdx) + '\n' )
+            fhDnaFragmentsPath.write( str(dnaFragment) + '\n' )
+            dnaFragments[ dnaFragmentIdx ] = { 'id': dnaFragmentIdx, 'length': len( dnaFragment ) }
+            sequence = sequence[1020:]
+            dnaFragmentIdx += 1
+        dnaFragment = sequence
+        fhDnaFragmentsPath.write( '>' + str(dnaFragmentIdx) + '\n' )
+        fhDnaFragmentsPath.write( str(dnaFragment) + '\n' )
+        dnaFragments[ dnaFragmentIdx ] = { 'id': dnaFragmentIdx, 'length': len( dnaFragment ) }
+        sequence = sequence[1020:]
+        dnaFragmentIdx += 1
 
 
 # Copy genomes, extract them and build ANI
 if( args.verbose ): print( 'compute ANIs...' )
 pool = mp.Pool( noCpus )
-results = pool.map( compute_ani, refGenomes )
+results = pool.starmap( compute_ani, zip(repeat(dnaFragmentsPath), repeat(dnaFragments), refGenomes) )
 pool.close()
 pool.join()
 
