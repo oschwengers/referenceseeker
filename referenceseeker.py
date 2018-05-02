@@ -12,7 +12,8 @@ import multiprocessing as mp
 from itertools import repeat
 
 
-parser = argparse.ArgumentParser( description='Fast determination of finished reference genomes.' )
+parser = argparse.ArgumentParser( prog='ReferenceSeeker',
+    description='Fast determination of finished reference genomes.' )
 parser.add_argument( '--db', '-d', required=True, help='ReferenceSeeker database path' )
 parser.add_argument( '--genome', '-g', required=True, help='Target draft genome' )
 parser.add_argument( '--scaffolds', '-s', action='store_const', default=False, const=True, help='Build scaffolds via MeDuSa (Bosi, Donati et al. 2015) based on detected references' )
