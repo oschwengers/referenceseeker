@@ -20,6 +20,7 @@ parser.add_argument( '--output', '-o', required=False, help='Output fasta file f
 parser.add_argument( '--cpus', '-c', required=False, type=int, help='Number of cpus to use (default = all available)' )
 parser.add_argument( '--unfiltered', '-u', action='store_const', default=False, const=True, help='Skip kmer prefilter' )
 parser.add_argument( '--verbose', '-v', action='store_const', default=False, const=True, help='Print verbose information' )
+parser.add_argument( '--version', action='version', version='%(prog)s 1.0' )
 args = parser.parse_args()
 
 
