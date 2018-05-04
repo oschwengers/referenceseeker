@@ -198,6 +198,7 @@ pool = mp.Pool( noCpus )
 results = pool.starmap( compute_ani, zip(repeat(dnaFragmentsPath), repeat(dnaFragments), refGenomes) )
 pool.close()
 pool.join()
+os.remove( dnaFragmentsPath )
 
 
 # filter and sort results
