@@ -30,29 +30,31 @@ __MIN_FRAGMENT_SIZE__ = 100
 
 
 # check parameters & environment variables
+if( args.verbose ): print( 'Options, parameters and arguments:' )
+
 REFERENCE_SEEKER_HOME = os.getenv( 'REFERENCE_SEEKER_HOME', None )
 if( REFERENCE_SEEKER_HOME == None ): sys.exit( 'ERROR: REFERENCE_SEEKER_HOME not set!' )
 REFERENCE_SEEKER_HOME = os.path.abspath( REFERENCE_SEEKER_HOME )
 if( not os.access( REFERENCE_SEEKER_HOME, os.R_OK & os.X_OK ) ): sys.exit( 'ERROR: REFERENCE_SEEKER_HOME ('+REFERENCE_SEEKER_HOME+') not readable/accessible!' )
-if( args.verbose ): print( 'REFERENCE_SEEKER_HOME: ' + REFERENCE_SEEKER_HOME )
+if( args.verbose ): print( '\tREFERENCE_SEEKER_HOME: ' + REFERENCE_SEEKER_HOME )
 
 dbPath = os.path.abspath( args.db )
 if( not os.access( dbPath, os.R_OK ) ): sys.exit( 'ERROR: database directory not readable!' )
-if( args.verbose ): print( 'db path: ' + dbPath )
+if( args.verbose ): print( '\tdb path: ' + dbPath )
 
 genomePath = os.path.abspath( args.genome )
 if( not os.access( genomePath, os.R_OK ) ): sys.exit( 'ERROR: genome file not readable!' )
-if( args.verbose ): print( 'genome path: ' + genomePath )
+if( args.verbose ): print( '\tgenome path: ' + genomePath )
 
-if( args.verbose ): print( 'build scaffolds: ' + str(args.scaffolds) )
+if( args.verbose ): print( '\tbuild scaffolds: ' + str(args.scaffolds) )
 cwdPath = os.path.abspath( os.getcwd() )
 scaffoldsPath = os.path.abspath(args.output) if args.output else cwdPath + '/scaffolds.fna'
 if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPath )
 
-if( args.verbose ): print( '# cpus: ' + str(args.cpus) )
+if( args.verbose ): print( '\t# cpus: ' + str(args.cpus) )
 
 if( args.unfiltered ): __MASH_THRESHOLD__ = '1.0'
-if( args.verbose ): print( 'kmer prefilter threshold: ' + __MASH_THRESHOLD__ )
+if( args.verbose ): print( '\tkmer prefilter threshold: ' + __MASH_THRESHOLD__ )
 
 fhFNULL = open( os.devnull, 'w' )
 
@@ -116,7 +118,7 @@ def compute_ani( dnaFragmentsPath, dnaFragments, refGenome ):
 
     shutil.rmtree( tmpDir )
 
-    if( args.verbose ): print( '\tref: %s\tANI: % 2.2f\tcons. DNA: % 2.2f' % (reference.split('/')[-1], ani*100, conservedDna*100) )
+    if( args.verbose ): print( '\t%s\t%2.2f\t%2.2f' % (reference.split('/')[-1][:15], ani*100, conservedDna*100) )
     refGenome[ 'ani' ] = ani
     refGenome[ 'conservedDna' ] = conservedDna
     return refGenome
@@ -125,7 +127,7 @@ def compute_ani( dnaFragmentsPath, dnaFragments, refGenome ):
 
 
 # Calculate genome distances via Mash
-if( args.verbose ): print( 'calc genome distances...' )
+if( args.verbose ): print( '\nCalculate genome distances...' )
 mashResultPath = cwdPath + '/mash.out'
 with open( mashResultPath, 'w' ) as fhMashResultPath:
     sp.check_call( [ REFERENCE_SEEKER_HOME + '/share/mash/mash',
@@ -158,7 +160,6 @@ if( len( accessionIds) > 100 ):
 
 
 # Get assemblies from RefSeq by accessions
-if( args.verbose ): print( 'lookup corresponding reference files...' )
 refGenomes = []
 with open( dbPath + '/db.tsv', 'r' ) as fhDbPath:
     for line in fhDbPath:
@@ -192,7 +193,7 @@ with open( dnaFragmentsPath, 'w' ) as fhDnaFragmentsPath:
 
 
 # Copy genomes, extract them and build ANI
-if( args.verbose ): print( 'compute ANIs...' )
+if( args.verbose ): print( '\nCompute ANIs...\n\tID\tANI\tConserved DNA' )
 pool = mp.Pool( args.cpus )
 results = pool.starmap( compute_ani, zip(repeat(dnaFragmentsPath), repeat(dnaFragments), refGenomes) )
 pool.close()
@@ -209,7 +210,7 @@ results = sorted( tmp_results, key=lambda k: -(k['ani']*k['conservedDna']) )
 
 
 # print results to STDOUT
-if( args.verbose ): print( 'ANIs:' )
+if( args.verbose ): print( '\nID\tANI\tConserved DNA\tTaxonomy ID\tName' )
 for result in results:
     print( '%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
     #print( '%s\t%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['dist'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
