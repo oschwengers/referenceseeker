@@ -14,13 +14,13 @@ from itertools import repeat
 
 parser = argparse.ArgumentParser( prog='ReferenceSeeker',
     description='Fast determination of finished reference genomes.' )
+parser.add_argument( 'genome', metavar='<genome>', help='Target draft genome in fasta format' )
 parser.add_argument( '--db', '-d', required=True, help='ReferenceSeeker database path' )
-parser.add_argument( '--genome', '-g', required=True, help='Target draft genome' )
-parser.add_argument( '--scaffolds', '-s', action='store_const', default=False, const=True, help='Build scaffolds via MeDuSa (Bosi, Donati et al. 2015) based on detected references' )
-parser.add_argument( '--output', '-o', required=False, help='Output fasta file for built scaffolds' )
-parser.add_argument( '--cpus', '-c', required=False, type=int, help='Number of cpus to use (default = all available)' )
-parser.add_argument( '--unfiltered', '-u', action='store_const', default=False, const=True, help='Skip kmer prefilter' )
-parser.add_argument( '--verbose', '-v', action='store_const', default=False, const=True, help='Print verbose information' )
+parser.add_argument( '--cpus', '-c', action='store', type=int, default=mp.cpu_count(), help='Number of cpus to use (default = all available)' )
+parser.add_argument( '--unfiltered', '-u', action='store_true', help='Skip kmer prefilter' )
+parser.add_argument( '--verbose', '-v', action='store_true', help='Print verbose information' )
+parser.add_argument( '--scaffolds', '-s', action='store_true', help='Build scaffolds via MeDuSa (Bosi, Donati et al. 2015) based on detected references' )
+parser.add_argument( '--output', '-o', help='Output fasta file for built scaffolds' )
 parser.add_argument( '--version', action='version', version='%(prog)s 1.0' )
 args = parser.parse_args()
 
@@ -49,8 +49,7 @@ cwdPath = os.path.abspath( os.getcwd() )
 scaffoldsPath = os.path.abspath(args.output) if args.output else cwdPath + '/scaffolds.fna'
 if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPath )
 
-noCpus = int(args.cpus) if args.cpus else mp.cpu_count()
-if( args.verbose ): print( '# cpus: ' + str(noCpus) )
+if( args.verbose ): print( '# cpus: ' + str(args.cpus) )
 
 if( args.unfiltered ): __MASH_THRESHOLD__ = '1.0'
 if( args.verbose ): print( 'kmer prefilter threshold: ' + __MASH_THRESHOLD__ )
@@ -194,7 +193,7 @@ with open( dnaFragmentsPath, 'w' ) as fhDnaFragmentsPath:
 
 # Copy genomes, extract them and build ANI
 if( args.verbose ): print( 'compute ANIs...' )
-pool = mp.Pool( noCpus )
+pool = mp.Pool( args.cpus )
 results = pool.starmap( compute_ani, zip(repeat(dnaFragmentsPath), repeat(dnaFragments), refGenomes) )
 pool.close()
 pool.join()
