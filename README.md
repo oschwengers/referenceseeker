@@ -94,27 +94,28 @@ referenceseekr.sh <REFERENCE_SEEKER_DB> <GENOME>
 
 
 ## Databases
-ReferenceSeeker depends on custom kmer databases build on NCBI RefSeq as well as
-finished reference genomes in fasta format.
-These databases can be downloaded HERE: (type, size zipped, size unzipped)
-- bacteria, 8.1 Gb, ~27 Gb
-- archaea, 184 Mb, 577 Mb
-- viral, 490 Mb, 681 Mb
+ReferenceSeeker depends on custom databases based on complete NCBI RefSeq genomes comprising 
+kmer hash subsets as well as fasta files.
+These databases (RefSeq release 87) can be downloaded HERE: (type, # complete genomes, size zipped, size unzipped)
+- bacteria, 9443, 12 Gb, 37 Gb
+- archaea, 255, 205 Mb, 642 Mb
+- viral, 7532, 508 Mb, 762 Mb
 
 The latest versions can be built using a custom nextflow pipeline.
-Valid values for <DB_TYPE> are:
+Valid values for `DB_TYPE` are:
 - 'archaea'
 - 'bacteria'
 - 'viral'
 
+Download and install Nextflow:
+```
+curl -fsSL get.nextflow.io | bash
+```
+
+Build database:
 ```
 export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
-export DB_TYPE=<DB_TYPE>
-curl -fsSL get.nextflow.io | bash
-nextflow build-db.nf --domain $DB_TYPE
-$REFERENCE_SEEKER_HOME/share/mash/mash paste db $DB_TYPE/*.msh
-rm -rf work/ .nextflow* $DB_TYPE/*.msh
-mv db.msh $DB_TYPE/
+sh build-db.sh <DB_TYPE>
 ```
 
 ## Dependencies
