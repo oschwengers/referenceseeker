@@ -27,6 +27,7 @@ args = parser.parse_args()
 
 __MASH_THRESHOLD__ = '0.5'
 __MIN_FRAGMENT_SIZE__ = 100
+__MAX_ANI_CALCULATIONS__ = 100
 
 
 # check parameters & environment variables
@@ -150,10 +151,9 @@ os.remove( mashResultPath )
 if( args.verbose ): print( '\tscreened ' + str(len(accessionIds)) + ' potential reference genome(s)' )
 
 
-if( args.verbose ): print( '\tfound ' + str(len(accessionIds)) + ' potential reference genome(s)' )
-# Reduce Mash output to best 100 hits
-if( len( accessionIds) > 100 ):
-    if( args.verbose ): print( '\treduce to best 100 hits...' )
+# Reduce Mash output to best __MAX_ANI_CALCULATIONS__ hits
+if( len( accessionIds) > __MAX_ANI_CALCULATIONS__ ):
+    if( args.verbose ): print( '\treduce to best ' + str(__MAX_ANI_CALCULATIONS__) + ' hits...' )
     tmpAccessionIds = sorted( accessionIds, key=lambda k: mashDistances[ k ] )
     accessionIds = tmpAccessionIds[:100]
 
