@@ -52,7 +52,7 @@ cwdPath = os.path.abspath( os.getcwd() )
 scaffoldsPath = os.path.abspath(args.output) if args.output else cwdPath + '/scaffolds.fna'
 if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPath )
 
-if( args.unfiltered ): print( '\tunfiltered: ' + str(args.unfiltered) )
+if( args.verbose ): print( '\tunfiltered: ' + str(args.unfiltered) )
 if( args.verbose ): print( '\t# cpus: ' + str(args.cpus) )
 
 fhFNULL = open( os.devnull, 'w' )
