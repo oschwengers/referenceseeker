@@ -25,7 +25,7 @@ parser.add_argument( '--version', action='version', version='%(prog)s 1.0' )
 args = parser.parse_args()
 
 
-__MASH_THRESHOLD__ = '0.01'
+__MASH_THRESHOLD__ = '0.5'
 __MIN_FRAGMENT_SIZE__ = 100
 
 
@@ -51,10 +51,8 @@ cwdPath = os.path.abspath( os.getcwd() )
 scaffoldsPath = os.path.abspath(args.output) if args.output else cwdPath + '/scaffolds.fna'
 if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPath )
 
+if( args.unfiltered ): print( '\tunfiltered: ' + str(args.unfiltered) )
 if( args.verbose ): print( '\t# cpus: ' + str(args.cpus) )
-
-if( args.unfiltered ): __MASH_THRESHOLD__ = '1.0'
-if( args.verbose ): print( '\tkmer prefilter threshold: ' + __MASH_THRESHOLD__ )
 
 fhFNULL = open( os.devnull, 'w' )
 
@@ -204,7 +202,7 @@ os.remove( dnaFragmentsPath )
 # filter and sort results
 tmp_results = []
 for result in results :
-    if( (result['conservedDna'] >= 0.69)  and (result['ani'] >= 0.98) ):
+    if( args.unfiltered  or  ((result['conservedDna'] >= 0.69)  and  (result['ani'] >= 0.95) )):
         tmp_results.append( result )
 results = sorted( tmp_results, key=lambda k: -(k['ani']*k['conservedDna']) )
 
