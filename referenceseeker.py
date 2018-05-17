@@ -125,7 +125,7 @@ def compute_ani( dnaFragmentsPath, dnaFragments, refGenome ):
 
 
 # Calculate genome distances via Mash
-if( args.verbose ): print( '\nCalculate genome distances...' )
+if( args.verbose ): print( '\nAssess genome distances...' )
 mashResultPath = cwdPath + '/mash.out'
 with open( mashResultPath, 'w' ) as fhMashResultPath:
     sp.check_call( [ REFERENCE_SEEKER_HOME + '/share/mash/mash',
@@ -147,6 +147,7 @@ with open( mashResultPath, 'r' ) as fhMashResultPath:
         accessionIds.append( cols[0] )
         mashDistances[ cols[0] ] = float( cols[2] )
 os.remove( mashResultPath )
+if( args.verbose ): print( '\tscreened ' + str(len(accessionIds)) + ' potential reference genome(s)' )
 
 
 if( args.verbose ): print( '\tfound ' + str(len(accessionIds)) + ' potential reference genome(s)' )
@@ -165,7 +166,7 @@ with open( dbPath + '/db.tsv', 'r' ) as fhDbPath:
             cols = line.strip().split( '\t' )
             accessionId = cols[0]
             if( accessionId in accessionIds ):
-                refGenomes.append( { 'id': accessionId, 'tax': cols[1], 'name': cols[2], 'dist': mashDistances[ accessionId ] } )
+                refGenomes.append( { 'id': accessionId, 'tax': cols[1], 'status': cols[2], 'name': cols[3], 'dist': mashDistances[ accessionId ] } )
 
 
 # Build dna fragments
@@ -208,10 +209,10 @@ results = sorted( tmp_results, key=lambda k: -(k['ani']*k['conservedDna']) )
 
 
 # print results to STDOUT
-if( args.verbose ): print( '\nID\tANI\tConserved DNA\tTaxonomy ID\tName' )
+if( args.verbose ): print( '\nID\tANI\tConserved DNA\tTaxonomy ID\tGenome Status\tName' )
 for result in results:
-    print( '%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
-    #print( '%s\t%s\t% 2.2f\t% 2.2f\t%s\t%s' % (result['id'], result['dist'], result['ani']*100, result['conservedDna']*100, result['tax'], result['name'] ) )
+    print( '%s\t% 2.2f\t% 2.2f\t%s\t%s\t%s' % (result['id'], result['ani']*100, result['conservedDna']*100, result['tax'], result['status'], result['name'] ) )
+    #print( '%s\t%s\t% 2.2f\t% 2.2f\t%s\t%s\t%s' % (result['id'], result['dist'], result['ani']*100, result['conservedDna']*100, result['tax'], result['status'], result['name'] ) )
 
 
 # create scaffolds based on draft genome and detected references
