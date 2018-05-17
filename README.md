@@ -22,9 +22,10 @@ ReferenceSeeker computes kmer based genome distances between a query genome and
 and a database built on RefSeq genomes via Mash (Ondov et al. 2016).
 Currently, ReferenceSeeker offers bacterial, archeael, fungi and viral databases.
 For subsequent candidates ReferenceSeeker computes ANI (average nucleotide identity)
-values picking genomes meeting community standard thresholds (Goris, Konstantinos et al. 2007)
-ranked by ANI and conserved DNA. Additionally, ReferenceSeeker can use MeDuSa
-(Bosi, Donati et al. 2015) to scaffold contigs based on the 20 closest reference genomes.
+values picking genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
+(Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
+Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
+to scaffold contigs based on the 20 closest reference genomes.
 
 
 ## Input & Output
@@ -72,7 +73,9 @@ optional arguments:
   --threads THREADS, -t THREADS
                         Number of threads to use (default = number of
                         available CPUs)
-  --unfiltered, -u      Skip kmer prefilter
+  --unfiltered, -u      Set kmer prefilter to extremely conservative values
+                        and skip species level ANI cutoffs (ANI >= 0.95 and
+                        conserved DNA >= 0.69
   --verbose, -v         Print verbose information
   --scaffolds, -s       Build scaffolds via MeDuSa (Bosi, Donati et al. 2015)
                         based on detected references

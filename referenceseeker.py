@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser( prog='ReferenceSeeker',
 parser.add_argument( 'genome', metavar='<genome>', help='Target draft genome in fasta format' )
 parser.add_argument( '--db', '-d', required=True, help='ReferenceSeeker database path' )
 parser.add_argument( '--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)' )
-parser.add_argument( '--unfiltered', '-u', action='store_true', help='Skip kmer prefilter' )
+parser.add_argument( '--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69' )
 parser.add_argument( '--verbose', '-v', action='store_true', help='Print verbose information' )
 parser.add_argument( '--scaffolds', '-s', action='store_true', help='Build scaffolds via MeDuSa (Bosi, Donati et al. 2015) based on detected references' )
 parser.add_argument( '--output', '-o', help='Output fasta file for built scaffolds' )
@@ -25,7 +25,7 @@ parser.add_argument( '--version', action='version', version='%(prog)s 1.0' )
 args = parser.parse_args()
 
 
-__MASH_THRESHOLD__ = '0.5'
+__MASH_MASH_DIST__ = '0.1'
 __MIN_FRAGMENT_SIZE__ = 100
 __MAX_ANI_CALCULATIONS__ = 100
 
@@ -54,6 +54,8 @@ if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPat
 
 if( args.verbose ): print( '\tunfiltered: ' + str(args.unfiltered) )
 if( args.verbose ): print( '\t# threads: ' + str(args.threads) )
+
+if( args.unfiltered ): __MASH_MASH_DIST__ = '0.3'
 
 fhFNULL = open( os.devnull, 'w' )
 
@@ -131,7 +133,7 @@ mashResultPath = cwdPath + '/mash.out'
 with open( mashResultPath, 'w' ) as fhMashResultPath:
     sp.check_call( [ REFERENCE_SEEKER_HOME + '/share/mash/mash',
         'dist',
-        '-d', __MASH_THRESHOLD__,
+        '-d', __MASH_MASH_DIST__,
         dbPath + '/db.msh',
         genomePath ],
         stdout = fhMashResultPath,
