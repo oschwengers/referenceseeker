@@ -209,7 +209,7 @@ results = sorted( tmp_results, key=lambda k: -(k['ani']*k['conservedDna']) )
 
 
 # print results to STDOUT
-if( args.verbose ): print( '\nID\tANI\tConserved DNA\tTaxonomy ID\tGenome Status\tName' )
+if( args.verbose ): print( '\nID\tANI\tConserved DNA\tTaxonomy ID\tAssembly Status\tName' )
 for result in results:
     print( '%s\t% 2.2f\t% 2.2f\t%s\t%s\t%s' % (result['id'], result['ani']*100, result['conservedDna']*100, result['tax'], result['status'], result['name'] ) )
     #print( '%s\t%s\t% 2.2f\t% 2.2f\t%s\t%s\t%s' % (result['id'], result['dist'], result['ani']*100, result['conservedDna']*100, result['tax'], result['status'], result['name'] ) )
