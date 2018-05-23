@@ -62,6 +62,7 @@ Alternatively, just use the aforementioned Docker image (oschwengers/referencese
 
 ## Usage
 Usage:
+```
 ReferenceSeeker [-h] --db DB [--threads THREADS] [--unfiltered] [--verbose] [--scaffolds] [--output OUTPUT] [--version] <genome>
 
 positional arguments:
@@ -82,7 +83,7 @@ optional arguments:
   --output OUTPUT, -o OUTPUT
                         Output fasta file for built scaffolds
   --version             show program's version number and exit
-
+```
 
 ## Examples
 Simple:
