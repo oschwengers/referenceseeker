@@ -23,9 +23,11 @@ Channel.fromPath( "${ncbiPath}/refseq/${domain}/assembly_summary.txt" )
 
 process sketch {
 
-    maxForks 4
-    maxRetries 3
     tag { "${acc} - ${orgName}" }
+
+    maxForks 3
+    errorStrategy 'retry'
+    maxRetries 3 
 
     input:
     set val(acc), val(taxId), val(orgName), val(status), val(path) from validGenomes
