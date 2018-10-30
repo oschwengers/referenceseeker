@@ -10,7 +10,6 @@ Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 - Examples
 - Databases
 - Dependencies
-- Citation
 
 
 ## Description
@@ -19,7 +18,8 @@ RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>) following a hierarchical approach
 combining a kmer based lookup and subsequent ANI calculations.
 
 ReferenceSeeker computes kmer based genome distances between a query genome and
-and a database built on RefSeq genomes via Mash (Ondov et al. 2016).
+and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Hereby, only
+complete genomes or those stated as 'representative' or 'reference' genome are included.
 Currently, ReferenceSeeker offers bacterial, archeael, fungi and viral databases.
 For subsequent candidates ReferenceSeeker computes ANI (average nucleotide identity)
 values picking genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
@@ -46,15 +46,16 @@ tab separated to STDOUT comprising the following columns:
 To setup ReferenceSeeker just do the following:
 1. clone the latest version of the repository
 2. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
-3. download and extract the databases or create one yourself
+3. download and extract a databases or create one yourself
 
 Example:
 ```
+cd ~
 git clone git@github.com:oschwengers/referenceseekr.git
-export REFERENCE_SEEKER_HOME=referenceseekr
-wget db...
-tar -xzf db.tar.gz
-rm db.tar.gz
+export REFERENCE_SEEKER_HOME=~/referenceseekr
+wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
+tar -xzf bacteria.tar.gz
+rm bacteria.tar.gz
 ```
 
 Alternatively, just use the aforementioned Docker image (oschwengers/referenceseekr) in order to ease the setup process.
@@ -76,7 +77,7 @@ optional arguments:
                         available CPUs)
   --unfiltered, -u      Set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
-                        conserved DNA >= 0.69
+                        conserved DNA >= 0.69. Use this option for very rare species.
   --verbose, -v         Print verbose information
   --scaffolds, -s       Build scaffolds via MeDuSa (Bosi, Donati et al. 2015)
                         based on detected references
@@ -112,11 +113,11 @@ referenceseekr.sh <REFERENCE_SEEKER_DB> <GENOME>
 ## Databases
 ReferenceSeeker depends on custom databases based on reference, representative as well as complete NCBI RefSeq genomes
 comprising kmer hash subsets as well as fasta files.
-These databases (RefSeq release 87) can be downloaded HERE: (type, # complete genomes, size zipped, size unzipped)
-- bacteria, 13563, 17 Gb, 53 Gb
-- archaea, 374, 324 Mb, 1.1 Gb
-- viral, 7532, 508 Mb, 761 Mb
-- fungi, 250, 2.2 Gb, 6.8 Gb
+These databases (RefSeq release 87) can be downloaded from the the following list: (type, link, # genomes, size zipped, size unzipped)
+- bacteria: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz>, 13563, 17 Gb, 53 Gb
+- archaea: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz>, 374, 324 Mb, 1.1 Gb
+- viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7532, 508 Mb, 761 Mb
+- fungi: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz>, 250, 2.2 Gb, 6.8 Gb
 
 The latest versions can be built using a custom nextflow pipeline.
 Valid values for `DB_TYPE` are:
@@ -144,7 +145,3 @@ ReferenceSeeker depends on the following packages:
 - MeDuSa (1.6) <https://github.com/combogenomics/medusa>
 
 ReferenceSeeker has been tested against aforementioned versions.
-
-
-## Citation
-Manuscript is in preparation.
