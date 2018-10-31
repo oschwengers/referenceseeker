@@ -2,11 +2,12 @@
 import java.nio.file.*
 
 
-domain   = params.domain
-ncbiPath = 'ftp://ftp.ncbi.nlm.nih.gov/genomes'
+assemblySummary = params.ass_sum
+ncbiPath        = params.ncbiPath
+domain          = params.domain
 
 
-Channel.fromPath( "${ncbiPath}/refseq/${domain}/assembly_summary.txt" )
+Channel.fromPath( assemblySummary )
     .splitCsv( skip: 2, sep: '\t'  )
     .filter( { (it[11].toLowerCase() == 'complete genome')  ||  (it[4].toLowerCase() == 'representative genome')  ||  (it[4].toLowerCase() == 'reference genome') } )
     .map( {
@@ -26,8 +27,8 @@ process sketch {
     tag { "${acc} - ${orgName}" }
 
     maxForks 3
-    errorStrategy 'retry'
-    maxRetries 3 
+    errorStrategy 'ignore'
+    maxRetries 3
 
     input:
     set val(acc), val(taxId), val(orgName), val(status), val(path) from validGenomes
