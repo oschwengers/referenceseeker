@@ -230,7 +230,7 @@ if( args.scaffolds ):
         '-i', genomePath, # assembled alignments
         '-o', scaffoldsPath, # new name
         '-v', # verbose flag
-        '-threads', str(noCpus), # threads
+        '-threads', str(args.threads), # threads
         '-random', '1000', # use 1000 random rounds to find the best scaffolds
         '-scriptPath', REFERENCE_SEEKER_HOME+'/share/medusa/medusa_scripts' # path to medusa script directory
         ],
