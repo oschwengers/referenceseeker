@@ -13,7 +13,7 @@ from itertools import repeat
 
 
 parser = argparse.ArgumentParser( prog='ReferenceSeeker',
-    description='Fast determination of finished reference genomes.' )
+    description='Fast determination of reference genomes.' )
 parser.add_argument( 'genome', metavar='<genome>', help='Target draft genome in fasta format' )
 parser.add_argument( '--db', '-d', required=True, help='ReferenceSeeker database path' )
 parser.add_argument( '--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)' )
