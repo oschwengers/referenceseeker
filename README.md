@@ -1,4 +1,4 @@
-# ReferenceSeeker: Fast determination of reference genomes.
+# ReferenceSeeker: fast determination of reference genomes.
 Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 
 
@@ -14,18 +14,21 @@ Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 
 ## Description
 ReferenceSeeker determines closely related reference genomes from
-RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>) following a hierarchical approach
-combining a kmer based lookup and subsequent ANI calculations.
+RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>) following a scalable hierarchical
+approach combining an ultra-fast kmer based database lookup of candidates and
+subsequent specific average nucleotide identity (ANI) calculation for the optimal
+selection of adequate reference genomes.
 
 ReferenceSeeker computes kmer based genome distances between a query genome and
 and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Hereby, only
 complete genomes or those stated as 'representative' or 'reference' genome are included.
-Currently, ReferenceSeeker offers bacterial, archeael, fungi and viral databases.
-For subsequent candidates ReferenceSeeker computes ANI (average nucleotide identity)
-values picking genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
-(Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
-Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
-to scaffold contigs based on the 20 closest reference genomes.
+Currently, ReferenceSeeker offers prebuilt bacterial, archeael, fungi and viral
+databases. For resulting candidates ReferenceSeeker subsequently computes ANI
+values picking genomes meeting community standard thresholds (ANI >= 95 % &
+conserved DNA >= 69 %) (Goris, Konstantinos et al. 2007) ranked by the harmonic
+mean of ANI and conserved DNA. Optionally, for draft assembly inputs
+ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015) to scaffold contigs
+based on the 20 closest reference genomes.
 
 
 ## Input & Output
@@ -113,11 +116,11 @@ referenceseekr.sh <REFERENCE_SEEKER_DB> <GENOME>
 ## Databases
 ReferenceSeeker depends on custom databases based on reference, representative as well as complete NCBI RefSeq genomes
 comprising kmer hash subsets as well as fasta files.
-These databases (RefSeq release 87) can be downloaded from the the following list: (type, link, # genomes, size zipped, size unzipped)
-- bacteria: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz>, 13563, 17 Gb, 53 Gb
-- archaea: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz>, 374, 324 Mb, 1.1 Gb
-- viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7532, 508 Mb, 761 Mb
-- fungi: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz>, 250, 2.2 Gb, 6.8 Gb
+These databases (RefSeq release 90) can be downloaded from the the following list: (type, link, # genomes, size zipped, size unzipped)
+- bacteria: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz>, 14,983, 18 Gb, 58 Gb
+- archaea: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz>, 386, 335 Mb, 1.1 Gb
+- viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7,855, 525 Mb, 719 Mb
+- fungi: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz>, 277, 2.5 Gb, 7.7 Gb
 
 The latest versions can be built using a custom nextflow pipeline.
 Valid values for `DB_TYPE` are:
