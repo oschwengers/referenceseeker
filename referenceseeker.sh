@@ -12,7 +12,7 @@ if [ ! -d $1 ]
 	echo "database directory does not exist!"
 	exit 1
   else
-	db="$(dirname $(readlink -e $1))/$(basename $1)"
+	db="$(realpath -e $1)"
 fi
 
 if [ ! -f $2 ]
@@ -20,7 +20,7 @@ if [ ! -f $2 ]
 	echo "fasta file does not exist or is not a file!"
 	exit 1
   else
-	data="$(dirname $(readlink -e $2))"
+	data="$(dirname $(realpath -e $2))"
 	genome="$(basename $2)"
 fi
 
