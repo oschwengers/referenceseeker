@@ -54,8 +54,8 @@ To setup ReferenceSeeker just do the following:
 Example:
 ```
 cd ~
-git clone git@github.com:oschwengers/referenceseekr.git
-export REFERENCE_SEEKER_HOME=~/referenceseekr
+git clone git@github.com:oschwengers/referenceseeker.git
+export REFERENCE_SEEKER_HOME=~/referenceseeker
 wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
 tar -xzf bacteria.tar.gz
 rm bacteria.tar.gz
@@ -92,24 +92,24 @@ optional arguments:
 ## Examples
 Simple:
 ```
-referenceseekr.py --db <REFERENCE_SEEKER_DB> <GENOME>
+referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 Expert: creating scaffolds with verbose output using a defined number of threads:
 ```
-referenceseekr.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
+referenceseeker.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
 ```
 
 With Docker:
 ```
-docker pull oschwengers/referenceseekr:latest
-docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseekr:latest <GENOME>
+sudo docker pull oschwengers/referenceseeker:latest
+sudo docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseeker:latest <GENOME>
 ```
 
 With Docker shell script:
 ```
-docker pull oschwengers/referenceseekr:latest
-referenceseekr.sh <REFERENCE_SEEKER_DB> <GENOME>
+sudo docker pull oschwengers/referenceseeker:latest
+referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 
@@ -137,7 +137,7 @@ curl -fsSL get.nextflow.io | bash
 Build database:
 ```
 export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
-sh build-db.sh <DB_TYPE>
+sh build-db.sh <DB_TYPE_OPTION>
 ```
 
 ## Dependencies
