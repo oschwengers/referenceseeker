@@ -1,4 +1,4 @@
-# ReferenceSeeker: fast determination of reference genomes.
+# ReferenceSeeker: fast determination of suitable reference genomes.
 Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 
 
