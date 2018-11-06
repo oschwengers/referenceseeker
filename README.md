@@ -55,7 +55,7 @@ Example:
 ```
 cd ~
 pip3 install biopython numpy networkx
-git clone git@github.com:oschwengers/referenceseeker.git
+git clone https://github.com/oschwengers/referenceseeker.git
 export REFERENCE_SEEKER_HOME=~/referenceseeker
 wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
 tar -xzf bacteria.tar.gz
