@@ -15,16 +15,16 @@ Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 ## Description
 ReferenceSeeker determines closely related reference genomes from
 RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>) following a scalable hierarchical
-approach combining an ultra-fast kmer based database lookup of candidates and
-subsequent specific average nucleotide identity (ANI) calculation for the optimal
-selection of adequate reference genomes.
+approach combining a fast kmer profile based database lookup of candidates and
+subsequent calculation of specific average nucleotide identity (ANI) values
+for the fast determination of suitable reference genomes.
 
-ReferenceSeeker computes kmer based genome distances between a query genome and
+ReferenceSeeker computes kmer profile based genome distances between a query genome and
 and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Hereby, only
 complete genomes or those stated as 'representative' or 'reference' genome are included.
-Currently, ReferenceSeeker offers prebuilt bacterial, archeael, fungi and viral
-databases. For resulting candidates ReferenceSeeker subsequently computes ANI
-values picking genomes meeting community standard thresholds (ANI >= 95 % &
+Currently, ReferenceSeeker offers pre-built bacterial, archeael, fungi and viral
+databases. For resulting candidate reference genomes ReferenceSeeker subsequently
+computes ANI and conserved DNA values filtered to community standard thresholds (ANI >= 95 % &
 conserved DNA >= 69 %) (Goris, Konstantinos et al. 2007) ranked by the harmonic
 mean of ANI and conserved DNA. Optionally, for draft assembly inputs
 ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015) to scaffold contigs
@@ -54,6 +54,7 @@ To setup ReferenceSeeker just do the following:
 Example:
 ```
 cd ~
+pip3 install biopython numpy networkx
 git clone git@github.com:oschwengers/referenceseeker.git
 export REFERENCE_SEEKER_HOME=~/referenceseeker
 wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
@@ -61,7 +62,8 @@ tar -xzf bacteria.tar.gz
 rm bacteria.tar.gz
 ```
 
-Alternatively, just use the aforementioned Docker image (oschwengers/referenceseekr) in order to ease the setup process.
+Alternatively, use the aforementioned Docker image (oschwengers/referenceseekr)
+in order to ease the setup process.
 
 
 ## Usage
@@ -142,7 +144,7 @@ sh build-db.sh <DB_TYPE_OPTION>
 
 ## Dependencies
 ReferenceSeeker depends on the following packages:
-- Python (3.5.2) and BioPython (1.66)
+- Python (3.5.2), Biopython (1.71), NumPy (1.14.5), NetworkX (1.11)
 - Mash (2.0) <https://github.com/marbl/Mash>
 - MUMmer (4.0.0-beta2) <https://github.com/gmarcais/mummer>
 - MeDuSa (1.6) <https://github.com/combogenomics/medusa>
