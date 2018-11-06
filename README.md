@@ -47,9 +47,10 @@ tab separated to STDOUT comprising the following columns:
 
 ## Installation
 To setup ReferenceSeeker just do the following:
-1. clone the latest version of the repository
-2. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
-3. download and extract a databases or create one yourself
+1. install necessary python dependencies via pip
+2. clone the latest version of the repository
+3. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
+4. download and extract a databases or create one yourself
 
 Example:
 ```
