@@ -49,7 +49,12 @@ if( args.verbose ): print( '\tgenome path: ' + genomePath )
 
 if( args.verbose ): print( '\tbuild scaffolds: ' + str(args.scaffolds) )
 cwdPath = os.path.abspath( os.getcwd() )
-scaffoldsPath = os.path.abspath(args.output) if args.output else cwdPath + '/scaffolds.fna'
+if( args.output ):
+    scaffoldsPath = os.path.abspath(args.output)
+    if( os.path.isdir(scaffoldsPath) ):
+        sys.exit( 'ERROR: output is a directory! Please, provide a valid path to a fasta file.' )
+else:
+    scaffoldsPath = cwdPath + '/scaffolds.fna'
 if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPath )
 
 if( args.verbose ): print( '\tunfiltered: ' + str(args.unfiltered) )
