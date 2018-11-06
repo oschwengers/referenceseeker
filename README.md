@@ -62,7 +62,7 @@ tar -xzf bacteria.tar.gz
 rm bacteria.tar.gz
 ```
 
-Alternatively, use the aforementioned Docker image (oschwengers/referenceseekr)
+Alternatively, use the aforementioned Docker image (oschwengers/referenceseeker)
 in order to ease the setup process.
 
 
