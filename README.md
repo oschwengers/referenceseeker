@@ -117,8 +117,8 @@ referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
 
 
 ## Databases
-ReferenceSeeker depends on custom databases based on reference, representative as well as complete NCBI RefSeq genomes
-comprising kmer hash subsets as well as fasta files.
+ReferenceSeeker depends on custom databases based on reference, representative as
+well as complete NCBI RefSeq genomes comprising kmer hash profiles taxonomic information.
 These databases (RefSeq release 90) can be downloaded from the the following list: (type, link, # genomes, size zipped, size unzipped)
 - bacteria: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz>, 14,983, 18 Gb, 58 Gb
 - archaea: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz>, 386, 335 Mb, 1.1 Gb
@@ -126,13 +126,8 @@ These databases (RefSeq release 90) can be downloaded from the the following lis
 - protozoa: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/protozoa.tar.gz>, 77, 953 Mb, 3.2 Gb
 - viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7,855, 525 Mb, 719 Mb
 
-The latest versions can be built using a custom nextflow pipeline.
-Valid values for `DB_TYPE` are:
-- 'archaea'
-- 'bacteria'
-- 'fungi'
-- 'protozoa'
-- 'viral'
+Updated database versions reflecting tThe latest RefSeq versions can be built
+with a shell script and nextflow pipeline.
 
 Download and install Nextflow:
 ```
@@ -144,6 +139,13 @@ Build database:
 export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
 sh build-db.sh <DB_TYPE_OPTION>
 ```
+
+`build-db.sh -h` prints a list of available database options:
+- -b: bacteria
+- -a: archaea
+- -f: fungi
+- -p: protozoa
+- -v: viruses
 
 ## Dependencies
 ReferenceSeeker depends on the following packages:
