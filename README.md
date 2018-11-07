@@ -22,13 +22,13 @@ for the fast determination of suitable reference genomes.
 ReferenceSeeker computes kmer profile based genome distances between a query genome and
 and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Hereby, only
 complete genomes or those stated as 'representative' or 'reference' genome are included.
-Currently, ReferenceSeeker offers pre-built bacterial, archeael, fungi and viral
-databases. For resulting candidate reference genomes ReferenceSeeker subsequently
-computes ANI and conserved DNA values filtered to community standard thresholds (ANI >= 95 % &
-conserved DNA >= 69 %) (Goris, Konstantinos et al. 2007) ranked by the harmonic
-mean of ANI and conserved DNA. Optionally, for draft assembly inputs
-ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015) to scaffold contigs
-based on the 20 closest reference genomes.
+ReferenceSeeker offers pre-built databases for the following taxonomic groups:
+bacteria, archaea, fungi, protozoa and viruses. For resulting candidate reference
+genomes ReferenceSeeker subsequently computes ANI and conserved DNA values filtered
+to community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
+(Goris, Konstantinos et al. 2007) ranked by the harmonic mean of ANI and conserved DNA.
+Optionally, for draft assembly inputs ReferenceSeeker can use MeDuSa
+(Bosi, Donati et al. 2015) to scaffold contigs based on the 20 closest reference genomes.
 
 
 ## Input & Output
@@ -122,15 +122,17 @@ comprising kmer hash subsets as well as fasta files.
 These databases (RefSeq release 90) can be downloaded from the the following list: (type, link, # genomes, size zipped, size unzipped)
 - bacteria: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz>, 14,983, 18 Gb, 58 Gb
 - archaea: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz>, 386, 335 Mb, 1.1 Gb
-- viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7,855, 525 Mb, 719 Mb
 - fungi: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz>, 277, 2.5 Gb, 7.7 Gb
+- protozoa: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/protozoa.tar.gz>, 77, 953 Mb, 3.2 Gb
+- viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7,855, 525 Mb, 719 Mb
 
 The latest versions can be built using a custom nextflow pipeline.
 Valid values for `DB_TYPE` are:
 - 'archaea'
 - 'bacteria'
-- 'viral'
 - 'fungi'
+- 'protozoa'
+- 'viral'
 
 Download and install Nextflow:
 ```

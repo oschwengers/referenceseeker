@@ -1,12 +1,11 @@
 
 NCBI_PATH='ftp://ftp.ncbi.nlm.nih.gov/genomes'
 
-#OPTIND=1
 DOMAIN=''
-getopts "bavf" opt;
+getopts "bavfp" opt;
 case "$opt" in
 h|\?)
-    echo "Select one of the following options:\n\t-b (bacteria)\n\t-a (archaea)\n\t-v (viral)\n\t-f (fungi)"
+    echo "Select one of the following options:\n\t-b (bacteria)\n\t-a (archaea)\n\t-v (viral)\n\t-f (fungi)\n\t-p (protozoa)"
     exit 0
     ;;
 b)  DOMAIN='bacteria'
@@ -16,6 +15,8 @@ a)  DOMAIN='archaea'
 v)  DOMAIN='viral'
     ;;
 f)  DOMAIN='fungi'
+    ;;
+p)  DOMAIN='protozoa'
     ;;
 \?)
     echo "Invalid option: -$OPTARG" >&2
