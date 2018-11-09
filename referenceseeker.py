@@ -13,7 +13,7 @@ from itertools import repeat
 
 
 parser = argparse.ArgumentParser( prog='ReferenceSeeker',
-    description='Fast determination of suitable reference genomes.' )
+    description='Rapid determination of appropriate reference genomes.' )
 parser.add_argument( 'genome', metavar='<genome>', help='Target draft genome in fasta format' )
 parser.add_argument( '--db', '-d', required=True, help='ReferenceSeeker database path' )
 parser.add_argument( '--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)' )
@@ -216,14 +216,15 @@ results = sorted( tmp_results, key=lambda k: -(k['ani']*k['conservedDna']) )
 
 
 # print results to STDOUT
-if( args.verbose ): print( '\nID\tANI\tConserved DNA\tTaxonomy ID\tAssembly Status\tName' )
+if( args.verbose ): print( '' )
+print( '#ID\tANI\tCon. DNA\tTaxonomy ID\tAssembly Status\tOrganism' )
 for result in results:
     print( '%s\t% 2.2f\t% 2.2f\t%s\t%s\t%s' % (result['id'], result['ani']*100, result['conservedDna']*100, result['tax'], result['status'], result['name'] ) )
 
 
 # create scaffolds based on draft genome and detected references
 if( args.scaffolds ):
-    if( args.verbose ): print( 'create scaffolds...' )
+    if( args.verbose ): print( '\ncreate scaffolds...' )
     # copy first 20 references to tmp file
     tmpDir = tempfile.mkdtemp()
     if( len(results) > 20 ): results = results[:20]

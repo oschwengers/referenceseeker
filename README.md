@@ -1,49 +1,62 @@
-# ReferenceSeeker: fast determination of suitable reference genomes.
+# ReferenceSeeker: rapid determination of suitable reference genomes.
 Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 
 
 ## Contents
-- Description
-- Input & Output
-- Installation
-- Usage
-- Examples
-- Databases
-- Dependencies
+- [Description](#description)
+- [Input & Output](#input-output)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Databases](#databases)
+- [Dependencies](#dependencies)
 
 
 ## Description
 ReferenceSeeker determines closely related reference genomes from
 RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>) following a scalable hierarchical
-approach combining a fast kmer profile based database lookup of candidates and
-subsequent calculation of specific average nucleotide identity (ANI) values
-for the fast determination of suitable reference genomes.
+approach combining an ultra-fast kmer profile-based database lookup of candidate
+reference genomes and subsequent computation of specific average nucleotide
+identity (ANI) values for the rapid determination of suitable reference genomes.
 
-ReferenceSeeker computes kmer profile based genome distances between a query genome and
-and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Hereby, only
-complete genomes or those stated as 'representative' or 'reference' genome are included.
-ReferenceSeeker offers pre-built databases for the following taxonomic groups:
-bacteria, archaea, fungi, protozoa and viruses. For resulting candidate reference
-genomes ReferenceSeeker subsequently computes ANI and conserved DNA values filtered
-to community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
-(Goris, Konstantinos et al. 2007) ranked by the harmonic mean of ANI and conserved DNA.
-Optionally, for draft assembly inputs ReferenceSeeker can use MeDuSa
-(Bosi, Donati et al. 2015) to scaffold contigs based on the 20 closest reference genomes.
+ReferenceSeeker computes kmer-based genome distances between a query genome and
+and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Therefore,
+only complete genomes or those stated as 'representative' or 'reference' genome
+are included. ReferenceSeeker offers pre-built databases for a broad spectrum of
+microbial taxonomic groups, i.e. bacteria, archaea, fungi, protozoa and viruses.
+For resulting candidates ReferenceSeeker subsequently computes ANI values picking
+genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
+(Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
+Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
+to scaffold contigs based on the 20 closest reference genomes.
 
 
 ## Input & Output
-Input:
-draft or finished genomes in fasta format
+### Input:
+Draft or finished genomes in fasta format
 
-Output:
-tab separated to STDOUT comprising the following columns:
-- RefSeq ID
+```
+referenceseeker.py --db ~/bacteria GCF_000013425.1.fna
+```
+
+### Output:
+Tab separated to STDOUT comprising the following columns:
+- RefSeq Assembly ID
 - ANI
-- conserved DNA
+- Conserved DNA
 - NCBI Taxonomy ID
 - Assembly Status
-- Organism (genus species strain)
+- Organism
 
+```
+#ID	ANI Con. DNA Taxonomy ID Assembly Status Organism
+GCF_000013425.1	 100.00	 100.00	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
+GCF_001900185.1	 100.00	 99.89	46170	complete	Staphylococcus aureus subsp. aureus HG001
+GCF_900475245.1	 100.00	 99.57	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
+GCF_001018725.2	 100.00	 99.28	1280	complete	Staphylococcus aureus FDAARGOS_10
+GCF_003595385.1	 99.87	 96.80	1280	complete	Staphylococcus aureus USA300-SUR2
+...
+```
 
 ## Installation
 To setup ReferenceSeeker just do the following:
@@ -119,14 +132,17 @@ referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
 ## Databases
 ReferenceSeeker depends on custom databases based on reference, representative as
 well as complete NCBI RefSeq genomes comprising kmer hash profiles taxonomic information.
-These databases (RefSeq release 90) can be downloaded from the the following list: (type, link, # genomes, size zipped, size unzipped)
-- bacteria: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz>, 14,983, 18 Gb, 58 Gb
-- archaea: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz>, 386, 335 Mb, 1.1 Gb
-- fungi: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz>, 277, 2.5 Gb, 7.7 Gb
-- protozoa: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/protozoa.tar.gz>, 77, 953 Mb, 3.2 Gb
-- viral: <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz>, 7,855, 525 Mb, 719 Mb
+We provide the following pre-built databases based on RefSeq release 90:
 
-Updated database versions reflecting tThe latest RefSeq versions can be built
+| Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
+| :---: | --- | ---: | :---: | :---: |
+| bacteria | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz> | 14,983 | 18 Gb | 58 Gb |
+| archaea | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz> | 386 | 335 Mb | 1.1 Gb |
+| fungi | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz> | 277 | 2.5 Gb | 7.7 Gb |
+| protozoa | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/protozoa.tar.gz> | 77 | 953 Mb | 3.2 Gb |
+| viral | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz> | 7,855 | 525 Mb | 719 Mb |
+
+Updated database versions reflecting the latest RefSeq versions can be built
 with a shell script and nextflow pipeline.
 
 Download and install Nextflow:
@@ -141,11 +157,11 @@ sh build-db.sh <DB_TYPE_OPTION>
 ```
 
 `build-db.sh -h` prints a list of available database options:
-- -b: bacteria
-- -a: archaea
-- -f: fungi
-- -p: protozoa
-- -v: viruses
+- `-b`: bacteria
+- `-a`: archaea
+- `-f`: fungi
+- `-p`: protozoa
+- `-v`: viruses
 
 ## Dependencies
 ReferenceSeeker depends on the following packages:
