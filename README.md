@@ -33,14 +33,13 @@ to scaffold contigs based on the 20 closest reference genomes.
 
 ## Input & Output
 ### Input:
-Draft or finished genomes in fasta format
-
+Path to a taxon database and a draft or finished genome in fasta format:
 ```
 referenceseeker.py --db ~/bacteria GCF_000013425.1.fna
 ```
 
 ### Output:
-Tab separated to STDOUT comprising the following columns:
+Tab separated lines to STDOUT comprising the following columns:
 - RefSeq Assembly ID
 - ANI
 - Conserved DNA
@@ -60,7 +59,7 @@ GCF_003595385.1	 99.87	 96.80	1280	complete	Staphylococcus aureus USA300-SUR2
 
 ## Installation
 To setup ReferenceSeeker just do the following:
-1. install necessary python dependencies via pip
+1. install necessary Python dependencies via pip
 2. clone the latest version of the repository
 3. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
 4. download and extract a databases or create one yourself
