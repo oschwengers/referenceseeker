@@ -162,7 +162,7 @@ if( args.verbose ): print( '\tscreened ' + str(len(accessionIds)) + ' potential 
 if( len( accessionIds) > __MAX_ANI_CALCULATIONS__ ):
     if( args.verbose ): print( '\treduce to best ' + str(__MAX_ANI_CALCULATIONS__) + ' hits...' )
     tmpAccessionIds = sorted( accessionIds, key=lambda k: mashDistances[ k ] )
-    accessionIds = tmpAccessionIds[:100]
+    accessionIds = tmpAccessionIds[:__MAX_ANI_CALCULATIONS__]
 
 
 # Get assemblies from RefSeq by accessions
