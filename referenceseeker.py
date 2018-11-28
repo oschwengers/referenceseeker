@@ -55,7 +55,7 @@ if( args.output ):
         sys.exit( 'ERROR: output is a directory! Please, provide a valid path to a fasta file.' )
 else:
     scaffoldsPath = cwdPath + '/scaffolds.fna'
-if( args.verbose  and  args.scaffolds ): print( 'scaffold path: ' + scaffoldsPath )
+if( args.verbose  and  args.scaffolds ): print( '\tscaffold path: ' + scaffoldsPath )
 
 if( args.verbose ): print( '\tunfiltered: ' + str(args.unfiltered) )
 if( args.verbose ): print( '\t# threads: ' + str(args.threads) )
