@@ -1,9 +1,8 @@
-#from mummer_parser_ import *
+
 from mummer_parser import *
-import sys,os
-#from IPython import embed
+import os
 import networkx as nx
-from cPickle import dump
+from pickle import dump
 from optparse import OptionParser,OptionGroup
 
 ######################################
@@ -37,7 +36,7 @@ if __name__=='__main__':
 		parser.error('Mandatory Arguments missing')
 	query_genome,mapping_dir,out,scheme,testing,gap=options.query_genome,options.mapping_dir,options.out,options.scheme,options.testing,int(options.gap)
 	if not mapping_dir.endswith('/'): mapping_dir+='/'
-	
+
 ######################################
 
 def sort_(clusters):
@@ -55,10 +54,9 @@ def update_edges_(G,Edge):
 	w=G.get_edge_data(u,v,{'weight':0})['weight'] + weight
 	d=G.get_edge_data(u,v,{'distance':0})['distance'] + distance
 	o=G.get_edge_data(u,v,{'orientation':[]})['orientation']
-	s=G.get_edge_data(u,v,{'seqSim':[]})['seqSim'] + [seqSimilarity]
 	o.append(orientation)
 	G.add_edge(u,v,weight=w,distance=d,orientation=o)
-	
+
 def update_edges(G,Edge):
 	u,v,distance,orientation,weight,seqSimilarity=Edge.name1,Edge.name2,Edge.distance,Edge.orientation,Edge.weight,Edge.seqSimilarity
 	if G.has_edge(u,v):
@@ -68,7 +66,7 @@ def update_edges(G,Edge):
 		G[u][v]['seqSim'] + [seqSimilarity]
 	else:
 		G.add_edge(u,v,weight=weight,distance=[distance],orientation=[orientation],seqSim=[seqSimilarity])
-	
+
 def compute_distances(G,method=0,outlier=1):
 	""" Estimate the distance for each edge """
 	import numpy as np
@@ -87,10 +85,9 @@ def compute_distances(G,method=0,outlier=1):
 
 def distanceEstimation_mean(dist_list,method=1):
 	""" Estimate the distance between two contigs, by computing the
-		average of all distances found for these in the reference 
+		average of all distances found for these in the reference
 		genomes. A method for outlier detection is used in order to
 		obtain reliable mean."""
-	#print "using mean..."
 	import numpy as np
 	v=np.array(dist_list)
 	if method == 1: mask=madBasedOutlier(v)
@@ -101,20 +98,13 @@ def distanceEstimation_mean(dist_list,method=1):
 def distanceEstimation_median(dist_list,method=1):
 	""" As the mother function, except that it uses the median instead
 		of the mean."""
-	#print "using median..."
 	import numpy as np
 	v=np.array(dist_list)
 	return int(np.median(v))
-	# try to remove outlier detection?
-	#if method == 1: mask=madBasedOutlier(v)
-	#else: mask=percentileBasedOutlier(v)
-	#distance=np.median(v[-mask])
-	#return distance
 
 def distanceEstimation_MSH(dist_list,seqSim_list,method=1):
 	""" As the mother function, except that it uses the most similar
 		hit's distance."""
-	#print "using most similar hit..."
 	import numpy as np
 	similarities,v=np.array(seqSim_list),np.array(dist_list)
 	# should remove outlier detection here
@@ -124,23 +114,21 @@ def distanceEstimation_MSH(dist_list,seqSim_list,method=1):
 	return int(distance)
 
 def madBasedOutlier(points, thresh=3.5):
-	""" return outliers based on median-absolute-deviation (MAD) 
+	""" return outliers based on median-absolute-deviation (MAD)
 		This performs better on small data samples (<20).
 		Require numpy object."""
 	import numpy as np
 	np.seterr(divide='ignore', invalid='ignore')
-	#from IPython import embed
 	if len(points.shape) == 1: points = points[:,None]
 	median = np.median(points, axis=0)
 	diff = np.sum((points - median)**2, axis=-1)
 	diff = np.sqrt(diff)
 	med_abs_deviation = np.median(diff)
 	modified_z_score = 0.6745 * diff / med_abs_deviation
-	#if med_abs_deviation == 0: embed()
 	return modified_z_score > thresh
-	
+
 def percentileBasedOutlier(data, threshold=95):
-	""" return outliers based on percentiles 
+	""" return outliers based on percentiles
 		This performs better on big data samples (>20).
 		Require numpy object"""
 	import numpy as np
@@ -166,41 +154,30 @@ def adjust_orientations(G):
 		G[n1][n2]['orientation']=convert_orientations(e,G[n1][n2]['orientation'])
 		max_count=G[n1][n2]['orientation'].count(max(G[n1][n2]['orientation'],
 					     key=lambda x:G[n1][n2]['orientation'].count(x)))
-		#embed()
 		G[n1][n2]['orientation_max']=list(set(tuple(i) for i in G[n1][n2]['orientation'] if G[n1][n2]['orientation'].count(i)==max_count))
 		G[n1][n2]['orientation_max']='==='.join(['=='.join(i) for i in G[n1][n2]['orientation_max']])
 		l=G[n1][n2]['orientation']
-		counts={'_'.join(i):l.count(i)/float(len(l)) for i in l}
-		#G[n1][n2]['orientation']='__'.join(['%s&%s' %(k,v) for k,v in counts.items()])
+		counts = {}
+		for i in l: counts['_'.join(i)] = l.count(i)/float(len(l))
 		G[n1][n2]['orientation']=''
 		G[n1][n2]['id']=id_
 		id_+=1
-	#edges=sorted(G.edges(), key=lambda x: G[x[0]][x[1]]['orientation_max'])
-	#for e in edges:
-		#n1,n2=e[:2]
-		#G[n1][n2]['id']=id_
-		#id_+=1
-		#embed()
-	
+
 def format_orientation_string(hit1,hit2):
 	orientations=['%s:%s' %(hit1.name,hit1.orientation), '%s:%s' %(hit2.name,hit2.orientation)]
-	#orientations.sort()
 	return orientations
 
 def convert_orientations(e,ori_list):
 	''' convert elements of a list i.e. a:1,b:-1 to b:1,a:-1 '''
-	#embed()
-	n1_,n2_=e
+	n1_=e
 	ori_new=[]
 	for l in ori_list:
 		if l[0].split(':')[0] != n1_:
-			#print 'inverting!',l[0].split(':')[0],n1_, len(ori_list) 
 			n1,v1,n2,v2=[i for j in l for i in j.split(':')]
 			v1,v2=int(v1)*-1,int(v2)*-1
 			l_=['%s:%s' %(n2,v2),'%s:%s' %(n1,v1)]
 		else: l_=l
 		ori_new.append(l_)
-	#embed()	
 	return ori_new
 
 
@@ -232,7 +209,6 @@ def testForPrune():
 		for e in edges:
 			if not testing: update_edges(G,Edge(*e,wscheme=scheme))
 			else: update_edges(G,Edge(*e,wscheme=scheme))
-	#embed()
 	print('adjusting orientations')
 	adjust_orientations(G)
 	compute_distances(G,method=gap)
@@ -240,7 +216,6 @@ def testForPrune():
 	else: dump(G,open(out,'w'))
 
 ######################################
-import sys
 if __name__ == '__main__':
 
 	inputs=[f for f in os.listdir(mapping_dir) if f.endswith('.coords')]
@@ -252,8 +227,6 @@ if __name__ == '__main__':
 		for e in edges:
 			if not testing: update_edges(G,Edge(*e,wscheme=scheme))
 			else: update_edges(G,Edge(*e,wscheme=scheme))
-		#sys.exit()
-	#embed()
 	print('adjusting orientations')
 	adjust_orientations(G)
 	compute_distances(G,method=gap)

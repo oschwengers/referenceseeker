@@ -23,6 +23,14 @@ and available in your PATH:
 
 3.  Java (from 1.6).
 
+The following Python packages should be present:
+
+1.  Networkx 
+
+2.  Numpy
+
+3.  Biopython
+
 The archive Medusa.tar.gz contains the following files:
 
 1.  A runnable .jar file medusa.jar This is the program you will run.

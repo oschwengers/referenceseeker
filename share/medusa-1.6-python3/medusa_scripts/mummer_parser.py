@@ -1,5 +1,3 @@
-import os,sys
-#from IPython import embed
 
 #######################
 
@@ -15,7 +13,7 @@ if __name__=='__main__':
 def parse(coords_file):
 	forbid={0,1,2,3,4}
 	for i,l in enumerate(open(coords_file)):
-		if i in forbid: continue 
+		if i in forbid: continue
 		yield mummer_hit(l.strip())
 
 def get_bestHits(hits,attr='covq'):
@@ -33,12 +31,9 @@ def get_bestHits(hits,attr='covq'):
 def compare(x,y,attr):
 	return float(x.__getattribute__(attr)) > float(y.__getattribute__(attr))
 
-def compare2(x,y):
-	return float(x.covq)*float(x.percidy) > float(y.covq)*float(y.percidy)
 
-	
 def getBestHits(coords,attr='covq'):
-	""" experimental version of get_bestHits with better performances. 
+	""" experimental version of get_bestHits with better performances.
 		Improvements:
 			- use of generators
 			- use of a dictionary for best hits:
@@ -47,7 +42,7 @@ def getBestHits(coords,attr='covq'):
 			- use of a dictionary for hit clusters:
 				. key = hit.reference
 				. value = [hit1,hit2,...,hitn]
-				. hits are added in order to compare the 
+				. hits are added in order to compare the
 				"""
 	best_hits={}
 	for h in parse(coords):
@@ -57,46 +52,26 @@ def getBestHits(coords,attr='covq'):
 		if compare(h,best_hits[h.query],attr): best_hits[h.query]=h
 	return best_hits.values()
 
-def getBestHits2(hits):
-	""" same as previous, but with different comparison """
-	best_hits={}
-	for h in parse(coords):
-		if h.query not in best_hits:
-			best_hits[h.query]=h
-			continue
-		if compare2(h,best_hits[h.query]): best_hits[h.query]=h
-	yield best_hits.values()
-		
 #########################
 # end of experimental
 #########################
 
 
-def get_bestHits2(hits):
-	query_contigs=set([h.query for h in hits])
-	best_hits=[]
-	for c in query_contigs:
-		best_hit=max([h for h in hits if h.query == c],key=lambda x: float(x.covq)*float(x.percidy))
-		best_hits.append(best_hit)
-	return best_hits
-
 def get_Clusters(best_hits):
 	clusters={}
 	for h in best_hits:
 		clusters[h.reference]=clusters.get(h.reference,[])
-		clusters[h.reference].append(h)	
+		clusters[h.reference].append(h)
 	return clusters
 
 def write_Clusters(clusters,out):
 	out=open(out,'w')
 	for cl in clusters.values():
 		cl.sort(key=lambda x:int(x.rstart))
-		# print '\n'.join([c.query for c in cl]),'\n'
 		out.write('\n'.join([c.query for c in cl])+'\n\n')
 
 def parse_mummer(coords):
 	hits=parse(coords)
-	#best_hits=get_bestHits(hits)
 	best_hits=getBestHits(coords)
 	clusters=get_Clusters(best_hits)
 	return clusters
@@ -106,20 +81,20 @@ def parse_mummer2(coords):
 	best_hits=get_bestHits2(hits)
 	clusters=get_Clusters(best_hits)
 	return clusters
-	
+
 def do_overlap(a,b):
 	'''return true if a (a1,a2) overlap with b (b1,b2)'''
 	sol=	((max(a) > min(b)) and (max(a) < max(b))) or \
 		((min(a) > min(b)) and (min(a) < max(b)))
 	return sol
-	
+
 def doMapWithin(hit1,hit2):
 	'''return true if a (a1,a2) maps within b (b1,b2) or viceversa'''
 	a,b=[int(hit1.rstart),int(hit1.rend)],[int(hit2.rstart),int(hit2.rend)]
 	if ((max(a) > max(b)) and (min(a) < min(b))): print('%s maps within %s !!!' %(hit2.name, hit1.name))
 	elif ((max(b) > max(a)) and (min(b) < min(a))): print('%s maps within %s !!!' %(hit1.name, hit2.name))
-	return 
-	
+	return
+
 
 #######################
 
@@ -131,7 +106,7 @@ class mummer_hit(object):
 		self.name=self.query
 		self.weight1=float(self.percidy)
 		self.weight2=float(self.percidy)*float(self.covq)
-		self.weightNaif=1		
+		self.weightNaif=1
 		if int(self.rstart)>int(self.rend): self.orientation=-1
 		else: self.orientation=1
 	def distance_from(self,hit):
@@ -145,6 +120,3 @@ class mummer_hit(object):
 
 if __name__=='__main__':
 	clusters=parse_mummer(coords)
-	#embed()
-	
-
