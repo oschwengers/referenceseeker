@@ -24,16 +24,13 @@ if [ ! -f $2 ]
 	genome="$(basename $2)"
 fi
 
-echo "db: $db"
-echo "data: $data"
-echo "genome: $genome"
-
+#echo "db: $db"
+#echo "data: $data"
+#echo "genome: $genome"
 
 sudo docker run \
 	--rm \
 	-v $db:/db \
 	-v $data:/data \
 	oschwengers/referenceseeker:latest \
-        -v \
 	$genome
-
