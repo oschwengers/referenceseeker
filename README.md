@@ -107,12 +107,12 @@ optional arguments:
 ## Examples
 Simple:
 ```
-referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
+$REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 Expert: creating scaffolds with verbose output using a defined number of threads:
 ```
-referenceseeker.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
+$REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
 ```
 
 With Docker:
@@ -152,7 +152,7 @@ curl -fsSL get.nextflow.io | bash
 Build database:
 ```
 export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
-sh build-db.sh <DB_TYPE_OPTION>
+sh $REFERENCE_SEEKER_HOME/build-db.sh <DB_TYPE_OPTION>
 ```
 
 `build-db.sh -h` prints a list of available database options:
