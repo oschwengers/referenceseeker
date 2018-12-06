@@ -35,7 +35,7 @@ to scaffold contigs based on the 20 closest reference genomes.
 ### Input:
 Path to a taxon database and a draft or finished genome in fasta format:
 ```
-referenceseeker.py --db ~/bacteria GCF_000013425.1.fna
+$ referenceseeker.py --db ~/bacteria GCF_000013425.1.fna
 ```
 
 ### Output:
@@ -66,13 +66,13 @@ To setup ReferenceSeeker just do the following:
 
 Example:
 ```
-cd ~
-pip3 install biopython numpy networkx
-git clone https://github.com/oschwengers/referenceseeker.git
-export REFERENCE_SEEKER_HOME=~/referenceseeker
-wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
-tar -xzf bacteria.tar.gz
-rm bacteria.tar.gz
+$ cd ~
+$ pip3 install biopython numpy networkx
+$ git clone https://github.com/oschwengers/referenceseeker.git
+$ export REFERENCE_SEEKER_HOME=~/referenceseeker
+$ wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
+$ tar -xzf bacteria.tar.gz
+$ rm bacteria.tar.gz
 ```
 
 Alternatively, use the aforementioned Docker image (oschwengers/referenceseeker)
@@ -107,24 +107,24 @@ optional arguments:
 ## Examples
 Simple:
 ```
-$REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
+$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 Expert: creating scaffolds with verbose output using a defined number of threads:
 ```
-$REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
+$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
 ```
 
 With Docker:
 ```
-sudo docker pull oschwengers/referenceseeker:latest
-sudo docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseeker:latest <GENOME>
+$ sudo docker pull oschwengers/referenceseeker:latest
+$ sudo docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseeker:latest <GENOME>
 ```
 
 With Docker shell script:
 ```
-sudo docker pull oschwengers/referenceseeker:latest
-referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
+$ sudo docker pull oschwengers/referenceseeker:latest
+$ referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 
@@ -146,21 +146,24 @@ with a shell script and nextflow pipeline.
 
 Download and install Nextflow:
 ```
-curl -fsSL get.nextflow.io | bash
+$ curl -fsSL get.nextflow.io | bash
 ```
 
 Build database:
 ```
-export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
-sh $REFERENCE_SEEKER_HOME/build-db.sh <DB_TYPE_OPTION>
+$ export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
+$ sh $REFERENCE_SEEKER_HOME/build-db.sh <DB_TYPE_OPTION>
 ```
 
-`build-db.sh -h` prints a list of available database options:
-- `-b`: bacteria
-- `-a`: archaea
-- `-f`: fungi
-- `-p`: protozoa
-- `-v`: viruses
+List of available database options:
+```
+$ sh build-db.sh
+	-b (bacteria)
+	-a (archaea)
+	-v (viral)
+	-f (fungi)
+	-p (protozoa)
+```
 
 ## Dependencies
 ReferenceSeeker depends on the following packages:
