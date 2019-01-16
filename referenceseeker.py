@@ -183,8 +183,8 @@ def compute_ani(dna_fragments_path, dna_fragments, ref_genome):
 	ani_matches = 0
 	ni_sum = 0.0
 	for fm in dna_fragment_matches:
-		if (((float(fm['alignment_length'] - fm['no_non_identities']) / float(fm['length'])) > 0.3)
-				and ((float(fm['alignment_length']) / float(fm['length'])) >= 0.7)):
+		if(((float(fm['alignment_length'] - fm['no_non_identities']) / float(fm['length'])) > 0.3)
+			and ((float(fm['alignment_length']) / float(fm['length'])) >= 0.7)):
 			ni_sum += float(fm['alignment_length'] - fm['no_non_identities']) / float(fm['alignment_length'])
 			ani_matches += 1
 	ani = (ni_sum / float(ani_matches)) if ani_matches > 0 else 0
@@ -203,6 +203,28 @@ def compute_ani(dna_fragments_path, dna_fragments, ref_genome):
 	ref_genome['ani'] = ani
 	ref_genome['conserved_dna'] = conserved_dna
 	return ref_genome
+
+
+def compute_n50(fasta_path):
+	"""Calculate N50 metric.
+
+	:param fasta_path: Path to sequence Fasta file.
+
+	:rtype (N50,L50): A tuple containing the N50 and L50 metrics for the assembly in 'fasta_path'.
+	"""
+	genome_length = 0
+	contig_lengths = []
+	for record in SeqIO.parse(fasta_path, 'fasta'):
+		length = len(record.seq)
+		genome_length += length
+		contig_lengths.append(length)
+	contig_lengths = sorted(contig_lengths, reverse=True)
+	tmp_sum = 0
+	i = -1
+	while tmp_sum <= 0.5 * genome_length:
+		i += 1
+		tmp_sum += contig_lengths[i]
+	return contig_lengths[i], i+1
 
 
 # calculate genome distances via Mash
@@ -358,6 +380,7 @@ if args.scaffolds:
 	# parse MeDuSa output and print results
 	medusa_result_path = genome_path + '_SUMMARY'
 	if os.path.isfile(medusa_result_path) and os.access(medusa_result_path, os.R_OK):
+		n50_pre_scaffolding, l50_pre_scaffolding = compute_n50(genome_path)
 		with open(medusa_result_path, 'r') as medusa_result_file:
 			medusa_result = medusa_result_file.read()
 			mg = re.search('singletons = (\d+), multi-contig scaffold = (\d+)', medusa_result)
@@ -365,24 +388,35 @@ if args.scaffolds:
 			no_scaffolds = int(mg.group(2))
 			mg = re.search('from (\d+) initial fragments', medusa_result)
 			no_init_contigs = int(mg.group(1))
+			n50_post_scaffolding, l50_post_scaffolding = compute_n50(scaffolds_path)
 			if args.verbose:
 				print(
 					(
-						'\tinitial contigs: %d\n'
-						'\t# new scaffolds: %d\n'
-						'\t# new contigs: %d\n'
+						'pre-scaffolding:\n'
+						'\tcontigs: %d\n'
+						'\tN50: %d\n'
+						'\tL50: %d\n'
+						'post-scaffolding:\n'
+						'\tscaffolds: %d\n'
+						'\tcontigs: %d\n'
+						'\tN50: %d\n'
+						'\tL50: %d'
 					) %
 					(
 						no_init_contigs,
+						n50_pre_scaffolding,
+						l50_pre_scaffolding,
 						no_scaffolds,
-						no_contigs
+						no_contigs,
+						n50_post_scaffolding,
+						l50_post_scaffolding
 					)
 				)
 		os.remove(medusa_result_path)
 	else:
 		sys.exit(
 			(
-				'ERROR: MeDuSa couldn\'t scaffold contigs!\n'
-				'Maybe selected reference genomes do not provide enough common sequence information?'
+				'ERROR: Contigs could not be scaffolded by MeDuSa!\n'
+				'Maybe selected reference genomes do not provide enough common sequence information.'
 			)
 		)
