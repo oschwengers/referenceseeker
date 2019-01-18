@@ -31,14 +31,17 @@ Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
 to scaffold contigs based on the 20 most suitable reference genomes.
 
 The reasoning for subsequent calculations of both ANI and conserved DNA values 
-is that albeit mash distance values correlate with ANI values for closely 
-related genomes, they do not necessarily correlate with conserved DNA values 
-as well. A kmer-based comparison alone cannot distinguish if a kmer is missing 
-due to a SNP or a lacking of the comprising subsequence.
+is that Mash distance values correlate well with ANI values for closely 
+related genomes but the same is not true for conserved DNA values. A kmer 
+fingerprint-based comparison alone cannot distinguish if a kmer is missing 
+due to a SNP, for instance or a lack of the kmer-comprising subsequence.
 As DNA conservancy (next to DNA identity) is very important for many kinds of 
 analyses, e.g. reference based SNP detections, ranking potential reference 
 genomes based on a mash distance alone is often not sufficient in order to select 
 the most appropriate reference genomes.
+
+![Mash D vs. ANI / conDNA](mash-ani-cdna.mini.png?raw=true)
+
 
 ## Input & Output
 ### Input:
