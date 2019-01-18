@@ -103,17 +103,19 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --db DB, -d DB        ReferenceSeeker database path
-  --threads THREADS, -t THREADS
-                        Number of threads to use (default = number of
-                        available CPUs)
+  --crg CRG, -c CRG     Max number of candidate reference genomes to assess
+                        (default = 100)
   --unfiltered, -u      Set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
-                        conserved DNA >= 0.69. Use this option for very rare species.
-  --verbose, -v         Print verbose information
+                        conserved DNA >= 0.69
   --scaffolds, -s       Build scaffolds via MeDuSa (Bosi, Donati et al. 2015)
                         based on detected references
   --output OUTPUT, -o OUTPUT
                         Output fasta file for built scaffolds
+  --threads THREADS, -t THREADS
+                        Number of threads to use (default = number of
+                        available CPUs)
+  --verbose, -v         Print verbose information
   --version             show program's version number and exit
 ```
 
@@ -125,7 +127,7 @@ $ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
 
 Expert: creating scaffolds with verbose output using a defined number of threads:
 ```
-$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
+$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --crg 500 --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
 ```
 
 With Docker:
