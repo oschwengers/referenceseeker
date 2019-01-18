@@ -30,24 +30,18 @@ parser.add_argument(
 	help='ReferenceSeeker database path'
 )
 parser.add_argument(
-	'--threads',
-	'-t',
+	'--crg',
+	'-c',
 	action='store',
 	type=int,
-	default=mp.cpu_count(),
-	help='Number of threads to use (default = number of available CPUs)'
+	default=100,
+	help='Max number of candidate reference genomes to assess (default = 100)'
 )
 parser.add_argument(
 	'--unfiltered',
 	'-u',
 	action='store_true',
 	help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69'
-)
-parser.add_argument(
-	'--verbose',
-	'-v',
-	action='store_true',
-	help='Print verbose information'
 )
 parser.add_argument(
 	'--scaffolds',
@@ -61,6 +55,20 @@ parser.add_argument(
 	help='Output fasta file for built scaffolds'
 )
 parser.add_argument(
+	'--threads',
+	'-t',
+	action='store',
+	type=int,
+	default=mp.cpu_count(),
+	help='Number of threads to use (default = number of available CPUs)'
+)
+parser.add_argument(
+	'--verbose',
+	'-v',
+	action='store_true',
+	help='Print verbose information'
+)
+parser.add_argument(
 	'--version',
 	action='version',
 	version='%(prog)s 1.0'
@@ -71,7 +79,6 @@ args = parser.parse_args()
 # set general constants
 MASH_MASH_DIST = '0.1'
 MIN_FRAGMENT_SIZE = 100
-MAX_ANI_CALCULATIONS = 100
 
 
 # check parameters & environment variables
@@ -105,9 +112,10 @@ if args.verbose:
 	print('\tREFERENCE_SEEKER_HOME: ' + REFERENCE_SEEKER_HOME)
 	print('\tdb path: ' + db_path)
 	print('\tgenome path: ' + genome_path)
-	print('\t# threads: ' + str(args.threads))
+	print('\t# CRG: ' + str(args.crg))
 	print('\tunfiltered: ' + str(args.unfiltered))
 	print('\tbuild scaffolds: ' + str(args.scaffolds))
+	print('\t# threads: ' + str(args.threads))
 	if args.scaffolds:
 		print('\tscaffold path: ' + scaffolds_path)
 
@@ -258,12 +266,12 @@ if args.verbose:
 	print('\tscreened ' + str(len(accession_ids)) + ' potential reference genome(s)')
 
 
-# reduce Mash output to best __MAX_ANI_CALCULATIONS__ hits
-if len(accession_ids) > MAX_ANI_CALCULATIONS:
+# reduce Mash output to best args.crg hits
+if len(accession_ids) > args.crg:
 	if args.verbose:
-		print('\treduce to best ' + str(MAX_ANI_CALCULATIONS) + ' hits...')
+		print('\treduce to best ' + str(args.crg) + ' hits...')
 	tmp_accession_ids = sorted(accession_ids, key=lambda k: mash_distances[k])
-	accession_ids = tmp_accession_ids[:MAX_ANI_CALCULATIONS]
+	accession_ids = tmp_accession_ids[:args.crg]
 
 
 # get assemblies from RefSeq by accessions
