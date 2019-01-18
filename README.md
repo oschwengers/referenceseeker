@@ -55,6 +55,7 @@ Tab separated lines to STDOUT comprising the following columns:
 - RefSeq Assembly ID
 - ANI
 - Conserved DNA
+- Mash Distance
 - NCBI Taxonomy ID
 - Assembly Status
 - Organism
