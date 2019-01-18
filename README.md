@@ -60,12 +60,12 @@ Tab separated lines to STDOUT comprising the following columns:
 - Organism
 
 ```
-#ID	ANI Con. DNA Taxonomy ID Assembly Status Organism
-GCF_000013425.1	 100.00	 100.00	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
-GCF_001900185.1	 100.00	 99.89	46170	complete	Staphylococcus aureus subsp. aureus HG001
-GCF_900475245.1	 100.00	 99.57	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
-GCF_001018725.2	 100.00	 99.28	1280	complete	Staphylococcus aureus FDAARGOS_10
-GCF_003595385.1	 99.87	 96.80	1280	complete	Staphylococcus aureus USA300-SUR2
+#ID	ANI	Con. DNA	Mash Distance	Taxonomy ID	Assembly Status	Organism
+GCF_000013425.1	100.00	100.00	0.00000	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
+GCF_001900185.1	100.00	99.89	0.00002	46170	complete	Staphylococcus aureus subsp. aureus HG001
+GCF_900475245.1	100.00	99.57	0.00004	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
+GCF_001018725.2	100.00	99.28	0.00016	1280	complete	Staphylococcus aureus FDAARGOS_10
+GCF_001018915.2	99.99	96.35	0.00056	1280	complete	Staphylococcus aureus NRS133
 ...
 ```
 

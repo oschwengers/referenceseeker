@@ -201,11 +201,12 @@ def compute_ani(dna_fragments_path, dna_fragments, ref_genome):
 
 	if args.verbose:
 		print(
-			'\t%s\t%2.2f\t%2.2f' %
+			'\t%s\t%2.2f\t%2.2f\t%1.5f' %
 			(
 				reference.split('/')[-1][:15],
 				ani * 100,
-				conserved_dna * 100
+				conserved_dna * 100,
+				ref_genome['mash_dist'],
 			)
 		)
 	ref_genome['ani'] = ani
@@ -288,7 +289,7 @@ with open(db_path + '/db.tsv', 'r') as fh_db_path:
 						'tax': cols[1],
 						'status': cols[2],
 						'name': cols[3],
-						'dist': mash_distances[accession_id]
+						'mash_dist': mash_distances[accession_id]
 					}
 				)
 
@@ -323,7 +324,7 @@ with open(dna_fragments_path, 'w') as fh_dna_fragments_path:
 
 # copy genomes, extract them and build ANI
 if args.verbose:
-	print('\nCompute ANIs...\n\tID\tANI\tConserved DNA')
+	print('\nCompute ANIs...\n\tID\tANI\tConserved DNA\tMash Distance')
 pool = mp.Pool(args.threads)
 results = pool.starmap(compute_ani, zip(it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
 pool.close()
@@ -342,14 +343,15 @@ results = sorted(tmp_results, key=lambda k: -(k['ani'] * k['conserved_dna']))
 # print results to STDOUT
 if args.verbose:
 	print('')
-print('#ID\tANI\tCon. DNA\tTaxonomy ID\tAssembly Status\tOrganism')
+print('#ID\tANI\tCon. DNA\tMash Distance\tTaxonomy ID\tAssembly Status\tOrganism')
 for result in results:
 	print(
-		'%s\t%2.2f\t%2.2f\t%s\t%s\t%s' %
+		'%s\t%2.2f\t%2.2f\t%1.5f\t%s\t%s\t%s' %
 		(
 			result['id'],
 			result['ani'] * 100,
 			result['conserved_dna'] * 100,
+			result['mash_dist'],
 			result['tax'],
 			result['status'],
 			result['name']
