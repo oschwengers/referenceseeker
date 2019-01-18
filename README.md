@@ -28,8 +28,17 @@ For resulting candidates ReferenceSeeker subsequently computes ANI values pickin
 genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
 (Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
 Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
-to scaffold contigs based on the 20 closest reference genomes.
+to scaffold contigs based on the 20 most suitable reference genomes.
 
+The reasoning for subsequent calculations of both ANI and conserved DNA values 
+is that albeit mash distance values correlate with ANI values for closely 
+related genomes, they do not necessarily correlate with conserved DNA values 
+as well. A kmer-based comparison alone cannot distinguish if a kmer is missing 
+due to a SNP or a lacking of the comprising subsequence.
+As DNA conservancy (next to DNA identity) is very important for many kinds of 
+analyses, e.g. reference based SNP detections, ranking potential reference 
+genomes based on a mash distance alone is often not sufficient in order to select 
+the most appropriate reference genomes.
 
 ## Input & Output
 ### Input:
@@ -59,7 +68,7 @@ GCF_003595385.1	 99.87	 96.80	1280	complete	Staphylococcus aureus USA300-SUR2
 
 ## Installation
 To setup ReferenceSeeker just do the following:
-1. install necessary Python dependencies via pip
+1. install necessary Python / Java dependencies (if necessary)
 2. clone the latest version of the repository
 3. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
 4. download and extract a databases or create one yourself
@@ -68,6 +77,7 @@ Example:
 ```
 $ cd ~
 $ pip3 install biopython numpy networkx
+$ sudo apt-get install openjdk-8-jdk
 $ git clone https://github.com/oschwengers/referenceseeker.git
 $ export REFERENCE_SEEKER_HOME=~/referenceseeker
 $ wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
@@ -166,8 +176,9 @@ $ sh build-db.sh
 ```
 
 ## Dependencies
-ReferenceSeeker depends on the following packages:
+ReferenceSeeker needs the following dependencies:
 - Python (3.5.2), Biopython (1.71), NumPy (1.14.5), NetworkX (1.11)
+- JAVA (8)
 - Mash (2.0) <https://github.com/marbl/Mash>
 - MUMmer (4.0.0-beta2) <https://github.com/gmarcais/mummer>
 - MeDuSa (1.6) <https://github.com/combogenomics/medusa>
