@@ -10,6 +10,7 @@ Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 - [Examples](#examples)
 - [Databases](#databases)
 - [Dependencies](#dependencies)
+- [Citation](#citation)
 
 
 ## Description
@@ -30,14 +31,14 @@ genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69
 Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
 to scaffold contigs based on the 20 most suitable reference genomes.
 
-The reasoning for subsequent calculations of both ANI and conserved DNA values 
-is that Mash distance values correlate well with ANI values for closely 
-related genomes but the same is not true for conserved DNA values. A kmer 
-fingerprint-based comparison alone cannot distinguish if a kmer is missing 
+The reasoning for subsequent calculations of both ANI and conserved DNA values
+is that Mash distance values correlate well with ANI values for closely
+related genomes but the same is not true for conserved DNA values. A kmer
+fingerprint-based comparison alone cannot distinguish if a kmer is missing
 due to a SNP, for instance or a lack of the kmer-comprising subsequence.
-As DNA conservancy (next to DNA identity) is very important for many kinds of 
-analyses, e.g. reference based SNP detections, ranking potential reference 
-genomes based on a mash distance alone is often not sufficient in order to select 
+As DNA conservancy (next to DNA identity) is very important for many kinds of
+analyses, e.g. reference based SNP detections, ranking potential reference
+genomes based on a mash distance alone is often not sufficient in order to select
 the most appropriate reference genomes.
 
 ![Mash D vs. ANI / conDNA](mash-ani-cdna.mini.png?raw=true)
@@ -190,3 +191,8 @@ ReferenceSeeker needs the following dependencies:
 - MeDuSa (1.6) <https://github.com/combogenomics/medusa>
 
 ReferenceSeeker has been tested against aforementioned versions.
+
+
+## Citation
+To temporarily cite our work, please transitionally refer to:
+> Schwengers O., Hain T., Chakraborty T., Goesmann A. (2019) ReferenceSeeker: rapid determination of appropriate reference genomes. GitHub https://github.com/oschwengers/referenceseeker
