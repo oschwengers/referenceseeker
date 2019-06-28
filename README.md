@@ -1,6 +1,8 @@
-# ReferenceSeeker: rapid determination of appropriate reference genomes.
-Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/oschwengers/referenceseeker/blob/master/LICENSE)
+![Don't judge me](https://img.shields.io/badge/Language-Python_3-steelblue.svg)
+![GitHub release](https://img.shields.io/github/release/oschwengers/referenceseeker.svg)
 
+# ReferenceSeeker: rapid determination of appropriate reference genomes.
 
 ## Contents
 - [Description](#description)
@@ -11,7 +13,6 @@ Author: Oliver Schwengers (oliver.schwengers@computational.bio.uni-giessen.de)
 - [Databases](#databases)
 - [Dependencies](#dependencies)
 - [Citation](#citation)
-
 
 ## Description
 ReferenceSeeker determines closely related reference genomes from
@@ -42,7 +43,6 @@ genomes based on a mash distance alone is often not sufficient in order to selec
 the most appropriate reference genomes.
 
 ![Mash D vs. ANI / conDNA](mash-ani-cdna.mini.png?raw=true)
-
 
 ## Input & Output
 ### Input:
@@ -92,7 +92,6 @@ $ rm bacteria.tar.gz
 
 Alternatively, use the aforementioned Docker image (oschwengers/referenceseeker)
 in order to ease the setup process.
-
 
 ## Usage
 Usage:
@@ -144,7 +143,6 @@ $ sudo docker pull oschwengers/referenceseeker:latest
 $ referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
-
 ## Databases
 ReferenceSeeker depends on custom databases based on reference, representative as
 well as complete NCBI RefSeq genomes comprising kmer hash profiles taxonomic information.
@@ -191,7 +189,6 @@ ReferenceSeeker needs the following dependencies:
 - MeDuSa (1.6) <https://github.com/combogenomics/medusa>
 
 ReferenceSeeker has been tested against aforementioned versions.
-
 
 ## Citation
 To temporarily cite our work, please transitionally refer to:
