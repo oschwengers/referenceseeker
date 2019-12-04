@@ -85,7 +85,7 @@ $ pip3 install biopython numpy networkx
 $ sudo apt-get install openjdk-8-jdk
 $ git clone https://github.com/oschwengers/referenceseeker.git
 $ export REFERENCE_SEEKER_HOME=~/referenceseeker
-$ wget https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz
+$ wget https://zenodo.org/record/3562005/files/bacteria.tar.gz?download=1
 $ tar -xzf bacteria.tar.gz
 $ rm bacteria.tar.gz
 ```
@@ -145,16 +145,16 @@ $ referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
 
 ## Databases
 ReferenceSeeker depends on custom databases based on reference, representative as
-well as complete NCBI RefSeq genomes comprising kmer hash profiles taxonomic information.
-We provide the following pre-built databases based on RefSeq release 90:
+well as complete NCBI RefSeq genomes comprising kmer hash profiles and taxonomic information.
+We provide the following pre-built databases based on RefSeq 2019-07-02 via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005) :
 
 | Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
 | :---: | --- | ---: | :---: | :---: |
-| bacteria | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/bacteria.tar.gz> | 14,983 | 18 Gb | 58 Gb |
-| archaea | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/archaea.tar.gz> | 386 | 335 Mb | 1.1 Gb |
-| fungi | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/fungi.tar.gz> | 277 | 2.5 Gb | 7.7 Gb |
-| protozoa | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/protozoa.tar.gz> | 77 | 953 Mb | 3.2 Gb |
-| viral | <https://s3.computational.bio.uni-giessen.de/swift/v1/referenceseeker/viral.tar.gz> | 7,855 | 525 Mb | 719 Mb |
+| bacteria | <https://zenodo.org/record/3562005/files/bacteria.tar.gz?download=1> | 18,229 | 22 Gb | 71 Gb |
+| archaea | <https://zenodo.org/record/3562005/files/archaea.tar.gz?download=1> | 417 | 364 Mb | 1.2 Gb |
+| fungi | <https://zenodo.org/record/3562005/files/fungi.tar.gz?download=1> | 288 | 2.6 Gb | 8 Gb |
+| protozoa | <https://zenodo.org/record/3562005/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
+| viral | <https://zenodo.org/record/3562005/files/viral.tar.gz?download=1> | 9,264 | 608 Mb | 835 Mb |
 
 Updated database versions reflecting the latest RefSeq versions can be built
 with a shell script and nextflow pipeline.
