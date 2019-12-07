@@ -191,5 +191,5 @@ ReferenceSeeker needs the following dependencies:
 ReferenceSeeker has been tested against aforementioned versions.
 
 ## Citation
-To temporarily cite our work, please transitionally refer to:
-> Schwengers O., Hain T., Chakraborty T., Goesmann A. (2019) ReferenceSeeker: rapid determination of appropriate reference genomes. GitHub https://github.com/oschwengers/referenceseeker
+
+> ReferenceSeeker: rapid determination of appropriate reference genomes. Oliver Schwengers, Torsten Hain, Trinad Chakraborty, Alexander Goesmann. bioRxiv 863621; doi: https://doi.org/10.1101/863621
