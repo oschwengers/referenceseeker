@@ -29,8 +29,6 @@ microbial taxonomic groups, i.e. bacteria, archaea, fungi, protozoa and viruses.
 For resulting candidates ReferenceSeeker subsequently computes ANI values picking
 genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
 (Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
-Additionally, ReferenceSeeker can use MeDuSa (Bosi, Donati et al. 2015)
-to scaffold contigs based on the 20 most suitable reference genomes.
 
 The reasoning for subsequent calculations of both ANI and conserved DNA values
 is that Mash distance values correlate well with ANI values for closely
@@ -96,7 +94,7 @@ in order to ease the setup process.
 ## Usage
 Usage:
 ```
-ReferenceSeeker [-h] --db DB [--threads THREADS] [--unfiltered] [--verbose] [--scaffolds] [--output OUTPUT] [--version] <genome>
+ReferenceSeeker [-h] --db DB [--threads THREADS] [--unfiltered] [--verbose] [--output OUTPUT] [--version] <genome>
 
 positional arguments:
   <genome>              Target draft genome in fasta format
@@ -109,8 +107,6 @@ optional arguments:
   --unfiltered, -u      Set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
                         conserved DNA >= 0.69
-  --scaffolds, -s       Build scaffolds via MeDuSa (Bosi, Donati et al. 2015)
-                        based on detected references
   --output OUTPUT, -o OUTPUT
                         Output fasta file for built scaffolds
   --threads THREADS, -t THREADS
@@ -126,9 +122,9 @@ Simple:
 $ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
-Expert: creating scaffolds with verbose output using a defined number of threads:
+Expert: verbose output and increased output of candidate reference genomes using a defined number of threads:
 ```
-$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --crg 500 --scaffolds --output scaffolds.fasta --verbose --threads 8 <GENOME>
+$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --crg 500 --output scaffolds.fasta --verbose --threads 8 <GENOME>
 ```
 
 With Docker:
@@ -182,11 +178,9 @@ $ sh build-db.sh
 
 ## Dependencies
 ReferenceSeeker needs the following dependencies:
-- Python (3.5.2), Biopython (1.71), NumPy (1.14.5), NetworkX (1.11)
-- JAVA (8)
+- Python (3.5.2), Biopython (1.71)
 - Mash (2.0) <https://github.com/marbl/Mash>
 - MUMmer (4.0.0-beta2) <https://github.com/gmarcais/mummer>
-- MeDuSa (1.6) <https://github.com/combogenomics/medusa>
 
 ReferenceSeeker has been tested against aforementioned versions.
 

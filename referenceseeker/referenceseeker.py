@@ -4,12 +4,10 @@ import argparse
 import itertools as it
 import multiprocessing as mp
 import os
-import re
-import shutil
 import subprocess as sp
 import sys
-import tempfile
 
+import referenceseeker
 import referenceseeker.constants as rc
 import referenceseeker.util as util
 import referenceseeker.ani as ani
@@ -25,11 +23,9 @@ def main():
     parser.add_argument('--db', '-d', required=True, help='ReferenceSeeker database path')
     parser.add_argument('--crg', '-c', action='store', type=int, default=100, help='Max number of candidate reference genomes to assess (default = 100)')
     parser.add_argument('--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
-    parser.add_argument('--scaffolds', '-s', action='store_true', help='Build scaffolds via MeDuSa (Bosi, Donati et al. 2015) based on detected references')
-    parser.add_argument('--output', '-o', help='Output fasta file for built scaffolds')
     parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)')
     parser.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')
-    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+    parser.add_argument('--version', action='version', version='%(prog)s ' + referenceseeker.__version__)
     args = parser.parse_args()
 
     # check parameters & environment variables
@@ -49,12 +45,6 @@ def main():
         sys.exit('ERROR: genome file not readable!')
 
     cwd_path = os.path.abspath(os.getcwd())
-    if args.output:
-        scaffolds_path = os.path.abspath(args.output)
-        if os.path.isdir(scaffolds_path):
-            sys.exit('ERROR: output is a directory! Please, provide a valid path to a fasta file.')
-    else:
-        scaffolds_path = cwd_path + '/scaffolds.fna'
 
     # print verbose information
     if args.verbose:
@@ -66,9 +56,6 @@ def main():
         print('\tunfiltered: ' + str(args.unfiltered))
         print('\tbuild scaffolds: ' + str(args.scaffolds))
         print('\t# threads: ' + str(args.threads))
-        if args.scaffolds:
-            print('\tscaffold path: ' + scaffolds_path)
-    fh_def_null = open(os.devnull, 'w')
 
     # calculate genome distances via Mash
     if args.verbose:
@@ -146,78 +133,6 @@ def main():
                 result['name']
             )
         )
-
-    # create scaffolds based on draft genome and detected references
-    if args.scaffolds:
-        if args.verbose:
-            print('\ncreate scaffolds...')
-        # copy first 20 references to tmp file
-        tmp_dir = tempfile.mkdtemp()
-        if len(results) > 20:
-            results = results[:20]
-        for result in results:
-            os.symlink(db_path + '/' + result['id'] + '.fna', tmp_dir + '/' + result['id'] + '.fna')
-        os.putenv('PATH', REFERENCE_SEEKER_HOME + '/share/mummer/:' + os.getenv('PATH'))
-        sp.check_call(
-            [
-                'java', '-jar', REFERENCE_SEEKER_HOME + '/share/medusa/medusa.jar',
-                '-f', tmp_dir,
-                '-i', genome_path,  # assembled alignments
-                '-o', scaffolds_path,  # new name
-                '-v',  # verbose flag
-                '-threads', str(args.threads),  # threads
-                '-random', '1000',  # use 1000 random rounds to find the best scaffolds
-                '-scriptPath', REFERENCE_SEEKER_HOME + '/share/medusa/medusa_scripts'  # path to medusa script directory
-            ],
-            cwd=cwd_path,
-            stdout=fh_def_null,
-            stderr=sp.STDOUT
-        )
-        shutil.rmtree(tmp_dir)
-
-        # parse MeDuSa output and print results
-        medusa_result_path = genome_path + '_SUMMARY'
-        if os.path.isfile(medusa_result_path) and os.access(medusa_result_path, os.R_OK):
-            n50_pre_scaffolding, l50_pre_scaffolding = util.compute_n50(genome_path)
-            with open(medusa_result_path, 'r') as medusa_result_file:
-                medusa_result = medusa_result_file.read()
-                mg = re.search('singletons = (\d+), multi-contig scaffold = (\d+)', medusa_result)
-                no_contigs = int(mg.group(1))
-                no_scaffolds = int(mg.group(2))
-                mg = re.search('from (\d+) initial fragments', medusa_result)
-                no_init_contigs = int(mg.group(1))
-                n50_post_scaffolding, l50_post_scaffolding = util.compute_n50(scaffolds_path)
-                if args.verbose:
-                    print(
-                        (
-                            'pre-scaffolding:\n'
-                            '\tcontigs: %d\n'
-                            '\tN50: %d\n'
-                            '\tL50: %d\n'
-                            'post-scaffolding:\n'
-                            '\tscaffolds: %d\n'
-                            '\tcontigs: %d\n'
-                            '\tN50: %d\n'
-                            '\tL50: %d'
-                        ) %
-                        (
-                            no_init_contigs,
-                            n50_pre_scaffolding,
-                            l50_pre_scaffolding,
-                            no_scaffolds,
-                            no_contigs,
-                            n50_post_scaffolding,
-                            l50_post_scaffolding
-                        )
-                    )
-            os.remove(medusa_result_path)
-        else:
-            sys.exit(
-                (
-                    'ERROR: Contigs could not be scaffolded by MeDuSa!\n'
-                    'Maybe selected reference genomes do not provide enough common sequence information.'
-                )
-            )
 
 
 if __name__ == '__main__':

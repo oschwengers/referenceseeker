@@ -56,26 +56,3 @@ def build_dna_fragments(genome_path, dna_fragments_path):
             sequence = sequence[rc.FRAGMENT_SIZE:]
             dna_fragment_idx += 1
     return dna_fragments
-
-
-def compute_n50(fasta_path):
-    """Calculate N50 metric.
-
-    :param fasta_path: Path to sequence Fasta file.
-
-    :rtype (N50,L50): A tuple containing the N50 and L50 metrics for the assembly in 'fasta_path'.
-    """
-
-    genome_length = 0
-    contig_lengths = []
-    for record in SeqIO.parse(fasta_path, 'fasta'):
-        length = len(record.seq)
-        genome_length += length
-        contig_lengths.append(length)
-    contig_lengths = sorted(contig_lengths, reverse=True)
-    tmp_sum = 0
-    i = -1
-    while tmp_sum <= 0.5 * genome_length:
-        i += 1
-        tmp_sum += contig_lengths[i]
-    return contig_lengths[i], i + 1
