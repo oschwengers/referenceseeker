@@ -74,7 +74,9 @@ def setup_configuration(args):
         'bundled-binaries': False,
         'threads': args.threads,
         'unfiltered': args.unfiltered,
-        'crg': args.crg
+        'crg': args.crg,
+        'ani': args.ani,
+        'conserved_dna': args.conserved_dna
     }
     base_dir = Path(__file__).parent.parent
     share_dir = base_dir.joinpath('share')

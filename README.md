@@ -27,7 +27,7 @@ only complete genomes or those stated as 'representative' or 'reference' genome
 are included. ReferenceSeeker offers pre-built databases for a broad spectrum of
 microbial taxonomic groups, i.e. bacteria, archaea, fungi, protozoa and viruses.
 For resulting candidates ReferenceSeeker subsequently computes ANI values picking
-genomes meeting community standard thresholds (ANI >= 95 % & conserved DNA >= 69 %)
+genomes meeting community standard thresholds by default (ANI >= 95 % & conserved DNA >= 69 %)
 (Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
 
 The reasoning for subsequent calculations of both ANI and conserved DNA values
@@ -99,8 +99,9 @@ $ ./referenceseeker/bin/referenceseeker --help
 ## Usage
 Usage:
 ```
-usage: referenceseeker [-h] [--crg CRG] [--unfiltered] [--verbose]
-                       [--threads THREADS] [--version]
+usage: referenceseeker [-h] [--crg CRG] [--ani ANI]
+                       [--conserved-dna CONSERVED_DNA] [--unfiltered]
+                       [--verbose] [--threads THREADS] [--version]
                        <database> <genome>
 
 Rapid determination of appropriate reference genomes.
@@ -111,8 +112,11 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --crg CRG, -c CRG     Max number of candidate reference genomes to assess
+  --crg CRG, -r CRG     Max number of candidate reference genomes to assess
                         (default = 100)
+  --ani ANI, -a ANI     ANI threshold value (default = 0.95)
+  --conserved-dna CONSERVED_DNA, -c CONSERVED_DNA
+                        Conserved DNA threshold value (default = 0.69)
   --unfiltered, -u      Set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
                         conserved DNA >= 0.69
