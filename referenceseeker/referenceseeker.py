@@ -19,7 +19,9 @@ def main():
     # parse options and arguments
     parser = argparse.ArgumentParser(
         prog='ReferenceSeeker',
-        description='Rapid determination of appropriate reference genomes.'
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='Rapid determination of appropriate reference genomes.',
+        epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION
     )
     parser.add_argument('genome', metavar='<genome>', help='Target draft genome in fasta format')
     parser.add_argument('--db', '-d', required=True, help='ReferenceSeeker database path')
@@ -28,13 +30,7 @@ def main():
     parser.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')
     parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
-    parser.add_argument('--citation', '-c', action='store_true', help='Print citation')
     args = parser.parse_args()
-
-    # print citation
-    if(args.citation):
-        print(rc.CITATION)
-        sys.exit()
 
     # setup global configuration
     config = util.setup_configuration(args)

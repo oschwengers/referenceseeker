@@ -7,4 +7,6 @@ UNFILTERED_MASH_DIST = '0.3'
 FRAGMENT_SIZE = 1020
 MIN_FRAGMENT_SIZE = 100
 
-CITATION = "ReferenceSeeker: rapid determination of appropriate reference genomes.\nOliver Schwengers, Torsten Hain, Trinad Chakraborty, Alexander Goesmann.\nbioRxiv 863621; doi: https://doi.org/10.1101/863621"
+CITATION = '''Schwengers O., Hain T., Chakraborty T., Goesmann A. (2019)
+ReferenceSeeker: rapid determination of appropriate reference genomes.
+bioRxiv 863621; doi: https://doi.org/10.1101/863621'''
