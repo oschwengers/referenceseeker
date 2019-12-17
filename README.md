@@ -70,22 +70,31 @@ GCF_001018915.2	99.99	96.35	0.00056	1280	complete	Staphylococcus aureus NRS133
 ```
 
 ## Installation
-To setup ReferenceSeeker just do the following:
+Platon can be installed and used in 2 different ways.
+
+In either case, a taxon database must be downloaded which we provide for download at Zenodo:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005)
+For more information scroll to [Databases](#databases).
+
+### Conda:
+The preferred way to install and run ReferenceSeeker is BioConda:
+```
+$ conda install -c conda-forge -c bioconda -c defaults referenceseeker
+$ referenceseeker --help
+```
+
+### GitHub
+Alternatively, you can use this raw GitHub repository:
 1. install necessary Python dependencies (if necessary)
 2. clone the latest version of the repository
-3. download and extract a databases or create one yourself
+3. download and extract a databases
 
 Example:
 ```
-$ pip3 install biopython
+$ pip3 install --user biopython
 $ git clone https://github.com/oschwengers/referenceseeker.git
-$ wget https://zenodo.org/record/3562005/files/bacteria.tar.gz?download=1
-$ tar -xzf bacteria.tar.gz
-$ rm bacteria.tar.gz
+$ ./referenceseeker/bin/referenceseeker --help
 ```
-
-Alternatively, use the aforementioned Docker image (oschwengers/referenceseeker)
-in order to ease the setup process.
 
 ## Usage
 Usage:
@@ -117,24 +126,14 @@ optional arguments:
 ## Examples
 Simple:
 ```
-$ bin/referenceseeker <REFERENCE_SEEKER_DB> <GENOME>
+$ # referenceseeker <REFERENCE_SEEKER_DB> <GENOME>
+$ referenceseeker bacteria/ genome.fasta
 ```
 
 Expert: verbose output and increased output of candidate reference genomes using a defined number of threads:
 ```
-$ bin/referenceseeker --crg 500 --verbose --threads 8 <REFERENCE_SEEKER_DB> <GENOME>
-```
-
-With Docker:
-```
-$ sudo docker pull oschwengers/referenceseeker:latest
-$ sudo docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseeker:latest <REFERENCE_SEEKER_DB> <GENOME>
-```
-
-With Docker shell script:
-```
-$ sudo docker pull oschwengers/referenceseeker:latest
-$ referenceseeker.sh <REFERENCE_SEEKER_DB> <GENOME>
+$ # referenceseeker --crg 500 --verbose --threads 8 <REFERENCE_SEEKER_DB> <GENOME>
+$ referenceseeker --crg 500 --verbose --threads 8 bacteria/ genome.fasta
 ```
 
 ## Databases
