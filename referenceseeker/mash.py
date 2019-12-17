@@ -11,6 +11,7 @@ def run_mash(config, mash_output_path):
             'mash',
             'dist',
             '-d', rc.UNFILTERED_MASH_DIST if config['unfiltered'] else rc.MAX_MASH_DIST,
+            '-p', str(config['threads']),
             str(config['db_path'].joinpath('db.msh')),
             str(config['genome_path'])
         ]
