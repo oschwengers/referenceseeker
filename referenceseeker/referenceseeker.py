@@ -3,13 +3,14 @@ import argparse
 import itertools as it
 import multiprocessing as mp
 import os
-import subprocess as sp
 import sys
+import shutil
 
 from pathlib import Path
 
 import referenceseeker
 import referenceseeker.constants as rc
+import referenceseeker.mash as mash
 import referenceseeker.util as util
 import referenceseeker.ani as ani
 
@@ -36,18 +37,20 @@ def main():
         sys.exit()
 
     # setup global configuration
-    config = util.setup_configuration()
+    config = util.setup_configuration(args)
 
     # check parameters
     db_path = Path(args.db)
     if(not os.access(str(db_path), os.R_OK)):
         sys.exit('ERROR: database directory not readable!')
     db_path = db_path.resolve()
+    config['db_path'] = db_path
 
     genome_path = Path(args.genome)
     if(not os.access(str(genome_path), os.R_OK)):
         sys.exit('ERROR: genome file not readable!')
     genome_path = genome_path.resolve()
+    config['genome_path'] = genome_path
 
     # print verbose information
     if(args.verbose):
@@ -63,60 +66,44 @@ def main():
 
     # calculate genome distances via Mash
     if(args.verbose):
-        print('\nAssess genome distances...')
-    mash_result_path = config['tmp'].joinpath('/mash.out')
-    with open(mash_result_path, 'w') as fh:
-        sp.check_call(
-            [
-                'mash',
-                'dist',
-                '-d', rc.UNFILTERED_MASH_DIST if args.unfiltered else rc.MAX_MASH_DIST,
-                str(db_path.joinpath('/db.msh')),
-                genome_path
-            ],
-            stdout=fh,
-            stderr=sp.STDOUT
-        )
+        print('\nEstimate genome distances...')
+    mash_output_path = config['tmp'].joinpath('/mash.out')
+    mash.run_mash(mash_output_path)
 
     # extract hits and store dist
-    accession_ids = []
-    mash_distances = {}
-    with open(mash_result_path, 'r') as fh:
-        for line in fh:
-            cols = line.rstrip().split()
-            accession_ids.append(cols[0])
-            mash_distances[cols[0]] = float(cols[2])
-    os.remove(mash_result_path)
+    accession_ids, mash_distances = mash.parse_mash_results(config, mash_output_path)
     if(args.verbose):
         print("\tscreened %d potential reference genome(s)" % len(accession_ids))
 
-    # reduce Mash output to best args.crg hits
-    if len(accession_ids) > args.crg:
+    # reduce Mash output to best hits (args.crg)
+    if(len(accession_ids) > args.crg):
         if(args.verbose):
             print("\treduce to best %d hits..." % args.crg)
         tmp_accession_ids = sorted(accession_ids, key=lambda k: mash_distances[k])
         accession_ids = tmp_accession_ids[:args.crg]
 
     # get assemblies from RefSeq by accessions
-    ref_genomes = util.read_reference_genomes(db_path, accession_ids, mash_distances)
+    ref_genomes = util.read_reference_genomes(config, accession_ids, mash_distances)
 
     # build dna fragments
-    dna_fragments_path = cwd_path + '/dna-fragments.fasta'
+    dna_fragments_path = config['tmp'].joinpath('/dna-fragments.fasta')
     dna_fragments = util.build_dna_fragments(genome_path, dna_fragments_path)
 
     # copy genomes, extract them and build ANI
     if(args.verbose):
         print('\nCompute ANIs...')
     pool = mp.Pool(args.threads)
-    results = pool.starmap(ani.compute_ani, zip(it.repeat(db_path), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
+    results = pool.starmap(ani.compute_ani, zip(it.repeat(config), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
     pool.close()
     pool.join()
-    os.remove(dna_fragments_path)
+
+    # remove tmp dir
+    shutil.rmtree(str(config['tmp']))
 
     # filter and sort results
     tmp_results = []
     for result in results:
-        if args.unfiltered or ((result['conserved_dna'] >= 0.69) and (result['ani'] >= 0.95)):
+        if(args.unfiltered or ((result['conserved_dna'] >= 0.69) and (result['ani'] >= 0.95))):
             tmp_results.append(result)
     results = sorted(tmp_results, key=lambda k: -(k['ani'] * k['conserved_dna']))
 

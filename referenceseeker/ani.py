@@ -1,11 +1,11 @@
 
-import os
 import shutil
+import sys
 import subprocess as sp
 import tempfile
 
 
-def compute_ani(db_path, dna_fragments_path, dna_fragments, ref_genome):
+def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
     """Perform per-genome calculation of ANI/conserved DNA values.
 
     :param dna_fragments_path: A path to DNA fragments Fasta file.
@@ -14,34 +14,43 @@ def compute_ani(db_path, dna_fragments_path, dna_fragments, ref_genome):
 
     :rtype: A dict representing a reference genome and additionally comprising ANI / conserved DNA values.
     """
-    REFERENCE_SEEKER_HOME = os.path.abspath(os.getenv('REFERENCE_SEEKER_HOME'))
-    reference_path = db_path + '/' + ref_genome['id'] + '.fna'
+
+    reference_path = config['db_path'].joinpath("%s.fna" % ref_genome['id'])
     tmp_dir = tempfile.mkdtemp()
 
     # perform global alignments via nucmer
-    sp.check_call(
-        [
-            REFERENCE_SEEKER_HOME + '/share/mummer/nucmer',
-            '--threads=1',
-            reference_path,
-            dna_fragments_path
-        ],
+    cmd = [
+        'nucmer',
+        '--threads=1',
+        str(reference_path),
+        dna_fragments_path
+    ]
+    proc = sp.run(
+        cmd,
         cwd=tmp_dir,
+        env=config['env'],
         stdout=sp.DEVNULL,
-        stderr=sp.STDOUT
+        stderr=sp.STDOUT,
+        universal_newlines=True
     )
-    filtered_delta_path = tmp_dir + '/out-filtered.delta'
+    if(proc.returncode != 0):
+        sys.exit("ERROR: failed to execute nucmer!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
+
+    filtered_delta_path = config['db_path'].joinpath('/out-filtered.delta')
     with open(filtered_delta_path, 'w') as fh:
-        sp.check_call(
-            [
-                REFERENCE_SEEKER_HOME + '/share/mummer/delta-filter',
-                '-q',
-                'out.delta'
-            ],
+        cmd = [
+            'delta-filter',
+            '-q',
+            'out.delta'
+        ]
+        proc = sp.run(
+            cmd,
             cwd=tmp_dir,
             stdout=fh,
             stderr=sp.STDOUT
         )
+        if(proc.returncode != 0):
+            sys.exit("ERROR: failed to execute delta-filter!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
 
     # parse nucmer output
     dna_fragment = None
@@ -81,7 +90,7 @@ def compute_ani(db_path, dna_fragments_path, dna_fragments, ref_genome):
 
     shutil.rmtree(tmp_dir)
 
-    # if args.verbose:
+    # if(args.verbose):
     #     print(
     #         '\t%s\t%2.2f\t%2.2f\t%1.5f' %
     #         (

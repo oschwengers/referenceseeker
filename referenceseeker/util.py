@@ -3,7 +3,6 @@ import os
 import subprocess as sp
 import sys
 import tempfile
-
 from pathlib import Path
 
 from Bio import SeqIO
@@ -11,14 +10,14 @@ from Bio import SeqIO
 import referenceseeker.constants as rc
 
 
-def read_reference_genomes(db_path, accession_ids, mash_distances):
+def read_reference_genomes(config, accession_ids, mash_distances):
     ref_genomes = []
-    with open(db_path + '/db.tsv', 'r') as fh:
+    with open(config['db_path'].joinpath('db.tsv'), 'r') as fh:
         for line in fh:
-            if line[0] != '#':
+            if(line[0] != '#'):
                 cols = line.strip().split('\t')
                 accession_id = cols[0]
-                if accession_id in accession_ids:
+                if(accession_id in accession_ids):
                     ref_genomes.append(
                         {
                             'id': accession_id,
@@ -31,7 +30,7 @@ def read_reference_genomes(db_path, accession_ids, mash_distances):
     return ref_genomes
 
 
-def build_dna_fragments(genome_path, dna_fragments_path):
+def build_dna_fragments(config, dna_fragments_path):
     """Build DNA fragments.
 
     :param genome_path: Path to input sequence Fasta file.
@@ -42,8 +41,9 @@ def build_dna_fragments(genome_path, dna_fragments_path):
 
     dna_fragments = {}
     dna_fragment_idx = 1
+    genome_path = config['genome_path']
     with open(dna_fragments_path, 'w') as fh:
-        for record in SeqIO.parse(genome_path, 'fasta'):
+        for record in SeqIO.parse(str(genome_path), 'fasta'):
             sequence = record.seq
             while len(sequence) > (rc.FRAGMENT_SIZE + rc.MIN_FRAGMENT_SIZE):  # forestall fragments shorter than MIN_FRAGMENT_SIZE
                 dnaFragment = sequence[:rc.FRAGMENT_SIZE]
@@ -65,13 +65,16 @@ def build_dna_fragments(genome_path, dna_fragments_path):
     return dna_fragments
 
 
-def setup_configuration():
+def setup_configuration(args):
     """Test environment and build a runtime configuration."""
 
     config = {
         'env': os.environ.copy(),
         'tmp': Path(tempfile.mkdtemp()),
-        'bundled-binaries': False
+        'bundled-binaries': False,
+        'threads': args.threads,
+        'unfiltered': args.unfiltered,
+        'crg': args.crg
     }
     base_dir = Path(__file__).parent.parent
     share_dir = base_dir.joinpath('share')
