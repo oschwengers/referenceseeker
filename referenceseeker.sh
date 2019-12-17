@@ -33,4 +33,5 @@ sudo docker run \
 	-v $db:/db \
 	-v $data:/data \
 	oschwengers/referenceseeker:latest \
+    $db \
 	$genome

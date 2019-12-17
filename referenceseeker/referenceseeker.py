@@ -18,13 +18,13 @@ import referenceseeker.ani as ani
 def main():
     # parse options and arguments
     parser = argparse.ArgumentParser(
-        prog='ReferenceSeeker',
+        prog='referenceseeker',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Rapid determination of appropriate reference genomes.',
         epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION
     )
+    parser.add_argument('db', metavar='<database>', help='ReferenceSeeker database path')
     parser.add_argument('genome', metavar='<genome>', help='Target draft genome in fasta format')
-    parser.add_argument('--db', '-d', required=True, help='ReferenceSeeker database path')
     parser.add_argument('--crg', '-c', action='store', type=int, default=100, help='Max number of candidate reference genomes to assess (default = 100)')
     parser.add_argument('--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
     parser.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')

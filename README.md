@@ -71,18 +71,14 @@ GCF_001018915.2	99.99	96.35	0.00056	1280	complete	Staphylococcus aureus NRS133
 
 ## Installation
 To setup ReferenceSeeker just do the following:
-1. install necessary Python / Java dependencies (if necessary)
+1. install necessary Python dependencies (if necessary)
 2. clone the latest version of the repository
-3. set REFERENCE_SEEKER_HOME environment variable pointing to the repository directory
-4. download and extract a databases or create one yourself
+3. download and extract a databases or create one yourself
 
 Example:
 ```
-$ cd ~
-$ pip3 install biopython numpy networkx
-$ sudo apt-get install openjdk-8-jdk
+$ pip3 install biopython
 $ git clone https://github.com/oschwengers/referenceseeker.git
-$ export REFERENCE_SEEKER_HOME=~/referenceseeker
 $ wget https://zenodo.org/record/3562005/files/bacteria.tar.gz?download=1
 $ tar -xzf bacteria.tar.gz
 $ rm bacteria.tar.gz
@@ -94,43 +90,45 @@ in order to ease the setup process.
 ## Usage
 Usage:
 ```
-ReferenceSeeker [-h] --db DB [--threads THREADS] [--unfiltered] [--verbose] [--output OUTPUT] [--version] <genome>
+usage: referenceseeker [-h] [--crg CRG] [--unfiltered] [--verbose]
+                       [--threads THREADS] [--version]
+                       <database> <genome>
+
+Rapid determination of appropriate reference genomes.
 
 positional arguments:
+  <database>            ReferenceSeeker database path
   <genome>              Target draft genome in fasta format
 
 optional arguments:
   -h, --help            show this help message and exit
-  --db DB, -d DB        ReferenceSeeker database path
   --crg CRG, -c CRG     Max number of candidate reference genomes to assess
                         (default = 100)
   --unfiltered, -u      Set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
                         conserved DNA >= 0.69
-  --output OUTPUT, -o OUTPUT
-                        Output fasta file for built scaffolds
+  --verbose, -v         Print verbose information
   --threads THREADS, -t THREADS
                         Number of threads to use (default = number of
                         available CPUs)
-  --verbose, -v         Print verbose information
-  --version             show program's version number and exit
+  --version, -V         show program's version number and exit
 ```
 
 ## Examples
 Simple:
 ```
-$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> <GENOME>
+$ bin/referenceseeker <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 Expert: verbose output and increased output of candidate reference genomes using a defined number of threads:
 ```
-$ $REFERENCE_SEEKER_HOME/referenceseeker.py --db <REFERENCE_SEEKER_DB> --crg 500 --output scaffolds.fasta --verbose --threads 8 <GENOME>
+$ bin/referenceseeker --crg 500 --verbose --threads 8 <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 With Docker:
 ```
 $ sudo docker pull oschwengers/referenceseeker:latest
-$ sudo docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseeker:latest <GENOME>
+$ sudo docker run --rm -v <REFERENCE_SEEKER_DB>:/db -v <DATA_DIR>:/data oschwengers/referenceseeker:latest <REFERENCE_SEEKER_DB> <GENOME>
 ```
 
 With Docker shell script:
