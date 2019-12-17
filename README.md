@@ -46,7 +46,7 @@ the most appropriate reference genomes.
 ### Input:
 Path to a taxon database and a draft or finished genome in fasta format:
 ```
-$ referenceseeker.py --db ~/bacteria GCF_000013425.1.fna
+$ referenceseeker ~/bacteria GCF_000013425.1.fna
 ```
 
 ### Output:
