@@ -4,11 +4,13 @@ import sys
 import subprocess as sp
 import tempfile
 
+from pathlib import Path
+
 
 def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
     """Perform per-genome calculation of ANI/conserved DNA values.
 
-    :param dna_fragments_path: A path to DNA fragments Fasta file.
+    :param config: a global config object encapsulating global runtime vars
     :param dna_fragments: A dict comprising information on fragments.
     :param ref_genome: A dict representing a reference genome.
 
@@ -16,18 +18,18 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
     """
 
     reference_path = config['db_path'].joinpath("%s.fna" % ref_genome['id'])
-    tmp_dir = tempfile.mkdtemp()
+    tmp_dir = Path(tempfile.mkdtemp())
 
     # perform global alignments via nucmer
     cmd = [
         'nucmer',
         '--threads=1',
         str(reference_path),
-        dna_fragments_path
+        str(dna_fragments_path)
     ]
     proc = sp.run(
         cmd,
-        cwd=tmp_dir,
+        cwd=str(tmp_dir),
         env=config['env'],
         stdout=sp.DEVNULL,
         stderr=sp.STDOUT,
@@ -36,8 +38,8 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
     if(proc.returncode != 0):
         sys.exit("ERROR: failed to execute nucmer!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
 
-    filtered_delta_path = config['db_path'].joinpath('/out-filtered.delta')
-    with open(filtered_delta_path, 'w') as fh:
+    filtered_delta_path = tmp_dir.joinpath('out-filtered.delta')
+    with filtered_delta_path.open(mode='w') as fh:
         cmd = [
             'delta-filter',
             '-q',
@@ -45,7 +47,7 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
         ]
         proc = sp.run(
             cmd,
-            cwd=tmp_dir,
+            cwd=str(tmp_dir),
             stdout=fh,
             stderr=sp.STDOUT
         )
@@ -55,7 +57,7 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
     # parse nucmer output
     dna_fragment = None
     dna_fragment_matches = []
-    with open(filtered_delta_path, 'r') as fh:
+    with filtered_delta_path.open() as fh:
         for line in fh:
             line = line.rstrip()
             if(line[0] == '>'):
@@ -88,7 +90,7 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
             ani_matches += 1
     ani = (ni_sum / float(ani_matches)) if ani_matches > 0 else 0
 
-    shutil.rmtree(tmp_dir)
+    shutil.rmtree(str(tmp_dir))
 
     # if(args.verbose):
     #     print(

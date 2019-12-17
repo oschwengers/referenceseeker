@@ -53,18 +53,18 @@ def main():
         print("ReferenceSeeker v%s" % referenceseeker.__version__)
         print('Options, parameters and arguments:')
         print("\tuse bundled binaries: %s" % str(config['bundled-binaries']))
-        print("\tdb path: %s" % str(config['db']))
-        print("\tgenome path: %s" % str(genome_path))
+        print("\tdb path: %s" % str(config['db_path']))
+        print("\tgenome path: %s" % str(config['genome_path']))
         print("\ttmp path: %s" % str(config['tmp']))
-        print("\tunfiltered: %s" % str(args.unfiltered))
-        print("\t# CRG: %d" % args.crg)
-        print("\t# threads: %d" % args.threads)
+        print("\tunfiltered: %s" % str(config['unfiltered']))
+        print("\t# CRG: %d" % config['crg'])
+        print("\t# threads: %d" % config['threads'])
 
     # calculate genome distances via Mash
     if(args.verbose):
         print('\nEstimate genome distances...')
-    mash_output_path = config['tmp'].joinpath('/mash.out')
-    mash.run_mash(mash_output_path)
+    mash_output_path = config['tmp'].joinpath('mash.out')
+    mash.run_mash(config, mash_output_path)
 
     # extract hits and store dist
     accession_ids, mash_distances = mash.parse_mash_results(config, mash_output_path)
@@ -82,8 +82,8 @@ def main():
     ref_genomes = util.read_reference_genomes(config, accession_ids, mash_distances)
 
     # build dna fragments
-    dna_fragments_path = config['tmp'].joinpath('/dna-fragments.fasta')
-    dna_fragments = util.build_dna_fragments(genome_path, dna_fragments_path)
+    dna_fragments_path = config['tmp'].joinpath('dna-fragments.fasta')
+    dna_fragments = util.build_dna_fragments(config, dna_fragments_path)
 
     # copy genomes, extract them and build ANI
     if(args.verbose):

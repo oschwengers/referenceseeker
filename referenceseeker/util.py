@@ -12,7 +12,7 @@ import referenceseeker.constants as rc
 
 def read_reference_genomes(config, accession_ids, mash_distances):
     ref_genomes = []
-    with open(config['db_path'].joinpath('db.tsv'), 'r') as fh:
+    with open(str(config['db_path'].joinpath('db.tsv')), 'r') as fh:
         for line in fh:
             if(line[0] != '#'):
                 cols = line.strip().split('\t')
@@ -33,7 +33,7 @@ def read_reference_genomes(config, accession_ids, mash_distances):
 def build_dna_fragments(config, dna_fragments_path):
     """Build DNA fragments.
 
-    :param genome_path: Path to input sequence Fasta file.
+    :param config: a global config object encapsulating global runtime vars
     :param dna_fragments_path: Path to DNA fragments output Fasta file.
 
     :rtype {idx, dna_fragment}: A dict containing index and DNA fragment objects.
@@ -42,7 +42,7 @@ def build_dna_fragments(config, dna_fragments_path):
     dna_fragments = {}
     dna_fragment_idx = 1
     genome_path = config['genome_path']
-    with open(dna_fragments_path, 'w') as fh:
+    with dna_fragments_path.open(mode='w') as fh:
         for record in SeqIO.parse(str(genome_path), 'fasta'):
             sequence = record.seq
             while len(sequence) > (rc.FRAGMENT_SIZE + rc.MIN_FRAGMENT_SIZE):  # forestall fragments shorter than MIN_FRAGMENT_SIZE
