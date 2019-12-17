@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 import argparse
 import itertools as it
@@ -6,6 +5,8 @@ import multiprocessing as mp
 import os
 import subprocess as sp
 import sys
+
+from pathlib import Path
 
 import referenceseeker
 import referenceseeker.constants as rc
@@ -23,51 +24,54 @@ def main():
     parser.add_argument('--db', '-d', required=True, help='ReferenceSeeker database path')
     parser.add_argument('--crg', '-c', action='store', type=int, default=100, help='Max number of candidate reference genomes to assess (default = 100)')
     parser.add_argument('--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
-    parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)')
     parser.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')
-    parser.add_argument('--version', action='version', version='%(prog)s ' + referenceseeker.__version__)
+    parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)')
+    parser.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
+    parser.add_argument('--citation', '-c', action='store_true', help='Print citation')
     args = parser.parse_args()
 
-    # check parameters & environment variables
-    REFERENCE_SEEKER_HOME = os.getenv('REFERENCE_SEEKER_HOME', None)
-    if REFERENCE_SEEKER_HOME is None:
-        sys.exit('ERROR: REFERENCE_SEEKER_HOME not set!')
-    REFERENCE_SEEKER_HOME = os.path.abspath(REFERENCE_SEEKER_HOME)
-    if not os.access(REFERENCE_SEEKER_HOME, os.R_OK & os.X_OK):
-        sys.exit('ERROR: REFERENCE_SEEKER_HOME (' + REFERENCE_SEEKER_HOME + ') not readable/accessible!')
+    # print citation
+    if(args.citation):
+        print(rc.CITATION)
+        sys.exit()
 
-    db_path = os.path.abspath(args.db)
-    if not os.access(db_path, os.R_OK):
+    # setup global configuration
+    config = util.setup_configuration()
+
+    # check parameters
+    db_path = Path(args.db)
+    if(not os.access(str(db_path), os.R_OK)):
         sys.exit('ERROR: database directory not readable!')
+    db_path = db_path.resolve()
 
-    genome_path = os.path.abspath(args.genome)
-    if not os.access(genome_path, os.R_OK):
+    genome_path = Path(args.genome)
+    if(not os.access(str(genome_path), os.R_OK)):
         sys.exit('ERROR: genome file not readable!')
-
-    cwd_path = os.path.abspath(os.getcwd())
+    genome_path = genome_path.resolve()
 
     # print verbose information
-    if args.verbose:
+    if(args.verbose):
+        print("ReferenceSeeker v%s" % referenceseeker.__version__)
         print('Options, parameters and arguments:')
-        print('\tREFERENCE_SEEKER_HOME: ' + REFERENCE_SEEKER_HOME)
-        print('\tdb path: ' + db_path)
-        print('\tgenome path: ' + genome_path)
-        print('\t# CRG: ' + str(args.crg))
-        print('\tunfiltered: ' + str(args.unfiltered))
-        print('\tbuild scaffolds: ' + str(args.scaffolds))
-        print('\t# threads: ' + str(args.threads))
+        print("\tuse bundled binaries: %s" % str(config['bundled-binaries']))
+        print("\tdb path: %s" % str(config['db']))
+        print("\tgenome path: %s" % str(genome_path))
+        print("\ttmp path: %s" % str(config['tmp']))
+        print("\tunfiltered: %s" % str(args.unfiltered))
+        print("\t# CRG: %d" % args.crg)
+        print("\t# threads: %d" % args.threads)
 
     # calculate genome distances via Mash
-    if args.verbose:
+    if(args.verbose):
         print('\nAssess genome distances...')
-    mash_result_path = cwd_path + '/mash.out'
+    mash_result_path = config['tmp'].joinpath('/mash.out')
     with open(mash_result_path, 'w') as fh:
         sp.check_call(
             [
-                REFERENCE_SEEKER_HOME + '/share/mash/mash',
+                'mash',
                 'dist',
                 '-d', rc.UNFILTERED_MASH_DIST if args.unfiltered else rc.MAX_MASH_DIST,
-                db_path + '/db.msh',
+                str(db_path.joinpath('/db.msh')),
                 genome_path
             ],
             stdout=fh,
@@ -83,13 +87,13 @@ def main():
             accession_ids.append(cols[0])
             mash_distances[cols[0]] = float(cols[2])
     os.remove(mash_result_path)
-    if args.verbose:
-        print('\tscreened ' + str(len(accession_ids)) + ' potential reference genome(s)')
+    if(args.verbose):
+        print("\tscreened %d potential reference genome(s)" % len(accession_ids))
 
     # reduce Mash output to best args.crg hits
     if len(accession_ids) > args.crg:
-        if args.verbose:
-            print('\treduce to best ' + str(args.crg) + ' hits...')
+        if(args.verbose):
+            print("\treduce to best %d hits..." % args.crg)
         tmp_accession_ids = sorted(accession_ids, key=lambda k: mash_distances[k])
         accession_ids = tmp_accession_ids[:args.crg]
 
@@ -101,8 +105,8 @@ def main():
     dna_fragments = util.build_dna_fragments(genome_path, dna_fragments_path)
 
     # copy genomes, extract them and build ANI
-    if args.verbose:
-        print('\nCompute ANIs...\n\tID\tANI\tConserved DNA\tMash Distance')
+    if(args.verbose):
+        print('\nCompute ANIs...')
     pool = mp.Pool(args.threads)
     results = pool.starmap(ani.compute_ani, zip(it.repeat(db_path), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
     pool.close()
@@ -117,7 +121,7 @@ def main():
     results = sorted(tmp_results, key=lambda k: -(k['ani'] * k['conserved_dna']))
 
     # print results to STDOUT
-    if args.verbose:
+    if(args.verbose):
         print('')
     print('#ID\tANI\tCon. DNA\tMash Distance\tTaxonomy ID\tAssembly Status\tOrganism')
     for result in results:

@@ -19,7 +19,6 @@ def compute_ani(db_path, dna_fragments_path, dna_fragments, ref_genome):
     tmp_dir = tempfile.mkdtemp()
 
     # perform global alignments via nucmer
-    fh_def_null = open(os.devnull, 'w')
     sp.check_call(
         [
             REFERENCE_SEEKER_HOME + '/share/mummer/nucmer',
@@ -28,10 +27,9 @@ def compute_ani(db_path, dna_fragments_path, dna_fragments, ref_genome):
             dna_fragments_path
         ],
         cwd=tmp_dir,
-        stdout=fh_def_null,
+        stdout=sp.DEVNULL,
         stderr=sp.STDOUT
     )
-    fh_def_null.close()
     filtered_delta_path = tmp_dir + '/out-filtered.delta'
     with open(filtered_delta_path, 'w') as fh:
         sp.check_call(
