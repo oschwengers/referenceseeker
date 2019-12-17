@@ -24,13 +24,13 @@ def main():
         epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION
     )
     parser.add_argument('db', metavar='<database>', help='ReferenceSeeker database path')
-    parser.add_argument('genome', metavar='<genome>', help='Target draft genome in fasta format')
-    parser.add_argument('--crg', '-r', action='store', type=int, default=100, help='Max number of candidate reference genomes to assess (default = 100)')
+    parser.add_argument('genome', metavar='<genome>', help='target draft genome in fasta format')
+    parser.add_argument('--crg', '-r', action='store', type=int, default=100, help='max number of candidate reference genomes to pass kmer prefilter (default = 100)')
     parser.add_argument('--ani', '-a', action='store', type=float, default=0.95, help='ANI threshold value (default = 0.95)')
     parser.add_argument('--conserved-dna', '-c', action='store', dest='conserved_dna', type=float, default=0.69, help='Conserved DNA threshold value (default = 0.69)')
-    parser.add_argument('--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
-    parser.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')
-    parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of threads to use (default = number of available CPUs)')
+    parser.add_argument('--unfiltered', '-u', action='store_true', help='set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
+    parser.add_argument('--verbose', '-v', action='store_true', help='print verbose information')
+    parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='number of threads to use (default = number of available CPUs)')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
     args = parser.parse_args()
 

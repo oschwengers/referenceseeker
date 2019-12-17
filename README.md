@@ -108,21 +108,21 @@ Rapid determination of appropriate reference genomes.
 
 positional arguments:
   <database>            ReferenceSeeker database path
-  <genome>              Target draft genome in fasta format
+  <genome>              target draft genome in fasta format
 
 optional arguments:
   -h, --help            show this help message and exit
-  --crg CRG, -r CRG     Max number of candidate reference genomes to assess
-                        (default = 100)
+  --crg CRG, -r CRG     max number of candidate reference genomes to pass kmer
+                        prefilter (default = 100)
   --ani ANI, -a ANI     ANI threshold value (default = 0.95)
   --conserved-dna CONSERVED_DNA, -c CONSERVED_DNA
                         Conserved DNA threshold value (default = 0.69)
-  --unfiltered, -u      Set kmer prefilter to extremely conservative values
+  --unfiltered, -u      set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
                         conserved DNA >= 0.69
-  --verbose, -v         Print verbose information
+  --verbose, -v         print verbose information
   --threads THREADS, -t THREADS
-                        Number of threads to use (default = number of
+                        number of threads to use (default = number of
                         available CPUs)
   --version, -V         show program's version number and exit
 ```
