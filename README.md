@@ -1,6 +1,10 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/oschwengers/referenceseeker/blob/master/LICENSE)
-![Don't judge me](https://img.shields.io/badge/Language-Python_3-blue.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/referenceseeker.svg)
 ![GitHub release](https://img.shields.io/github/release/oschwengers/referenceseeker.svg)
+![PyPI](https://img.shields.io/pypi/v/referenceseeker.svg)
+![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
+![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)
+![Conda](https://img.shields.io/conda/pn/bioconda/referenceseeker.svg)
 
 # ReferenceSeeker: rapid determination of appropriate reference genomes.
 
