@@ -74,7 +74,7 @@ GCF_001018915.2	99.99	96.35	0.00056	1280	complete	Staphylococcus aureus NRS133
 ```
 
 ## Installation
-Platon can be installed via Cona and Git(Hub).
+Platon can be installed via Conda and Git(Hub).
 
 In either case, a taxon database must be downloaded which we provide for download at Zenodo:
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005)
