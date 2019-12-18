@@ -74,14 +74,14 @@ GCF_001018915.2	99.99	96.35	0.00056	1280	complete	Staphylococcus aureus NRS133
 ```
 
 ## Installation
-Platon can be installed and used in 2 different ways.
+Platon can be installed via Cona and Git(Hub).
 
 In either case, a taxon database must be downloaded which we provide for download at Zenodo:
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005)
 For more information scroll to [Databases](#databases).
 
-### Conda:
-The preferred way to install and run ReferenceSeeker is BioConda:
+### Conda / BioConda
+The preferred way to install and run ReferenceSeeker is [Conda](https://conda.io/docs/install/quick.html) using the [Bioconda](https://bioconda.github.io/) channel:
 ```
 $ conda install -c conda-forge -c bioconda -c defaults referenceseeker
 $ referenceseeker --help
