@@ -87,7 +87,7 @@ def main():
 
     # build dna fragments
     dna_fragments_path = config['tmp'].joinpath('dna-fragments.fasta')
-    dna_fragments = util.build_dna_fragments(config, dna_fragments_path)
+    dna_fragments = util.build_dna_fragments(genome_path, dna_fragments_path)
 
     # copy genomes, extract them and build ANI
     if(args.verbose):
