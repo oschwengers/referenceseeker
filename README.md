@@ -32,7 +32,7 @@ are included. ReferenceSeeker offers pre-built databases for a broad spectrum of
 microbial taxonomic groups, i.e. bacteria, archaea, fungi, protozoa and viruses.
 For resulting candidates ReferenceSeeker subsequently computes ANI values picking
 genomes meeting community standard thresholds by default (ANI >= 95 % & conserved DNA >= 69 %)
-(Goris, Konstantinos et al. 2007) ranked by ANI and conserved DNA.
+(Goris, Konstantinos et al. 2007) ranked by the product of ANI and conserved DNA values.
 
 The reasoning for subsequent calculations of both ANI and conserved DNA values
 is that Mash distance values correlate well with ANI values for closely
@@ -42,7 +42,8 @@ due to a SNP, for instance or a lack of the kmer-comprising subsequence.
 As DNA conservancy (next to DNA identity) is very important for many kinds of
 analyses, e.g. reference based SNP detections, ranking potential reference
 genomes based on a mash distance alone is often not sufficient in order to select
-the most appropriate reference genomes.
+the most appropriate reference genomes. If desired, ANI and conserved DNA values
+can be computed bidirectionally.
 
 ![Mash D vs. ANI / conDNA](mash-ani-cdna.mini.png?raw=true)
 
@@ -55,21 +56,49 @@ $ referenceseeker ~/bacteria GCF_000013425.1.fna
 
 ### Output:
 Tab separated lines to STDOUT comprising the following columns:
+
+Unidirectionally (query -> references):
 - RefSeq Assembly ID
+- Mash Distance
 - ANI
 - Conserved DNA
-- Mash Distance
 - NCBI Taxonomy ID
 - Assembly Status
 - Organism
 
 ```
-#ID	ANI	Con. DNA	Mash Distance	Taxonomy ID	Assembly Status	Organism
-GCF_000013425.1	100.00	100.00	0.00000	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
-GCF_001900185.1	100.00	99.89	0.00002	46170	complete	Staphylococcus aureus subsp. aureus HG001
-GCF_900475245.1	100.00	99.57	0.00004	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
-GCF_001018725.2	100.00	99.28	0.00016	1280	complete	Staphylococcus aureus FDAARGOS_10
-GCF_001018915.2	99.99	96.35	0.00056	1280	complete	Staphylococcus aureus NRS133
+#ID	Mash Distance	ANI	Con. DNA	Taxonomy ID	Assembly Status	Organism
+GCF_000013425.1	0.00000	100.00	100.00	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
+GCF_001900185.1	0.00002	100.00	99.89	46170	complete	Staphylococcus aureus subsp. aureus HG001
+GCF_900475245.1	0.00004	100.00	99.57	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
+GCF_001018725.2	0.00016	100.00	99.28	1280	complete	Staphylococcus aureus FDAARGOS_10
+GCF_003595465.1	0.00185	99.86	96.81	1280	complete	Staphylococcus aureus USA300-SUR6
+GCF_003595385.1	0.00180	99.87	96.80	1280	complete	Staphylococcus aureus USA300-SUR2
+GCF_003595365.1	0.00180	99.87	96.80	1280	complete	Staphylococcus aureus USA300-SUR1
+GCF_001956815.1	0.00180	99.87	96.80	46170	complete	Staphylococcus aureus subsp. aureus USA300_SUR1
+...
+```
+Bidirectionally (query -> references [QR] & references -> query [RQ]):
+- RefSeq Assembly ID
+- Mash Distance
+- QR ANI
+- QR Conserved DNA
+- RQ ANI
+- RQ Conserved DNA
+- NCBI Taxonomy ID
+- Assembly Status
+- Organism
+
+```
+#ID	Mash Distance	QR ANI	QR Con. DNA	RQ ANI	RQ Con. DNA	Taxonomy ID	Assembly Status	Organism
+GCF_000013425.1	0.00000	100.00	100.00	100.00	100.00	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
+GCF_001900185.1	0.00002	100.00	99.89	100.00	99.89	46170	complete	Staphylococcus aureus subsp. aureus HG001
+GCF_900475245.1	0.00004	100.00	99.57	99.99	99.67	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
+GCF_001018725.2	0.00016	100.00	99.28	99.95	98.88	1280	complete	Staphylococcus aureus FDAARGOS_10
+GCF_001018915.2	0.00056	99.99	96.35	99.98	99.55	1280	complete	Staphylococcus aureus NRS133
+GCF_001019415.2	0.00081	99.99	94.47	99.98	99.36	1280	complete	Staphylococcus aureus NRS146
+GCF_001018735.2	0.00096	100.00	94.76	99.98	98.58	1280	complete	Staphylococcus aureus NRS137
+GCF_003354885.1	0.00103	99.93	96.63	99.93	96.66	1280	complete	Staphylococcus aureus 164
 ...
 ```
 
@@ -105,7 +134,8 @@ Usage:
 ```
 usage: referenceseeker [-h] [--crg CRG] [--ani ANI]
                        [--conserved-dna CONSERVED_DNA] [--unfiltered]
-                       [--verbose] [--threads THREADS] [--version]
+                       [--bidirectional] [--verbose] [--threads THREADS]
+                       [--version]
                        <database> <genome>
 
 Rapid determination of appropriate reference genomes.
@@ -124,6 +154,7 @@ optional arguments:
   --unfiltered, -u      set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
                         conserved DNA >= 0.69
+  --bidirectional, -b   Compute bidirectional ANI values (default = False)
   --verbose, -v         print verbose information
   --threads THREADS, -t THREADS
                         number of threads to use (default = number of

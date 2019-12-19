@@ -10,23 +10,19 @@ from Bio import SeqIO
 import referenceseeker.constants as rc
 
 
-def read_reference_genomes(config, accession_ids, mash_distances):
-    ref_genomes = []
+def read_reference_genomes(config):
+    ref_genomes = {}
     with open(str(config['db_path'].joinpath('db.tsv')), 'r') as fh:
         for line in fh:
             if(line[0] != '#'):
                 cols = line.strip().split('\t')
                 accession_id = cols[0]
-                if(accession_id in accession_ids):
-                    ref_genomes.append(
-                        {
-                            'id': accession_id,
-                            'tax': cols[1],
-                            'status': cols[2],
-                            'name': cols[3],
-                            'mash_dist': mash_distances[accession_id]
-                        }
-                    )
+                ref_genomes[accession_id] = {
+                    'id': accession_id,
+                    'tax': cols[1],
+                    'status': cols[2],
+                    'name': cols[3]
+                }
     return ref_genomes
 
 
@@ -43,10 +39,14 @@ def build_dna_fragments(genome_path, dna_fragments_path):
     dna_fragment_idx = 1
     with dna_fragments_path.open(mode='w') as fh:
         for record in SeqIO.parse(str(genome_path), 'fasta'):
-            sequence = record.seq
+            sequence = str(record.seq)
             while len(sequence) > (rc.FRAGMENT_SIZE + rc.MIN_FRAGMENT_SIZE):  # forestall fragments shorter than MIN_FRAGMENT_SIZE
                 dnaFragment = sequence[:rc.FRAGMENT_SIZE]
-                fh.write(">%s\n%s\n" % (str(dna_fragment_idx), str(dnaFragment)))
+                fh.write('>')
+                fh.write(str(dna_fragment_idx))
+                fh.write('\n')
+                fh.write(str(dnaFragment))
+                fh.write('\n')
                 dna_fragments[dna_fragment_idx] = {
                     'id': dna_fragment_idx,
                     'length': len(dnaFragment)
@@ -54,7 +54,11 @@ def build_dna_fragments(genome_path, dna_fragments_path):
                 sequence = sequence[rc.FRAGMENT_SIZE:]
                 dna_fragment_idx += 1
             dnaFragment = sequence
-            fh.write(">%s\n%s\n" % (str(dna_fragment_idx), str(dnaFragment)))
+            fh.write('>')
+            fh.write(str(dna_fragment_idx))
+            fh.write('\n')
+            fh.write(str(dnaFragment))
+            fh.write('\n')
             dna_fragments[dna_fragment_idx] = {
                 'id': dna_fragment_idx,
                 'length': len(dnaFragment)
@@ -73,6 +77,7 @@ def setup_configuration(args):
         'bundled-binaries': False,
         'threads': args.threads,
         'unfiltered': args.unfiltered,
+        'bidirectional': args.bidirectional,
         'crg': args.crg,
         'ani': args.ani,
         'conserved_dna': args.conserved_dna
