@@ -110,46 +110,46 @@ respectively.
 Table: Runtimes and numbers of resulting RG executed locally on a quad-core moderate consumer
 laptop and a 64 core server machine. \label{Table 1}
 
-----------------------------------------------------------------------------------------
-                    Genome                           Genome Size   Laptop   Server  # RG
-                                                            [kb]  [mm:ss]  [mm:ss]      
---------------------------------------------------- ------------ -------- -------- -----
-  *Escherichia coli* str. K-12 substr. MG1665              4,641     3:24     0:30  100*
-   (GCF_000005845.2)                                                                    
+------------------------------------------------------------------------------------
+Genome                                           Genome Size   Laptop   Server  # RG
+                                                        [kb]  [mm:ss]  [mm:ss]      
+----------------------------------------------- ------------ -------- -------- -----
+*Escherichia coli* str. K-12 substr. MG1665            4,641     3:24     0:30  100*
+(GCF_000005845.2)                                                                   
 
-   *Pseudomonas aeruginosa* PAO1                           6,264     5:20     0:44  100*
-   (GCF_000006765.1)                                                                    
+*Pseudomonas aeruginosa* PAO1                          6,264     5:20     0:44  100*
+(GCF_000006765.1)                                                                   
 
-   *Listeria monocytogenes* ​EGD-e                          2,944     2:52     0:24  100*
-   (GCF_000196035.1)                                                                    
+*Listeria monocytogenes* ​EGD-e                         2,944     2:52     0:24  100*
+(GCF_000196035.1)                                                                   
 
-   *Staphylococcus aureus* subsp aureus NCTC 8325          2,821     2:31     0:21  100*
-   (GCF_000013425.1)                                                                    
+*Staphylococcus aureus* subsp aureus NCTC 8325         2,821     2:31     0:21  100*
+(GCF_000013425.1)                                                                   
 
-   *Halobacterium salinarum* NRC-1                         2,571     0:04     0:03     2 
-   (GCF_000006805.1)                                                                    
+*Halobacterium salinarum* NRC-1                        2,571     0:04     0:03     2
+(GCF_000006805.1)                                                                   
 
-   *Methanococcus maripaludis* X1                          1,746     0:22     0:09     5 
-   (GCF_000220645.1)                                                                    
+*Methanococcus maripaludis* X1                         1,746     0:22     0:09     5
+(GCF_000220645.1)                                                                   
 
-   *Aspergillus fumigatus* ​Af293                          29,384     3:11     2:07     1
-   (GCF_000002655.1)                                                                    
+*Aspergillus fumigatus* ​Af293                         29,384     3:11     2:07     1
+(GCF_000002655.1)                                                                   
 
-   *Candida albicans* SC5314                              14,282     0:21     0:19     1
-   (GCF_000182965.3)                                                                    
+*Candida albicans* SC5314                             14,282     0:21     0:19     1
+(GCF_000182965.3)                                                                   
 
-   *Entamoeba histolytica* HM-1:IMSS                      20,835     6:04     4:41     1
-   (GCF_000208925.1)                                                                    
+*Entamoeba histolytica* HM-1:IMSS                     20,835     6:04     4:41     1
+(GCF_000208925.1)                                                                   
 
-   *Plasmodium falciparum* ​3D7                            23,326     2:52     1:49     1
-   (GCF_000002765.4)                                                                    
+*Plasmodium falciparum* ​3D7                           23,326     2:52     1:49     1
+(GCF_000002765.4)                                                                   
 
-   *Influenza A* virus                                        13     0:03     0:02     1 
-   (GCF_001343785.1)                                                                    
+*Influenza A* virus                                       13     0:03     0:02     1
+(GCF_001343785.1)                                                                   
 
-   *Human coronavirus* NL63                                   27     0:04     0:02     1 
-   (GCF_000853865.1)                                                                    
-----------------------------------------------------------------------------------------
+*Human coronavirus* NL63                                  27     0:04     0:02     1
+(GCF_000853865.1)                                                                   
+------------------------------------------------------------------------------------
 
 # Availability
 The source code is available on GitHub under a GPL3 license: https://github.com/oschwengers/referenceseeker​.
