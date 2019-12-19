@@ -46,7 +46,7 @@ the most suitable RGs. To the best of the authors’ knowledge, there is current
 providing both an integrated, highly specific workflow and scalable and rapid implementation.
 ReferenceSeeker was designed to overcome this bottleneck. As a novel command line tool, it
 combines a fast kmer profile-based lookup of candidate reference genomes (CRGs) from high
-quality databases with rapid computation of highly specific ANI and conserved DNA values.
+quality databases with rapid computation of (mutual) highly specific ANI and conserved DNA values.
 
 # Implementation
 ReferenceSeeker is a linux command line tool implemented in Python 3. All necessary external
