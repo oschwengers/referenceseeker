@@ -92,10 +92,8 @@ def main():
     # copy genomes, extract them and build ANI
     if(args.verbose):
         print('\nCompute ANIs...')
-    pool = mp.Pool(args.threads)
-    results = pool.starmap(ani.align_query, zip(it.repeat(config), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
-    pool.close()
-    pool.join()
+    with mp.Pool(args.threads) as pool:
+        results = pool.starmap(ani.align_query, zip(it.repeat(config), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
 
     # remove tmp dir
     shutil.rmtree(str(config['tmp']))
