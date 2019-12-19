@@ -93,7 +93,7 @@ def main():
     if(args.verbose):
         print('\nCompute ANIs...')
     pool = mp.Pool(args.threads)
-    results = pool.starmap(ani.compute_ani, zip(it.repeat(config), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
+    results = pool.starmap(ani.align_query, zip(it.repeat(config), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
     pool.close()
     pool.join()
 

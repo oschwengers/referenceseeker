@@ -7,7 +7,7 @@ import tempfile
 from pathlib import Path
 
 
-def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
+def align_query(config, dna_fragments_path, dna_fragments, ref_genome):
     """Perform per-genome calculation of ANI/conserved DNA values.
 
     :param config: a global config object encapsulating global runtime vars
@@ -69,7 +69,22 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
                     dna_fragment['no_non_identities'] = int(cols[4])  # number of non-identities
                     dna_fragment_matches.append(dna_fragment)
 
-    # calc % conserved DNA
+    ref_genome['ani'] = compute_ani(dna_fragment_matches)
+    ref_genome['conserved_dna'] = compute_conserved_dna(dna_fragments, dna_fragment_matches)
+
+    shutil.rmtree(str(tmp_dir))
+    return ref_genome
+
+
+def compute_conserved_dna(dna_fragments, dna_fragment_matches):
+    """Calculate conserved DNA value for a set of DNA fragment matches.
+
+    :param dna_fragments: A dict comprising information on DNA fragments.
+    :param dna_fragment_matches: A dict comprising matches of DNA fragments.
+
+    :rtype: conserved DNA value.
+    """
+
     alignment_sum = 0
     for fm in dna_fragment_matches:
         rel_alignment_length = float(fm['alignment_length'] - fm['no_non_identities']) / float(fm['length'])
@@ -78,9 +93,18 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
     genome_length = 0
     for fm in dna_fragments.values():
         genome_length += fm['length']
-    conserved_dna = (float(alignment_sum) / float(genome_length)) if genome_length > 0 else 0
 
-    # calc average nucleotide identity
+    return (float(alignment_sum) / float(genome_length)) if genome_length > 0 else 0
+
+
+def compute_ani(dna_fragment_matches):
+    """Calculate ANI value for a set of DNA fragment matches.
+
+    :param dna_fragment_matches: A dict comprising matches of DNA fragments.
+
+    :rtype: ANI value.
+    """
+
     ani_matches = 0
     ni_sum = 0.0
     for fm in dna_fragment_matches:
@@ -88,11 +112,5 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
                 and ((float(fm['alignment_length']) / float(fm['length'])) >= 0.7)):
             ni_sum += float(fm['alignment_length'] - fm['no_non_identities']) / float(fm['alignment_length'])
             ani_matches += 1
-    ani = (ni_sum / float(ani_matches)) if ani_matches > 0 else 0
 
-    shutil.rmtree(str(tmp_dir))
-
-    ref_genome['ani'] = ani
-    ref_genome['conserved_dna'] = conserved_dna
-
-    return ref_genome
+    return (ni_sum / float(ani_matches)) if ani_matches > 0 else 0
