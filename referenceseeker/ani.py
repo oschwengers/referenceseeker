@@ -92,17 +92,6 @@ def compute_ani(config, dna_fragments_path, dna_fragments, ref_genome):
 
     shutil.rmtree(str(tmp_dir))
 
-    # if(args.verbose):
-    #     print(
-    #         '\t%s\t%2.2f\t%2.2f\t%1.5f' %
-    #         (
-    #             reference_path.split('/')[-1][:15],
-    #             ani * 100,
-    #             conserved_dna * 100,
-    #             ref_genome['mash_dist'],
-    #         )
-    #     )
-
     ref_genome['ani'] = ani
     ref_genome['conserved_dna'] = conserved_dna
 
