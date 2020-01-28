@@ -21,16 +21,16 @@
 ## Description
 ReferenceSeeker determines closely related reference genomes from
 RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>) following a scalable hierarchical
-approach combining an ultra-fast kmer profile-based database lookup of candidate
+approach combining an fast kmer profile-based database lookup of candidate
 reference genomes and subsequent computation of specific average nucleotide
 identity (ANI) values for the rapid determination of suitable reference genomes.
 
 ReferenceSeeker computes kmer-based genome distances between a query genome and
-and a database built on RefSeq genomes via Mash (Ondov et al. 2016). Therefore,
-only complete genomes or those stated as 'representative' or 'reference' genome
+and potential reference genome candidates from RefSeq via Mash (Ondov et al. 2016). Therefore,
+only complete genomes or those stated as 'representative genome' or 'reference genome'
 are included. ReferenceSeeker offers pre-built databases for a broad spectrum of
 microbial taxonomic groups, i.e. bacteria, archaea, fungi, protozoa and viruses.
-For resulting candidates ReferenceSeeker subsequently computes ANI values picking
+For resulting candidates ReferenceSeeker subsequently computes (bidirectional) ANI values picking
 genomes meeting community standard thresholds by default (ANI >= 95 % & conserved DNA >= 69 %)
 (Goris, Konstantinos et al. 2007) ranked by the product of ANI and conserved DNA values.
 
