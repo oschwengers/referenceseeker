@@ -22,55 +22,6 @@ def align_query_genome(config, dna_fragments_path, dna_fragments, ref_genome_id)
     reference_genome_path = config['db_path'].joinpath("%s.fna" % ref_genome_id)
     tmp_dir = Path(tempfile.mkdtemp())
 
-    # perform global alignments via nucmer
-    # cmd = [
-    #     'nucmer',
-    #     '--threads=1',
-    #     str(reference_genome_path),
-    #     str(dna_fragments_path)
-    # ]
-    # proc = sp.run(
-    #     cmd,
-    #     cwd=str(tmp_dir),
-    #     env=config['env'],
-    #     stdout=sp.DEVNULL,
-    #     stderr=sp.STDOUT,
-    #     universal_newlines=True
-    # )
-    # if(proc.returncode != 0):
-    #     sys.exit("ERROR: failed to execute nucmer!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
-    #
-    # filtered_delta_path = tmp_dir.joinpath('out-filtered.delta')
-    # with filtered_delta_path.open(mode='w') as fh:
-    #     cmd = [
-    #         'delta-filter',
-    #         '-q',
-    #         'out.delta'
-    #     ]
-    #     proc = sp.run(
-    #         cmd,
-    #         cwd=str(tmp_dir),
-    #         stdout=fh,
-    #         stderr=sp.STDOUT
-    #     )
-    #     if(proc.returncode != 0):
-    #         sys.exit("ERROR: failed to execute delta-filter!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
-    #
-    # # parse nucmer output
-    # dna_fragment = None
-    # dna_fragment_matches = []
-    # with filtered_delta_path.open() as fh:
-    #     for line in fh:
-    #         line = line.rstrip()
-    #         if(line[0] == '>'):
-    #             dna_fragment = dna_fragments.get(int(line.split(' ')[1]), None)
-    #         elif(dna_fragment is not None):
-    #             cols = line.split(' ')
-    #             if(len(cols) == 7):
-    #                 dna_fragment['alignment_length'] = abs(int(cols[3]) - int(cols[2])) + 1  # abs( qStop - qStart ) + 1
-    #                 dna_fragment['no_non_identities'] = int(cols[4])  # number of non-identities
-    #                 dna_fragment_matches.append(dna_fragment)
-
     dna_fragment_matches = execute_nucmer(config, tmp_dir, dna_fragments, dna_fragments_path, reference_genome_path)
 
     shutil.rmtree(str(tmp_dir))

@@ -87,8 +87,6 @@ def main():
 
     # get genomes from RefSeq by accessions
     ref_genomes = util.read_reference_genomes(config)
-    # ref_genomes = util.read_reference_genomes(config, screened_ref_genome_ids, mash_distances)
-    # screened_ref_genomes = filter(lambda k: k['id'] in screened_ref_genome_ids, ref_genomes)
     screened_ref_genomes = {k: v for k, v in ref_genomes.items() if k in screened_ref_genome_ids}
 
     # build dna fragments
@@ -119,8 +117,6 @@ def main():
                 ref_genome_id, ani, conserved_dna = f.result()
                 result = results[ref_genome_id]
                 result.append((ani, conserved_dna))
-    # with mp.Pool(args.threads) as pool:
-    #     results = pool.starmap(ani.align_query, zip(it.repeat(config), it.repeat(dna_fragments_path), it.repeat(dna_fragments), ref_genomes))
 
     # remove tmp dir
     shutil.rmtree(str(config['tmp']))
