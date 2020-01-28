@@ -87,7 +87,8 @@ results are subsequently filtered by configurable ANI and conDNA values with a d
 and 69%, respectively. Finally, CRGs are sorted according to the harmonic mean of ANI and
 conDNA values in order to incorporate both nucleotide identity and genome coverage of query
 genomes and resulting CRGs. In this manner, ReferenceSeeker ensures that the resulting RGs
-sufficiently reflect the genomic landscape of a query genome.
+sufficiently reflect the genomic landscape of a query genome. If desired by the user, this approach
+can be extended to a bidirectional computation of aforementioned ANI and conDNA values.
 
 ![Figure 1: Scatter plots showing the correlation between Mash distance, ANI and conDNA
 values. ANI and conserved DNA values are plotted against Mash distance values for 500
