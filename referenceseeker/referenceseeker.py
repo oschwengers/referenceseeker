@@ -1,6 +1,5 @@
 
 import argparse
-import itertools as it
 import multiprocessing as mp
 import os
 import sys
