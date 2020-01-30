@@ -48,6 +48,8 @@ def main():
     genome_path = Path(args.genome)
     if(not os.access(str(genome_path), os.R_OK)):
         sys.exit('ERROR: genome file not readable!')
+    if(genome_path.stat().st_size == 0):
+        sys.exit('ERROR: genome file (%s) is empty!' % genome_path)
     genome_path = genome_path.resolve()
     config['genome_path'] = genome_path
 
