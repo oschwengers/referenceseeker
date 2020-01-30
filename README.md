@@ -103,7 +103,7 @@ GCF_003354885.1	0.00103	99.93	96.63	99.93	96.66	1280	complete	Staphylococcus aur
 ```
 
 ## Installation
-Platon can be installed via Conda and Git(Hub).
+ReferenceSeeker can be installed via Conda and Git(Hub).
 
 In either case, a taxon database must be downloaded which we provide for download at Zenodo:
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005)
@@ -122,7 +122,6 @@ Alternatively, you can use this raw GitHub repository:
 2. clone the latest version of the repository
 3. download and extract a databases
 
-Example:
 ```
 $ pip3 install --user biopython
 $ git clone https://github.com/oschwengers/referenceseeker.git
@@ -132,10 +131,9 @@ $ ./referenceseeker/bin/referenceseeker --help
 ## Usage
 Usage:
 ```
-usage: referenceseeker [-h] [--crg CRG] [--ani ANI]
-                       [--conserved-dna CONSERVED_DNA] [--unfiltered]
-                       [--bidirectional] [--verbose] [--threads THREADS]
-                       [--version]
+usage: referenceseeker [--crg CRG] [--ani ANI] [--conserved-dna CONSERVED_DNA]
+                       [--unfiltered] [--bidirectional] [--help] [--version]
+                       [--verbose] [--threads THREADS]
                        <database> <genome>
 
 Rapid determination of appropriate reference genomes.
@@ -144,22 +142,27 @@ positional arguments:
   <database>            ReferenceSeeker database path
   <genome>              target draft genome in fasta format
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --crg CRG, -r CRG     max number of candidate reference genomes to pass kmer
+Filter options / thresholds:
+  These options control the filtering and alignment workflow.
+
+  --crg CRG, -r CRG     Max number of candidate reference genomes to pass kmer
                         prefilter (default = 100)
-  --ani ANI, -a ANI     ANI threshold value (default = 0.95)
+  --ani ANI, -a ANI     ANI threshold (default = 0.95)
   --conserved-dna CONSERVED_DNA, -c CONSERVED_DNA
-                        Conserved DNA threshold value (default = 0.69)
-  --unfiltered, -u      set kmer prefilter to extremely conservative values
+                        Conserved DNA threshold (default = 0.69)
+  --unfiltered, -u      Set kmer prefilter to extremely conservative values
                         and skip species level ANI cutoffs (ANI >= 0.95 and
                         conserved DNA >= 0.69
-  --bidirectional, -b   Compute bidirectional ANI values (default = False)
-  --verbose, -v         print verbose information
-  --threads THREADS, -t THREADS
-                        number of threads to use (default = number of
-                        available CPUs)
+  --bidirectional, -b   Compute bidirectional ANI/conserved DNA values
+                        (default = False)
+
+Runtime & auxiliary options:
+  --help, -h            Show this help message and exit
   --version, -V         show program's version number and exit
+  --verbose, -v         Print verbose information
+  --threads THREADS, -t THREADS
+                        Number of used threads (default = number of available
+                        CPU cores)
 ```
 
 ## Examples

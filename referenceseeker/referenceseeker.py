@@ -21,18 +21,23 @@ def main():
         prog='referenceseeker',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Rapid determination of appropriate reference genomes.',
-        epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION
+        epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION,
+        add_help=False
     )
     parser.add_argument('db', metavar='<database>', help='ReferenceSeeker database path')
     parser.add_argument('genome', metavar='<genome>', help='target draft genome in fasta format')
-    parser.add_argument('--crg', '-r', action='store', type=int, default=100, help='max number of candidate reference genomes to pass kmer prefilter (default = 100)')
-    parser.add_argument('--ani', '-a', action='store', type=float, default=0.95, help='ANI threshold value (default = 0.95)')
-    parser.add_argument('--conserved-dna', '-c', action='store', dest='conserved_dna', type=float, default=0.69, help='Conserved DNA threshold value (default = 0.69)')
-    parser.add_argument('--unfiltered', '-u', action='store_true', help='set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
-    parser.add_argument('--bidirectional', '-b', action='store_true', help='Compute bidirectional ANI values (default = False)')
-    parser.add_argument('--verbose', '-v', action='store_true', help='print verbose information')
-    parser.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='number of threads to use (default = number of available CPUs)')
-    parser.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
+    group_workflow = parser.add_argument_group('Filter options / thresholds', 'These options control the filtering and alignment workflow.')
+    group_workflow.add_argument('--crg', '-r', action='store', type=int, default=100, help='Max number of candidate reference genomes to pass kmer prefilter (default = 100)')
+    group_workflow.add_argument('--ani', '-a', action='store', type=float, default=0.95, help='ANI threshold (default = 0.95)')
+    group_workflow.add_argument('--conserved-dna', '-c', action='store', dest='conserved_dna', type=float, default=0.69, help='Conserved DNA threshold (default = 0.69)')
+    group_workflow.add_argument('--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
+    group_workflow.add_argument('--bidirectional', '-b', action='store_true', help='Compute bidirectional ANI/conserved DNA values (default = False)')
+
+    group_runtime = parser.add_argument_group('Runtime & auxiliary options')
+    group_runtime.add_argument('--help', '-h', action='help', help='Show this help message and exit')
+    group_runtime.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
+    group_runtime.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')
+    group_runtime.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of used threads (default = number of available CPU cores)')
     args = parser.parse_args()
 
     # setup global configuration
