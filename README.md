@@ -201,8 +201,10 @@ $ referenceseeker --crg 500 --verbose --threads 8 bacteria/ genome.fasta
 ```
 
 ## Databases
-ReferenceSeeker depends on custom databases based on reference, representative as
-well as complete NCBI RefSeq genomes comprising kmer hash profiles and taxonomic information.
+ReferenceSeeker depends on custom databases comprising taxonomic genome informations as
+well as kmer hash profiles for each entry.
+
+### RefSeq based databases
 We provide the following pre-built databases based on RefSeq 2019-07-02 via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005) :
 
 | Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
@@ -235,6 +237,61 @@ $ sh build-db.sh
 	-v (viral)
 	-f (fungi)
 	-p (protozoa)
+```
+
+### Custom database
+If above mentiond RefSeq based databases do not contain sufficiently-close related
+genomes or are just too large, ReferenceSeeker provides auxiliary commands
+in order to either create databases from scratch or to expand existing ones.
+Therefore, a second executable `referenceseeker_db` accepts `init` and `import` subcommands:
+
+Usage:
+```
+usage: referenceseeker_db [--help] [--version] {init,import} ...
+
+Rapid determination of appropriate reference genomes.
+
+positional arguments:
+  {init,import}  sub-command help
+    init         Initialize a new database
+    import       Add a new genome to database
+
+Runtime & auxiliary options:
+  --help, -h     Show this help message and exit
+  --version, -V  show program's version number and exit
+```
+
+If a new database should be created, use `referenceseeker_db init`:
+```
+usage: referenceseeker_db init [-h] [--output OUTPUT] --db DB
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --output OUTPUT, -o OUTPUT
+                        output directory (default = current working directory)
+  --db DB, -d DB        Name of the new ReferenceSeeker database
+```
+
+This new database or an existing one can be used to import genomes in Fasta, GenBank or EMBL format:
+```
+usage: referenceseeker_db import [-h] --db DB --genome GENOME [--id ID]
+                                 [--taxonomy TAXONOMY]
+                                 [--status {complete,chromosome,scaffold,contig}]
+                                 [--organism ORGANISM]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --db DB, -d DB        ReferenceSeeker database path
+  --genome GENOME, -g GENOME
+                        Genome path [Fasta, GenBank, EMBL]
+  --id ID, -i ID        Unique genome identifier (default sequence id of first
+                        record)
+  --taxonomy TAXONOMY, -t TAXONOMY
+                        Taxonomy ID (default = 12908 [unclassified sequences])
+  --status {complete,chromosome,scaffold,contig}, -s {complete,chromosome,scaffold,contig}
+                        Assembly level (default = contig)
+  --organism ORGANISM, -o ORGANISM
+                        Organism name (default = "")
 ```
 
 ## Dependencies
