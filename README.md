@@ -128,6 +128,27 @@ $ git clone https://github.com/oschwengers/referenceseeker.git
 $ ./referenceseeker/bin/referenceseeker --help
 ```
 
+### Test
+To test you installation we prepared a tiny mock database comprising 4 `Salmonella spp` genomes
+and a query assembly (SRA: SRR498276) in the `test` directory:
+```
+$ git clone https://github.com/oschwengers/referenceseeker.git
+$
+$ # BioConda installation
+$ referenceseeker referenceseeker/test/db referenceseeker/test/Salmonella_enterica_CFSAN000189.fasta
+$
+$ # GitHub installation
+$ ./referenceseeker/bin/referenceseeker referenceseeker/test/db referenceseeker/test/Salmonella_enterica_CFSAN000189.fasta
+```
+
+Expected output:
+```
+#ID	Mash Distance	ANI	Con. DNA	Taxonomy ID	Assembly Status	Organism
+GCF_000439415.1	0.00003	100.00	99.55	1173427	complete	Salmonella enterica subsp. enterica serovar Bareilly str. CFSAN000189
+GCF_002760915.1	0.01000	99.00	89.86	149539	complete	Salmonella enterica subsp. enterica serovar Enteritidis 56-3991
+GCF_900205275.1	0.01522	98.61	83.13	90370	complete	Salmonella enterica subsp. enterica serovar Typhi
+```
+
 ## Usage
 Usage:
 ```
