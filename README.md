@@ -5,6 +5,7 @@
 ![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
 ![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)
 ![Conda](https://img.shields.io/conda/pn/bioconda/referenceseeker.svg)
+![Python package](https://github.com/oschwengers/referenceseeker/workflows/Python%20package/badge.svg?branch=master)
 
 # ReferenceSeeker: rapid determination of appropriate reference genomes.
 
