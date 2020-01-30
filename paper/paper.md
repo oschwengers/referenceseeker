@@ -39,7 +39,7 @@ assemblies, comparative genomics and metagenomic tasks. Therefore, a rigorously 
 RG is a prerequisite for the accurate and successful application of the aforementioned
 bioinformatic analyses. In order to address this issue several new databases, methods and tools
 have been published in recent years *e.g.* RefSeq, DNA-DNA hybridization [@Meier-Kolthoff:2013]​,
-average nucleotide identity (ANI) values [@Goris:2007] and Mash ​[@Ondov:2016]​.
+average nucleotide identity (ANI) as well as percentage of conserved DNA (conDNA) values [@Goris:2007] and Mash ​[@Ondov:2016]​.
 Nevertheless, the sheer amount of currently available databases and potential RGs
 contained therein, together with the plethora of tools available, often require manual selection of
 the most suitable RGs. To the best of the authors’ knowledge, there is currently no such tool
@@ -72,28 +72,38 @@ The resulting set of CRGs is subsequently reduced to a configurable number of CR
 with the lowest Mash distances.
 
 ## Determination of RG
-As a highly specific measure for microbial genome relationships ReferenceSeeker uses ANI and
-conserved DNA (conDNA) values. The reasoning for the subsequent calculation of ANI and
-conDNA values is that although Mash distance values correlate well with ANI values, the same
-cannot be observed for conDNA values (Figure 1).
-
-Calculation of these metrics is implemented vía Nucmer contained in the MUMmer package
-[@Marcais:2018] as it was recently shown that Nucmer based implementations (ANIn)
-compare favourably against BLAST+ based implementations (ANIb) in terms of runtime. Given
-that compared genomes are closely related, i.e. shared ANI is above 90%, it was also shown
-that ANIn correlates well with ANIb [@Yoon:2017]. This is ensured by the prior Mash-based
-selection of CRGs. As an established threshold for species boundaries [@Goris:2007]​,
-results are subsequently filtered by configurable ANI and conDNA values with a default of 95%
-and 69%, respectively. Finally, CRGs are sorted according to the harmonic mean of ANI and
-conDNA values in order to incorporate both nucleotide identity and genome coverage of query
-genomes and resulting CRGs. In this manner, ReferenceSeeker ensures that the resulting RGs
-sufficiently reflect the genomic landscape of a query genome. If desired by the user, this approach
-can be extended to a bidirectional computation of aforementioned ANI and conDNA values.
+Mash distances used for the preliminary selection of CRGs were shown to correlate
+well with ANI values capturing nucleotide-level sequence similarities. However,
+Mash distances do not correlate well with the conDNA statistic, which captures the
+query sequence coverage within a certain reference sequence (Figure 1).
+In order to precisely calculate sequence similarities beyond the capability of kmer fingerprints
+and to assure that RGs share an adequate portion of the query genome,
+ReferenceSeeker calculates both ANI and conDNA to derive a highly specific measure
+of microbial genome relationships [@Goris:2007].
 
 ![Figure 1: Scatter plots showing the correlation between Mash distance, ANI and conDNA
 values. ANI and conserved DNA values are plotted against Mash distance values for 500
 candidate reference genomes with the lowest Mash distance within the bacterial database for
 10 randomly selected *Escherichia coli* genomes from the RefSeq database, each.](mash-ani-cdna.scatter.png)
+
+Therefore, required sequence alignments are conducted via Nucmer of the
+MUMmer package [@Marcais:2018] as it was recently shown that Nucmer based implementations (ANIn)
+compare favourably to BLAST+ based implementations (ANIb) in terms of runtime.
+Exact calculations of ANI and conDNA values were adopted from [@Goris:2007] and are carried out as follows.
+Each query genome is split into consecutive 1,020 bp nucleotide fragments which are aligned to a reference genome via Nucmer.
+The conDNA value is then calculated as the ratio between the sum of all aligned nucleotides within nucleotide fragments with an alignment with a sequence identity above 90% and the sum of nucleotides of all nucleotide fragments.
+The ANI value is calculated as the mean sequence identity of all nucleotide fragements
+with a sequence identity above 30% and an alignment length of at least 70% along the entire fragment length.
+
+Given that compared genomes are closely related, *i.e.* they share an ANI of above 90%, it was also shown
+that ANIn correlates well with ANIb [@Yoon:2017]. This requirement is ensured by the prior Mash-based
+selection of CRGs. As an established threshold for species boundaries [@Goris:2007]​,
+results are subsequently filtered by configurable ANI and conDNA values with a default of 95%
+and 69%, respectively. Finally, CRGs are sorted according to the harmonic mean of ANI and
+conDNA values in order to incorporate both the nucleotide identity and the genome coverage
+between the query genome and resulting CRGs. In this manner, ReferenceSeeker ensures that the resulting RGs
+sufficiently reflect the genomic landscape of a query genome. If desired by the user, this approach
+can be extended to a bidirectional computation of aforementioned ANI and conDNA values.
 
 # Application
 ReferenceSeeker takes as input a microbial genome assembly in fasta format and the path to a
