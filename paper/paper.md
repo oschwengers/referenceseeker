@@ -92,7 +92,7 @@ compare favourably to BLAST+ based implementations (ANIb) in terms of runtime.
 Exact calculations of ANI and conDNA values were adopted from [@Goris:2007] and are carried out as follows.
 Each query genome is split into consecutive 1,020 bp nucleotide fragments which are aligned to a reference genome via Nucmer.
 The conDNA value is then calculated as the ratio between the sum of all aligned nucleotides within nucleotide fragments with an alignment with a sequence identity above 90% and the sum of nucleotides of all nucleotide fragments.
-The ANI value is calculated as the mean sequence identity of all nucleotide fragements
+The ANI value is calculated as the mean sequence identity of all nucleotide fragments
 with a sequence identity above 30% and an alignment length of at least 70% along the entire fragment length.
 
 Given that compared genomes are closely related, *i.e.* they share an ANI of above 90%, it was also shown
