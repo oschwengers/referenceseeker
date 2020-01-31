@@ -130,10 +130,10 @@ def import_genome(args):
                 (genome_id, args.taxonomy, args.status, args.organism)
             )
     except:
-        print("ERROR: could not import genome (%s/%s) into database (%s)!" % (args.organism, args.fasta, args.db), file=sys.stderr)
+        print("ERROR: could not import genome (%s/%s) into database (%s)!" % (args.organism, args.genome, args.db), file=sys.stderr)
         raise
         sys.exit(-1)
-    print("\nSuccessfully imported genome (%s/%s) into database (%s)" % (args.organism, args.fasta, db_path))
+    print("\nSuccessfully imported genome (%s/%s) into database (%s)" % (args.organism, args.genome, db_path))
 
 
 def main():
