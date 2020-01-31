@@ -61,7 +61,8 @@ information comprising genome sequences of all RefSeq genomes with an assembly l
 ‘complete’ or whose RefSeq category is either denoted as ‘reference genome’ or ‘representative
 genome’, as well as kmer profiles, related species names, NCBI Taxonomy identifiers and
 RefSeq assembly identifiers. For convenient and fully automatic updates, we provide locally
-executable scripts implemented in bash and Nextflow ​[@Di_Tommaso:2017]​ .
+executable scripts implemented in bash and Nextflow ​[@Di_Tommaso:2017]​. Non-public genomes can
+be imported into existing or newly created databases by an auxiliary command line interface.
 
 ## Database Lookup of CRGs
 To reduce the number of necessary ANI calculations a kmer profile-based lookup of CRGs
