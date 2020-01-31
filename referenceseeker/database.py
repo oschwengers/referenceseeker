@@ -76,6 +76,11 @@ def import_genome(args):
         # copy genome fasta file to database directory
         shutil.copyfile(str(genome_path), str(db_path.joinpath("%s.fna" % genome_id)))
 
+        # copy/rename genome file to have Mash use the right ID in its internal db
+        old_genome_path = genome_path
+        genome_path = tmp_path.joinpath(genome_id)
+        shutil.copyfile(str(old_genome_path), str(genome_path))
+
         # sketch genome
         cmd = [
             'mash',
@@ -83,7 +88,7 @@ def import_genome(args):
             '-o', 'genome',
             '-k', '32',
             '-s', '10000',
-            str(genome_path)
+            genome_id
         ]
         proc = sp.run(
             cmd,
