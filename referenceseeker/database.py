@@ -47,17 +47,17 @@ def import_genome(args):
         tmp_path = Path(tempfile.mkdtemp())
         genome_suffix = genome_path.suffix.lower()
         genome_id = args.id
-        if(genome_suffix in ['.fasta', '.fas', '.fsa', '.fna', 'fa']):
+        if(genome_suffix in ['.fasta', '.fas', '.fsa', '.fna', '.fa']):
             # import fasta
             pass
-        elif(genome_suffix in ['.genbank', '.gbff', 'gbk', 'gb']):
+        elif(genome_suffix in ['.genbank', '.gbff', '.gbk', '.gb']):
             # import genbank
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
             with input_path.open() as fh_in, genome_path.open('w') as fh_out:
                 sequences = SeqIO.parse(fh_in, "genbank")
                 SeqIO.write(sequences, fh_out, "fasta")
-        elif(genome_suffix in ['.embl', '.ebl', 'el']):
+        elif(genome_suffix in ['.embl', '.ebl', '.el']):
             # import embl
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
