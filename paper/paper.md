@@ -41,7 +41,7 @@ bioinformatic analyses. In order to address this issue several new databases, me
 have been published in recent years *e.g.* RefSeq, DNA-DNA hybridization [@Meier-Kolthoff:2013]​,
 average nucleotide identity (ANI) as well as percentage of conserved DNA (conDNA) values [@Goris:2007] and Mash ​[@Ondov:2016]​.
 Nevertheless, the sheer amount of currently available databases and potential RGs
-contained therein, together with the plethora of tools available, often require manual selection of
+contained therein, together with the plethora of tools available, often requires manual selection of
 the most suitable RGs. To the best of the authors’ knowledge, there is currently no such tool
 providing both an integrated, highly specific workflow and scalable and rapid implementation.
 ReferenceSeeker was designed to overcome this bottleneck. As a novel command line tool, it
