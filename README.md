@@ -1,10 +1,10 @@
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01994/status.svg)](https://doi.org/10.21105/joss.01994)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/oschwengers/referenceseeker/blob/master/LICENSE)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/referenceseeker.svg)
 ![GitHub release](https://img.shields.io/github/release/oschwengers/referenceseeker.svg)
 ![PyPI](https://img.shields.io/pypi/v/referenceseeker.svg)
 ![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
 ![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)
-![Conda](https://img.shields.io/conda/pn/bioconda/referenceseeker.svg)
 ![Python package](https://github.com/oschwengers/referenceseeker/workflows/Python%20package/badge.svg?branch=master)
 
 # ReferenceSeeker: rapid determination of appropriate reference genomes.
