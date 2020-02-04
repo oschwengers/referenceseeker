@@ -131,15 +131,15 @@ $ ./referenceseeker/bin/referenceseeker --help
 
 ### Test
 To test you installation we prepared a tiny mock database comprising 4 `Salmonella spp` genomes
-and a query assembly (SRA: SRR498276) in the `test` directory:
+and a query assembly (SRA: SRR498276) in the `tests` directory:
 ```
 $ git clone https://github.com/oschwengers/referenceseeker.git
 $
 $ # BioConda installation
-$ referenceseeker referenceseeker/test/db referenceseeker/test/Salmonella_enterica_CFSAN000189.fasta
+$ referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
 $
 $ # GitHub installation
-$ ./referenceseeker/bin/referenceseeker referenceseeker/test/db referenceseeker/test/Salmonella_enterica_CFSAN000189.fasta
+$ ./referenceseeker/bin/referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
 ```
 
 Expected output:
