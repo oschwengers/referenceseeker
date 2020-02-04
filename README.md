@@ -304,4 +304,4 @@ ReferenceSeeker has been tested against aforementioned versions.
 
 ## Citation
 
-> ReferenceSeeker: rapid determination of appropriate reference genomes. Oliver Schwengers, Torsten Hain, Trinad Chakraborty, Alexander Goesmann. bioRxiv 863621; doi: https://doi.org/10.1101/863621
+> Schwengers et al., (2020). ReferenceSeeker: rapid determination of appropriate reference genomes. Journal of Open Source Software, 5(46), 1994, https://doi.org/10.21105/joss.01994

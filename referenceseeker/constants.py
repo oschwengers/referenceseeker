@@ -7,6 +7,6 @@ UNFILTERED_MASH_DIST = '0.3'
 FRAGMENT_SIZE = 1020
 MIN_FRAGMENT_SIZE = 100
 
-CITATION = '''Schwengers O., Hain T., Chakraborty T., Goesmann A. (2019)
+CITATION = '''Schwengers et al., (2020)
 ReferenceSeeker: rapid determination of appropriate reference genomes.
-bioRxiv 863621; doi: https://doi.org/10.1101/863621'''
+Journal of Open Source Software, 5(46), 1994, https://doi.org/10.21105/joss.01994'''
