@@ -130,7 +130,7 @@ $ ./referenceseeker/bin/referenceseeker --help
 ```
 
 ### Test
-To test you installation we prepared a tiny mock database comprising 4 `Salmonella spp` genomes
+To test your installation we prepared a tiny mock database comprising 4 `Salmonella spp` genomes
 and a query assembly (SRA: SRR498276) in the `tests` directory:
 ```
 $ git clone https://github.com/oschwengers/referenceseeker.git
