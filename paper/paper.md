@@ -50,7 +50,7 @@ quality databases with rapid computation of (mutual) highly specific ANI and con
 
 # Implementation
 ReferenceSeeker is a linux command line tool implemented in Python 3. All necessary external
-binaries are bundled with the software. The tool Itself requires no external dependencies other
+binaries are bundled with the software. The tool itself requires no external dependencies other
 than Biopython for file input and output.
 
 ## Databases
