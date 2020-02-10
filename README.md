@@ -4,7 +4,7 @@
 ![GitHub release](https://img.shields.io/github/release/oschwengers/referenceseeker.svg)
 ![PyPI](https://img.shields.io/pypi/v/referenceseeker.svg)
 ![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
-![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)
+[![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)](http://bioconda.github.io/recipes/referenceseeker/README.html)
 ![Python package](https://github.com/oschwengers/referenceseeker/workflows/Python%20package/badge.svg?branch=master)
 
 # ReferenceSeeker: rapid determination of appropriate reference genomes.
@@ -13,9 +13,13 @@
 - [Description](#description)
 - [Input & Output](#input-output)
 - [Installation](#installation)
+  - [BioConda](#bioconda)
+  - [GitHub](#github)
 - [Usage](#usage)
 - [Examples](#examples)
 - [Databases](#databases)
+  - [RefSeq](#refseq-based)
+  - [Custom](#custom-database)
 - [Dependencies](#dependencies)
 - [Citation](#citation)
 
@@ -110,7 +114,7 @@ In either case, a taxon database must be downloaded which we provide for downloa
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005)
 For more information scroll to [Databases](#databases).
 
-### Conda / BioConda
+### BioConda
 The preferred way to install and run ReferenceSeeker is [Conda](https://conda.io/docs/install/quick.html) using the [Bioconda](https://bioconda.github.io/) channel:
 ```
 $ conda install -c conda-forge -c bioconda -c defaults referenceseeker
@@ -204,7 +208,7 @@ $ referenceseeker --crg 500 --verbose --threads 8 bacteria/ genome.fasta
 ReferenceSeeker depends on custom databases comprising taxonomic genome informations as
 well as kmer hash profiles for each entry.
 
-### RefSeq based databases
+### RefSeq based
 We provide the following pre-built databases based on RefSeq 2019-07-02 via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005) :
 
 | Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
