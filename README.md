@@ -220,17 +220,18 @@ We provide the following pre-built databases based on RefSeq 2019-07-02 via [![D
 | viral | <https://zenodo.org/record/3562005/files/viral.tar.gz?download=1> | 9,264 | 608 Mb | 835 Mb |
 
 Updated database versions reflecting the latest RefSeq versions can be built
-with a shell script and nextflow pipeline.
+with shell and nextflow scripts contained in this repository.
 
 Download and install Nextflow:
 ```
 $ curl -fsSL get.nextflow.io | bash
 ```
 
-Build database:
+Clone this repo and build a database:
 ```
-$ export REFERENCE_SEEKER_HOME=<REFERENCE_SEEKER_DIR>
-$ sh $REFERENCE_SEEKER_HOME/build-db.sh <DB_TYPE_OPTION>
+$ git clone git@github.com:oschwengers/referenceseeker.git
+$ export REFERENCE_SEEKER_HOME=$(realpath referenceseeker)
+$ sh $REFERENCE_SEEKER_HOME/db-scripts/build-db.sh <DB_TYPE_OPTION>
 ```
 
 List of available database options:
