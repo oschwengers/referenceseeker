@@ -111,7 +111,7 @@ GCF_003354885.1	0.00103	99.93	96.63	99.93	96.66	1280	complete	Staphylococcus aur
 ReferenceSeeker can be installed via Conda and Git(Hub).
 
 In either case, a taxon database must be downloaded which we provide for download at Zenodo:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562004.svg)](https://doi.org/10.5281/zenodo.3562004)
 For more information scroll to [Databases](#databases).
 
 ### BioConda
@@ -209,15 +209,16 @@ ReferenceSeeker depends on custom databases comprising taxonomic genome informat
 well as kmer hash profiles for each entry.
 
 ### RefSeq based
-We provide the following pre-built databases based on RefSeq 2019-07-02 via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562005.svg)](https://doi.org/10.5281/zenodo.3562005) :
+We provide the following pre-built databases based on RefSeq release 99 (2020-03-06)
+via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3725706.svg)](https://doi.org/10.5281/zenodo.3725706) :
 
 | Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
 | :---: | --- | ---: | :---: | :---: |
-| bacteria | <https://zenodo.org/record/3562005/files/bacteria.tar.gz?download=1> | 18,229 | 22 Gb | 71 Gb |
-| archaea | <https://zenodo.org/record/3562005/files/archaea.tar.gz?download=1> | 417 | 364 Mb | 1.2 Gb |
-| fungi | <https://zenodo.org/record/3562005/files/fungi.tar.gz?download=1> | 288 | 2.6 Gb | 8 Gb |
-| protozoa | <https://zenodo.org/record/3562005/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
-| viral | <https://zenodo.org/record/3562005/files/viral.tar.gz?download=1> | 9,264 | 608 Mb | 835 Mb |
+| bacteria | <https://zenodo.org/record/3725706/files/bacteria.tar.gz?download=1> | 24,879 | 32 Gb | 101 Gb |
+| archaea | <https://zenodo.org/record/3725706/files/archaea.tar.gz?download=1> | 564 | 513 Mb | 1.6 Gb |
+| fungi | <https://zenodo.org/record/3725706/files/fungi.tar.gz?download=1> | 299 | 2.7 Gb | 8.4 Gb |
+| protozoa | <https://zenodo.org/record/3725706/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
+| viruses | <https://zenodo.org/record/3725706/files/viruses.tar.gz?download=1> | 8,999 | 602 Mb | 898 Mb |
 
 Updated database versions reflecting the latest RefSeq versions can be built
 with shell and nextflow scripts contained in this repository.
@@ -239,7 +240,7 @@ List of available database options:
 $ sh build-db.sh
 	-b (bacteria)
 	-a (archaea)
-	-v (viral)
+	-v (viruses)
 	-f (fungi)
 	-p (protozoa)
 ```
