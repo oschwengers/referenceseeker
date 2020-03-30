@@ -36,9 +36,9 @@ genomes meeting community standard thresholds by default (ANI >= 95 % & conserve
 (Goris, Konstantinos et al. 2007) ranked by the product of ANI and conserved DNA values
 to take into account both genome coverage and identity.
 
-Custom databases can be built by local genomes. For convenience, we provide pre-built
+Custom databases can be built with local genomes. For further convenience, we provide pre-built
 databases based on RefSeq's (<https://www.ncbi.nlm.nih.gov/refseq>) *complete*,
-*reference* and *representative* genomes for the following microbial taxons:
+*reference* and *representative* genomes for the following microbial taxa:
 - bacteria
 - archaea
 - fungi
@@ -47,10 +47,10 @@ databases based on RefSeq's (<https://www.ncbi.nlm.nih.gov/refseq>) *complete*,
 
 The reasoning for subsequent calculations of both ANI and conserved DNA values
 is that Mash distance values correlate well with ANI values for closely
-related genomes but the same is not true for conserved DNA values. A kmer
+related genomes, however the same is not true for conserved DNA values. A kmer
 fingerprint-based comparison alone cannot distinguish if a kmer is missing
 due to a SNP, for instance or a lack of the kmer-comprising subsequence.
-As DNA conservancy (next to DNA identity) is very important for many kinds of
+As DNA conservation (next to DNA identity) is very important for many kinds of
 analyses, e.g. reference based SNP detections, ranking potential reference
 genomes based on a mash distance alone is often not sufficient in order to select
 the most appropriate reference genomes. If desired, ANI and conserved DNA values
