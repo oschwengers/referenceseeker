@@ -49,13 +49,16 @@ def import_genome(args):
         genome_id = args.id
         if(genome_suffix in ['.fasta', '.fas', '.fsa', '.fna', '.fa']):
             # import fasta
-            pass
+            with genome_path.open() as fh_in:
+                sequences = SeqIO.parse(fh_in, "fasta")
+                test_sequences(sequences)
         elif(genome_suffix in ['.genbank', '.gbff', '.gbk', '.gb']):
             # import genbank
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
             with input_path.open() as fh_in, genome_path.open('w') as fh_out:
                 sequences = SeqIO.parse(fh_in, "genbank")
+                test_sequences(sequences)
                 SeqIO.write(sequences, fh_out, "fasta")
         elif(genome_suffix in ['.embl', '.ebl', '.el']):
             # import embl
@@ -63,6 +66,7 @@ def import_genome(args):
             genome_path = tmp_path.joinpath('genome.fasta')
             with input_path.open() as fh_in, genome_path.open('w') as fh_out:
                 sequences = SeqIO.parse(fh_in, "embl")
+                test_sequences(sequences)
                 SeqIO.write(sequences, fh_out, "fasta")
         else:
             raise Exception("Unknown genome file extension (%s)" % genome_suffix)
@@ -134,11 +138,22 @@ def import_genome(args):
                 "%s\t%i\t%s\t%s\n" %
                 (genome_id, args.taxonomy, args.status, args.organism)
             )
-    except:
+    except Exception as e:
+        print(e)
         print("ERROR: could not import genome (%s/%s) into database (%s)!" % (args.organism, args.genome, args.db), file=sys.stderr)
-        raise
         sys.exit(-1)
     print("\nSuccessfully imported genome (%s/%s) into database (%s)" % (args.organism, args.genome, db_path))
+
+
+def test_sequences(sequences):
+    sequence_ids = set()
+    for record in sequences:
+        if(len(record.seq) == 0):
+            raise Exception("Record %s with zero length sequence" % record.id)
+        if(record.id in sequence_ids):
+            raise Exception("Duplicated record id: %s" % record.id)
+        else:
+            sequence_ids.add(record.id)
 
 
 def main():
