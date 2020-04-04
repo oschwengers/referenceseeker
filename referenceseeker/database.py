@@ -71,6 +71,13 @@ def import_genome(args):
         else:
             raise Exception("Unknown genome file extension (%s)" % genome_suffix)
 
+        if args.protein:
+            # assume fasta format
+            protein_path = Path(args.protein).resolve()
+            with protein_path.open() as fh_in:
+                sequences = SeqIO.parse(fh_in, "fasta")
+                test_sequences(sequences)
+
         # extract genome id if it is empty
         if(genome_id is None):
             for record in SeqIO.parse(str(genome_path), 'fasta'):
@@ -79,6 +86,8 @@ def import_genome(args):
 
         # copy genome fasta file to database directory
         shutil.copyfile(str(genome_path), str(db_path.joinpath("%s.fna" % genome_id)))
+        if args.protein:
+            shutil.copyfile(str(protein_path), str(db_path.joinpath("%s.faa" % genome_id)))
 
         # copy/rename genome file to have Mash use the right ID in its internal db
         old_genome_path = genome_path
@@ -183,6 +192,7 @@ def main():
     parser_import = subparsers.add_parser('import', help='Add a new genome to database')
     parser_import.add_argument('--db', '-d', action='store', required=True, help='ReferenceSeeker database path')
     parser_import.add_argument('--genome', '-g', action='store', required=True, help='Genome path [Fasta, GenBank, EMBL]')
+    parser_import.add_argument('--protein', '-p', action='store', required=False, help='Protein path [Fasta]; optional')
     parser_import.add_argument('--id', '-i', action='store', default=None, help='Unique genome identifier (default sequence id of first record)')
     parser_import.add_argument('--taxonomy', '-t', action='store', type=int, default=12908, help='Taxonomy ID (default = 12908 [unclassified sequences])')
     parser_import.add_argument('--status', '-s', action='store', choices=['complete', 'chromosome', 'scaffold', 'contig'], default='contig', help='Assembly level (default = contig)')
