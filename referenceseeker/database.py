@@ -40,7 +40,7 @@ def init(args):
     print("Use 'referenceseeker_db import' to import genomes into database")
 
 
-def import_genome(args):
+def import_genome(config, args):
     try:
         db_path = Path(args.db).resolve()
         genome_path = Path(args.genome).resolve()
@@ -97,6 +97,7 @@ def import_genome(args):
         proc = sp.run(
             cmd,
             cwd=str(tmp_path),
+            env=config['env'],
             stdout=sp.PIPE,
             stderr=sp.PIPE,
             universal_newlines=True
@@ -120,6 +121,7 @@ def import_genome(args):
             proc = sp.run(
                 cmd,
                 cwd=str(tmp_path),
+                env=config['env'],
                 stdout=sp.PIPE,
                 stderr=sp.PIPE,
                 universal_newlines=True
@@ -157,8 +159,10 @@ def test_sequences(sequences):
 
 
 def main():
-    #  test if necessary 3rd party executables are available
-    util.test_binaries()
+    #  setup path and test if necessary 3rd party executables are available
+    config = {}
+    util.set_path(config)
+    util.test_binaries(config)
 
     # parse options and arguments
     parser = argparse.ArgumentParser(
@@ -193,7 +197,7 @@ def main():
     if(args.subcommand == 'init'):
         init(args)
     elif(args.subcommand == 'import'):
-        import_genome(args)
+        import_genome(config, args)
     else:
         parser.print_help()
         sys.exit("Error: no subcommand provided!")

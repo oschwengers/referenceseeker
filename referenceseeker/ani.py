@@ -87,6 +87,7 @@ def execute_nucmer(config, tmp_dir, dna_fragments, query_path, reference_genome_
         proc = sp.run(
             cmd,
             cwd=str(tmp_dir),
+            env=config['env'],
             stdout=fh,
             stderr=sp.STDOUT
         )

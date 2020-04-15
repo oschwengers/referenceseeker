@@ -72,7 +72,6 @@ def setup_configuration(args):
     """Test environment and build a runtime configuration."""
 
     config = {
-        'env': os.environ.copy(),
         'tmp': Path(tempfile.mkdtemp()),
         'bundled-binaries': False,
         'threads': args.threads,
@@ -82,37 +81,48 @@ def setup_configuration(args):
         'ani': args.ani,
         'conserved_dna': args.conserved_dna
     }
-    base_dir = Path(__file__).parent.parent
-    share_dir = base_dir.joinpath('share')
-    if(os.access(str(share_dir), os.R_OK & os.X_OK)):
-        config['env']["PATH"] = str(share_dir) + ':' + config['env']["PATH"]
-        config['bundled-binaries'] = True
 
+    set_path(config)
+
+    base_dir = Path(__file__).parent.parent
     db_path = base_dir.joinpath('db')
     if(os.access(str(db_path), os.R_OK & os.X_OK)):
         config['db'] = db_path
     return config
 
 
-def test_binaries():
+def set_path(config):
+    config['env'] = os.environ.copy()
+    base_dir = Path(__file__).parent.parent
+    share_dir = base_dir.joinpath('share')
+    print("base dir: %s, share dir: %s" % (base_dir, share_dir))
+    if(os.access(str(share_dir), os.R_OK & os.X_OK)):
+        config['env']['PATH'] = str(share_dir) + ':' + config['env']['PATH']
+        config['bundled-binaries'] = True
+        print("PATH: %s" % config['env']['PATH'])
+
+
+def test_binaries(config):
     """Test the proper installation of necessary 3rd party executables."""
 
-    # test prodigal
+    # test Mash
     try:
         sp.check_call(
             ['mash', 'dist', '-h'],
+            env=config['env'],
             stdout=sp.DEVNULL,
             stderr=sp.DEVNULL
         )
     except FileNotFoundError:
-        sys.exit('ERROR: \'prodigal\' was not found!')
+        sys.exit('ERROR: \'Mash\' was not found!')
     except:
-        sys.exit('ERROR: \'prodigal\' was not exeutable!')
+        sys.exit('ERROR: \'Mash\' was not exeutable!')
 
     # test nucmer
     try:
         sp.check_call(
             ['nucmer', '--help'],
+            env=config['env'],
             stdout=sp.DEVNULL,
             stderr=sp.DEVNULL
         )
@@ -125,6 +135,7 @@ def test_binaries():
     try:
         sp.check_call(
             ['delta-filter', '-h'],
+            env=config['env'],
             stdout=sp.DEVNULL,
             stderr=sp.DEVNULL
         )
