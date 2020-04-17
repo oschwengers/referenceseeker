@@ -95,11 +95,9 @@ def set_path(config):
     config['env'] = os.environ.copy()
     base_dir = Path(__file__).parent.parent
     share_dir = base_dir.joinpath('share')
-    print("base dir: %s, share dir: %s" % (base_dir, share_dir))
     if(os.access(str(share_dir), os.R_OK & os.X_OK)):
         config['env']['PATH'] = str(share_dir) + ':' + config['env']['PATH']
         config['bundled-binaries'] = True
-        print("PATH: %s" % config['env']['PATH'])
 
 
 def test_binaries(config):
