@@ -308,7 +308,7 @@ optional arguments:
 
 ## Dependencies
 ReferenceSeeker needs the following dependencies:
-- Python (3.5.2), Biopython (1.71)
+- Python (3.6), Biopython (1.71)
 - Mash (2.2) <https://github.com/marbl/Mash>
 - MUMmer (4.0.0-beta2) <https://github.com/gmarcais/mummer>
 
