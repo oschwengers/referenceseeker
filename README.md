@@ -227,7 +227,7 @@ via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3992357.svg)](https://do
 | archaea | <https://zenodo.org/record/3992357/files/archaea.tar.gz?download=1> | 590 | 534 Mb | 1.7 Gb |
 | fungi | <https://zenodo.org/record/3992357/files/fungi.tar.gz?download=1> | 327 | 2.9 Gb | 9.3 Gb |
 | protozoa | <https://zenodo.org/record/3992357/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
-| viruses | <https://zenodo.org/record/3992357/files/viruses.tar.gz?download=1> | 10,012 | 697 Mb | 955 Mb |
+| viruses | <https://zenodo.org/record/3992357/files/viral.tar.gz?download=1> | 10,012 | 697 Mb | 955 Mb |
 
 Updated database versions reflecting the latest RefSeq versions can be built
 with shell and nextflow scripts contained in this repository.
