@@ -45,6 +45,8 @@ databases based on RefSeq's (<https://www.ncbi.nlm.nih.gov/refseq>) *complete*,
 - protozoa
 - viruses
 
+and additionally, also complete *plasmids* from RefSeq.
+
 The reasoning for subsequent calculations of both ANI and conserved DNA values
 is that Mash distance values correlate well with ANI values for closely
 related genomes, however the same is not true for conserved DNA values. A kmer
@@ -215,16 +217,17 @@ ReferenceSeeker depends on custom databases comprising taxonomic genome informat
 well as kmer hash profiles for each entry.
 
 ### RefSeq based
-We provide the following pre-built databases based on RefSeq release 99 (2020-03-06)
-via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3725706.svg)](https://doi.org/10.5281/zenodo.3725706) :
+We provide the following pre-built databases based on RefSeq release 201 (2020-07-13)
+via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3992357.svg)](https://doi.org/10.5281/zenodo.3992357) :
 
 | Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
 | :---: | --- | ---: | :---: | :---: |
-| bacteria | <https://zenodo.org/record/3725706/files/bacteria.tar.gz?download=1> | 24,879 | 32 Gb | 101 Gb |
-| archaea | <https://zenodo.org/record/3725706/files/archaea.tar.gz?download=1> | 564 | 513 Mb | 1.6 Gb |
-| fungi | <https://zenodo.org/record/3725706/files/fungi.tar.gz?download=1> | 299 | 2.7 Gb | 8.4 Gb |
-| protozoa | <https://zenodo.org/record/3725706/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
-| viruses | <https://zenodo.org/record/3725706/files/viruses.tar.gz?download=1> | 8,999 | 602 Mb | 898 Mb |
+| bacteria | <https://zenodo.org/record/3992357/files/bacteria.tar.gz?download=1> | 27,165 | 34.2 Gb | 111 Gb |
+| plasmids | <https://zenodo.org/record/3992357/files/plasmids.tar.gz?download=1> | 26,907 | 917 Mb | 2.7 Gb |
+| archaea | <https://zenodo.org/record/3992357/files/archaea.tar.gz?download=1> | 590 | 534 Mb | 1.7 Gb |
+| fungi | <https://zenodo.org/record/3992357/files/fungi.tar.gz?download=1> | 327 | 2.9 Gb | 9.3 Gb |
+| protozoa | <https://zenodo.org/record/3992357/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
+| viruses | <https://zenodo.org/record/3992357/files/viruses.tar.gz?download=1> | 10,012 | 697 Mb | 955 Mb |
 
 Updated database versions reflecting the latest RefSeq versions can be built
 with shell and nextflow scripts contained in this repository.
@@ -249,6 +252,8 @@ $ sh build-db.sh
 	-v (viruses)
 	-f (fungi)
 	-p (protozoa)
+
+$ sh build-plasmids.sh
 ```
 
 ### Custom database
