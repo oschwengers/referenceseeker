@@ -29,7 +29,7 @@ wget -O assembly_summary.txt ${NCBI_PATH}/refseq/${DOMAIN}/assembly_summary.txt
 
 nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db.nf --ass_sum ./assembly_summary.txt --ncbiPath $NCBI_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
 
-$REFERENCE_SEEKER_HOME/share/mash/mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
+$REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
 
 rm -rf work/ .nextflow* sketches/ assembly_summary.txt
 

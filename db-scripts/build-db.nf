@@ -45,7 +45,7 @@ process sketch {
     """
     wget -O ${acc}.gz ${ncbiPath}/${path}/${path.split('/').last()}_genomic.fna.gz
     gunzip ${acc}.gz
-    ${REFERENCE_SEEKER_HOME}/share/mash/mash sketch -k 32 -s 10000 ${acc}
+    ${REFERENCE_SEEKER_HOME}/share/mash sketch -k 32 -s 10000 ${acc}
     mv ${acc} ${acc}.fna
     """
 }
