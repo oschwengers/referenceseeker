@@ -190,7 +190,7 @@ def main():
     parser_import.add_argument('--id', '-i', action='store', default=None, help='Unique genome identifier (default sequence id of first record)')
     parser_import.add_argument('--taxonomy', '-t', action='store', type=int, default=12908, help='Taxonomy ID (default = 12908 [unclassified sequences])')
     parser_import.add_argument('--status', '-s', action='store', choices=['complete', 'chromosome', 'scaffold', 'contig'], default='contig', help='Assembly level (default = contig)')
-    parser_import.add_argument('--organism', '-o', action='store', default='', help='Organism name (default = "")')
+    parser_import.add_argument('--organism', '-o', action='store', default='NA', help='Organism name (default = "NA")')
 
     args = parser.parse_args()
 
