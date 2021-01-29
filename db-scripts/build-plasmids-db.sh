@@ -2,7 +2,7 @@
 NCBI_PATH='ftp://ftp.ncbi.nlm.nih.gov/genomes'
 
 echo "Download plasmid sequences..."
-for i in 1 2 3 4 5 6 7 8; do
+for i in 1 2 3 4 5 6 7 8 9; do
     wget ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/plasmid/plasmid.${i}.1.genomic.fna.gz
 done
 

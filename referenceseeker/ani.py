@@ -3,6 +3,7 @@ import shutil
 import sys
 import subprocess as sp
 import tempfile
+from xopen import xopen
 
 from pathlib import Path
 
@@ -19,8 +20,12 @@ def align_query_genome(config, dna_fragments_path, dna_fragments, ref_genome_id)
     :rtype: A dict representing a reference genome and additionally comprising ANI / conserved DNA values.
     """
 
-    reference_genome_path = config['db_path'].joinpath("%s.fna" % ref_genome_id)
     tmp_dir = Path(tempfile.mkdtemp())
+    reference_genome_zipped_path = config['db_path'].joinpath("%s.fna.gz" % ref_genome_id)
+    reference_genome_path = tmp_dir.joinpath("%s.fna" % ref_genome_id)
+    with reference_genome_path.open(mode='w') as fh_out, xopen(str(reference_genome_zipped_path), threads=0) as fh_in:
+        for line in fh_in:
+            fh_out.write(line)
 
     dna_fragment_matches = execute_nucmer(config, tmp_dir, dna_fragments, dna_fragments_path, reference_genome_path)
 
@@ -42,7 +47,7 @@ def align_reference_genome(config, query_genome_path, ref_genome_id):
     :rtype: A dict representing a reference genome and additionally comprising ANI / conserved DNA values.
     """
 
-    reference_genome_path = config['db_path'].joinpath("%s.fna" % ref_genome_id)
+    reference_genome_path = config['db_path'].joinpath("%s.fna.gz" % ref_genome_id)
     tmp_dir = Path(tempfile.mkdtemp())
 
     dna_fragments_path = tmp_dir.joinpath('dna-fragments.fasta')

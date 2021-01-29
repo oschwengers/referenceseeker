@@ -36,7 +36,7 @@ process sketch {
     output:
     set val(acc), val(taxId), val(status), val(orgName) into dbEntries
     file("${acc}.msh") into outMash
-    file("${acc}.fna") into outFasta
+    file("${acc}.fna.gz") into outFasta
 
     publishDir pattern: '*.fna', path: "./${domain}/", mode: 'move'
     publishDir pattern: '*.msh', path: './sketches/',  mode: 'move'
@@ -47,6 +47,7 @@ process sketch {
     gunzip ${acc}.gz
     ${REFERENCE_SEEKER_HOME}/share/mash sketch -k 32 -s 10000 ${acc}
     mv ${acc} ${acc}.fna
+    gzip ${acc}.fna
     """
 }
 
