@@ -35,3 +35,6 @@ $REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash fail
 rm -rf work/ .nextflow* sketches/ *.tsv *_metadata.tar.gz gtdb_genomes_reps.tar.gz
 
 mv db.msh $DOMAIN/
+
+tar -I pigz -cf "$DOMAIN.tar.gz" $DOMAIN
+md5sum "$DOMAIN.tar.gz"

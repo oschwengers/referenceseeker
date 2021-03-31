@@ -16,3 +16,6 @@ $REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash fail
 rm -rf work/ .nextflow* sketches/ plasmid.* plasmids.fna
 
 mv db.msh plasmids/
+
+tar -I pigz -cf plasmids.tar.gz plasmids
+md5sum plasmids.tar.gz

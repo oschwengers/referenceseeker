@@ -34,3 +34,6 @@ $REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash fail
 rm -rf work/ .nextflow* sketches/ assembly_summary.txt
 
 mv db.msh $DOMAIN/
+
+tar -I pigz -cf "$DOMAIN.tar.gz" $DOMAIN
+md5sum "$DOMAIN.tar.gz"
