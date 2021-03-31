@@ -7,6 +7,7 @@ import sys
 import tempfile
 
 from Bio import SeqIO
+from xopen import xopen
 
 import referenceseeker
 import referenceseeker.constants as rc
@@ -78,7 +79,11 @@ def import_genome(config, args):
                 break
 
         # copy genome fasta file to database directory
-        shutil.copyfile(str(genome_path), str(db_path.joinpath("%s.fna" % genome_id)))
+        # shutil.copyfile(str(genome_path), str(db_path.joinpath("%s.fna" % genome_id)))
+        genome_database_path = db_path.joinpath(f"{genome_id}.fna.gz")
+        with genome_path.open() as fh_in, xopen(str(genome_database_path), mode='wb') as fh_out:
+            for line in fh_in:
+                fh_out.write(bytes(line, 'utf-8'))
 
         # copy/rename genome file to have Mash use the right ID in its internal db
         old_genome_path = genome_path
