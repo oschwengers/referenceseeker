@@ -8,6 +8,8 @@ import shutil
 import concurrent.futures as cf
 from pathlib import Path
 
+from xopen import xopen
+
 import referenceseeker
 import referenceseeker.constants as rc
 import referenceseeker.mash as mash
@@ -73,6 +75,15 @@ def main():
         print("\tconserved DNA: %0.2f" % config['conserved_dna'])
         print("\t# CRG: %d" % config['crg'])
         print("\t# threads: %d" % config['threads'])
+    
+    # import potentially gzipped query genome
+    if(genome_path.suffix == '.gz'):
+        genome_unzipped_path = config['tmp'].joinpath(f"{genome_path.stem}.fna")
+        with genome_unzipped_path.open(mode='w') as fh_out, xopen(str(genome_path), threads=0) as fh_in:
+            for line in fh_in:
+                fh_out.write(line)
+        genome_path = genome_unzipped_path
+        config['genome_path'] = genome_path
 
     # calculate genome distances via Mash
     if(args.verbose):
