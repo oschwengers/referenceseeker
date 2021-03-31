@@ -38,7 +38,7 @@ process sketch {
     file("${acc}.msh") into outMash
     file("${acc}.fna.gz") into outFasta
 
-    publishDir pattern: '*.fna', path: "./${domain}/", mode: 'move'
+    publishDir pattern: '*.fna.gz', path: "./${domain}/", mode: 'move'
     publishDir pattern: '*.msh', path: './sketches/',  mode: 'move'
 
     script:
