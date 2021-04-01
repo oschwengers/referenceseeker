@@ -9,13 +9,13 @@ done
 echo "Unzip plasmid sequences..."
 zcat plasmid.* > plasmids.fna
 
-nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-plasmids-db.nf --plasmids plasmids.fna  ||  { echo "Nextflow failed!"; exit; }
+nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-plasmids-db-refseq.nf --plasmids plasmids.fna  ||  { echo "Nextflow failed!"; exit; }
 
 $REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
 
 rm -rf work/ .nextflow* sketches/ plasmid.* plasmids.fna
 
-mv db.msh plasmids/
+mv db.msh plasmids-refseq/
 
-tar -I pigz -cf plasmids.tar.gz plasmids
+tar -I pigz -cf plasmids-refseq.tar.gz plasmids-refseq
 md5sum plasmids.tar.gz

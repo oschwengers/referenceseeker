@@ -36,18 +36,18 @@ process sketch {
     file("${acc}.msh") into outMash
     file("${acc}.fna.gz") into outFasta
 
-    publishDir pattern: '*.fna.gz', path: "./plasmids/", mode: 'move'
+    publishDir pattern: '*.fna.gz', path: "./plasmids-refseq/", mode: 'move'
     publishDir pattern: '*.msh', path: './sketches/', mode: 'move'
 
     script:
     """
     mv ${sequence} ${acc}
     ${REFERENCE_SEEKER_HOME}/share/mash sketch -k 32 -s 1000 ${acc}
-    mv ${acc} ${acc}.fna
+    cp -L ${acc} ${acc}.fna
     gzip ${acc}.fna
     """
 }
 
 
 dbEntries.map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" }
-    .collectFile( name: 'db.tsv', storeDir: './plasmids/', newLine: true )
+    .collectFile( name: 'db.tsv', storeDir: './plasmids-refseq/', newLine: true )

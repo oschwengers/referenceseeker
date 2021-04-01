@@ -26,7 +26,7 @@ process sketch {
 
     tag { "${acc} - ${orgName}" }
 
-    maxForks 3
+    maxForks 4
     errorStrategy 'ignore'
     maxRetries 3
 
@@ -38,7 +38,7 @@ process sketch {
     file("${acc}.msh") into outMash
     file("${acc}.fna.gz") into outFasta
 
-    publishDir pattern: '*.fna.gz', path: "./${domain}/", mode: 'move'
+    publishDir pattern: '*.fna.gz', path: "./${domain}-refseq/", mode: 'move'
     publishDir pattern: '*.msh', path: './sketches/',  mode: 'move'
 
     script:
@@ -53,4 +53,4 @@ process sketch {
 
 
 dbEntries.map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" }
-    .collectFile( name: 'db.tsv', storeDir: "./${domain}/", newLine: true )
+    .collectFile( name: 'db.tsv', storeDir: "./${domain}-refseq/", newLine: true )

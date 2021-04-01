@@ -27,13 +27,13 @@ esac
 echo "Download $DOMAIN database..."
 wget -O assembly_summary.txt ${NCBI_PATH}/refseq/${DOMAIN}/assembly_summary.txt
 
-nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db.nf --ass_sum ./assembly_summary.txt --ncbiPath $NCBI_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
+nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db-refseq.nf --ass_sum ./assembly_summary.txt --ncbiPath $NCBI_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
 
 $REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
 
 rm -rf work/ .nextflow* sketches/ assembly_summary.txt
 
-mv db.msh $DOMAIN/
+mv db.msh "$DOMAIN-refseq"/
 
-tar -I pigz -cf "$DOMAIN.tar.gz" $DOMAIN
-md5sum "$DOMAIN.tar.gz"
+tar -I pigz -cf "$DOMAIN-refseq.tar.gz" "$DOMAIN-refseq"
+md5sum "$DOMAIN-refseq.tar.gz"
