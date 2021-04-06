@@ -10,6 +10,7 @@
 # ReferenceSeeker: rapid determination of appropriate reference genomes.
 
 ## Contents
+
 - [Description](#description)
 - [Input & Output](#input-output)
 - [Installation](#installation)
@@ -24,53 +25,41 @@
 - [Citation](#citation)
 
 ## Description
-ReferenceSeeker determines closely related reference genomes following a scalable hierarchical
-approach combining an fast kmer profile-based database lookup of candidate
-reference genomes and subsequent computation of specific average nucleotide
-identity (ANI) values for the rapid determination of suitable reference genomes.
 
-ReferenceSeeker computes kmer-based genome distances between a query genome and
-potential reference genome candidates via Mash (Ondov et al. 2016).
-For resulting candidates ReferenceSeeker subsequently computes (bidirectional) ANI values picking
-genomes meeting community standard thresholds by default (ANI >= 95 % & conserved DNA >= 69 %)
-(Goris, Konstantinos et al. 2007) ranked by the product of ANI and conserved DNA values
-to take into account both genome coverage and identity.
+ReferenceSeeker determines closely related reference genomes following a scalable hierarchical approach combining an fast kmer profile-based database lookup of candidate reference genomes and subsequent computation of specific average nucleotide identity (ANI) values for the rapid determination of suitable reference genomes.
 
-Custom databases can be built with local genomes. For further convenience, we provide pre-built
-databases based on RefSeq's (<https://www.ncbi.nlm.nih.gov/refseq>) *complete*,
-*reference* and *representative* genomes for the following microbial taxa:
+ReferenceSeeker computes kmer-based genome distances between a query genome and potential reference genome candidates via Mash (Ondov et al. 2016). For resulting candidates ReferenceSeeker subsequently computes (bidirectional) ANI values picking genomes meeting community standard thresholds by default (ANI >= 95 % & conserved DNA >= 69 %) (Goris, Konstantinos et al. 2007) ranked by the product of ANI and conserved DNA values to take into account both genome coverage and identity.
+
+Custom databases can be built with local genomes. For further convenience, we provide pre-built databases with sequences from RefSeq (<https://www.ncbi.nlm.nih.gov/refseq>), GTDB and PLSDB copmrising the following taxa:
+
 - bacteria
 - archaea
 - fungi
 - protozoa
 - viruses
 
-and additionally, also complete *plasmids* from RefSeq.
+as well as *plasmids*.
 
-The reasoning for subsequent calculations of both ANI and conserved DNA values
-is that Mash distance values correlate well with ANI values for closely
-related genomes, however the same is not true for conserved DNA values. A kmer
-fingerprint-based comparison alone cannot distinguish if a kmer is missing
-due to a SNP, for instance or a lack of the kmer-comprising subsequence.
-As DNA conservation (next to DNA identity) is very important for many kinds of
-analyses, e.g. reference based SNP detections, ranking potential reference
-genomes based on a mash distance alone is often not sufficient in order to select
-the most appropriate reference genomes. If desired, ANI and conserved DNA values
-can be computed bidirectionally.
+The reasoning for subsequent calculations of both ANI and conserved DNA values is that Mash distance values correlate well with ANI values for closely related genomes, however the same is not true for conserved DNA values. A kmer fingerprint-based comparison alone cannot distinguish if a kmer is missing due to a SNP, for instance or a lack of the kmer-comprising subsequence. As DNA conservation (next to DNA identity) is very important for many kinds of analyses, *e.g.* reference based SNP detections, ranking potential reference genomes based on a mash distance alone is often not sufficient in order to select the most appropriate reference genomes. If desired, ANI and conserved DNA values can be computed bidirectionally.
 
 ![Mash D vs. ANI / conDNA](mash-ani-cdna.mini.png?raw=true)
 
 ## Input & Output
-### Input:
-Path to a taxon database and a draft or finished genome in fasta format:
-```
+
+### Input
+
+Path to a taxon database and a draft or finished genome in (zipped) fasta format:
+
+```bash
 $ referenceseeker ~/bacteria GCF_000013425.1.fna
 ```
 
-### Output:
+### Output
+
 Tab separated lines to STDOUT comprising the following columns:
 
 Unidirectionally (query -> references):
+
 - RefSeq Assembly ID
 - Mash Distance
 - ANI
@@ -79,19 +68,21 @@ Unidirectionally (query -> references):
 - Assembly Status
 - Organism
 
-```
-#ID	Mash Distance	ANI	Con. DNA	Taxonomy ID	Assembly Status	Organism
-GCF_000013425.1	0.00000	100.00	100.00	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
-GCF_001900185.1	0.00002	100.00	99.89	46170	complete	Staphylococcus aureus subsp. aureus HG001
-GCF_900475245.1	0.00004	100.00	99.57	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
-GCF_001018725.2	0.00016	100.00	99.28	1280	complete	Staphylococcus aureus FDAARGOS_10
-GCF_003595465.1	0.00185	99.86	96.81	1280	complete	Staphylococcus aureus USA300-SUR6
-GCF_003595385.1	0.00180	99.87	96.80	1280	complete	Staphylococcus aureus USA300-SUR2
-GCF_003595365.1	0.00180	99.87	96.80	1280	complete	Staphylococcus aureus USA300-SUR1
-GCF_001956815.1	0.00180	99.87	96.80	46170	complete	Staphylococcus aureus subsp. aureus USA300_SUR1
+```bash
+#ID    Mash Distance    ANI    Con. DNA    Taxonomy ID    Assembly Status    Organism
+GCF_000013425.1    0.00000    100.00    100.00    93061    complete    Staphylococcus aureus subsp. aureus NCTC 8325
+GCF_001900185.1    0.00002    100.00    99.89     46170    complete    Staphylococcus aureus subsp. aureus HG001
+GCF_900475245.1    0.00004    100.00    99.57     93061    complete    Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
+GCF_001018725.2    0.00016    100.00    99.28     1280     complete    Staphylococcus aureus FDAARGOS_10
+GCF_003595465.1    0.00185    99.86     96.81     1280     complete    Staphylococcus aureus USA300-SUR6
+GCF_003595385.1    0.00180    99.87     96.80     1280     complete    Staphylococcus aureus USA300-SUR2
+GCF_003595365.1    0.00180    99.87     96.80     1280     complete    Staphylococcus aureus USA300-SUR1
+GCF_001956815.1    0.00180    99.87     96.80     46170    complete    Staphylococcus aureus subsp. aureus USA300_SUR1
 ...
 ```
+
 Bidirectionally (query -> references [QR] & references -> query [RQ]):
+
 - RefSeq Assembly ID
 - Mash Distance
 - QR ANI
@@ -102,69 +93,75 @@ Bidirectionally (query -> references [QR] & references -> query [RQ]):
 - Assembly Status
 - Organism
 
-```
-#ID	Mash Distance	QR ANI	QR Con. DNA	RQ ANI	RQ Con. DNA	Taxonomy ID	Assembly Status	Organism
-GCF_000013425.1	0.00000	100.00	100.00	100.00	100.00	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325
-GCF_001900185.1	0.00002	100.00	99.89	100.00	99.89	46170	complete	Staphylococcus aureus subsp. aureus HG001
-GCF_900475245.1	0.00004	100.00	99.57	99.99	99.67	93061	complete	Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
-GCF_001018725.2	0.00016	100.00	99.28	99.95	98.88	1280	complete	Staphylococcus aureus FDAARGOS_10
-GCF_001018915.2	0.00056	99.99	96.35	99.98	99.55	1280	complete	Staphylococcus aureus NRS133
-GCF_001019415.2	0.00081	99.99	94.47	99.98	99.36	1280	complete	Staphylococcus aureus NRS146
-GCF_001018735.2	0.00096	100.00	94.76	99.98	98.58	1280	complete	Staphylococcus aureus NRS137
-GCF_003354885.1	0.00103	99.93	96.63	99.93	96.66	1280	complete	Staphylococcus aureus 164
+```bash
+#ID    Mash Distance    QR ANI    QR Con. DNA    RQ ANI    RQ Con. DNA    Taxonomy ID    Assembly Status    Organism
+GCF_000013425.1    0.00000    100.00    100.00    100.00    100.00    93061    complete    Staphylococcus aureus subsp. aureus NCTC 8325
+GCF_001900185.1    0.00002    100.00    99.89     100.00    99.89     46170    complete    Staphylococcus aureus subsp. aureus HG001
+GCF_900475245.1    0.00004    100.00    99.57     99.99     99.67     93061    complete    Staphylococcus aureus subsp. aureus NCTC 8325 NCTC8325
+GCF_001018725.2    0.00016    100.00    99.28     99.95     98.88     1280     complete    Staphylococcus aureus FDAARGOS_10
+GCF_001018915.2    0.00056    99.99     96.35     99.98     99.55     1280     complete    Staphylococcus aureus NRS133
+GCF_001019415.2    0.00081    99.99     94.47     99.98     99.36     1280     complete    Staphylococcus aureus NRS146
+GCF_001018735.2    0.00096    100.00    94.76     99.98     98.58     1280     complete    Staphylococcus aureus NRS137
+GCF_003354885.1    0.00103    99.93     96.63     99.93     96.66     1280     complete    Staphylococcus aureus 164
 ...
 ```
 
 ## Installation
-ReferenceSeeker can be installed via Conda and Git(Hub).
 
-In either case, a taxon database must be downloaded which we provide for download at Zenodo:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562004.svg)](https://doi.org/10.5281/zenodo.3562004)
-For more information scroll to [Databases](#databases).
+ReferenceSeeker can be installed via Conda and Git(Hub). In either case, a taxon database must be downloaded which we provide for download at Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562004.svg)](https://doi.org/10.5281/zenodo.3562004)
+For more information have a look at [Databases](#databases).
 
 ### BioConda
+
 The preferred way to install and run ReferenceSeeker is [Conda](https://conda.io/docs/install/quick.html) using the [Bioconda](https://bioconda.github.io/) channel:
-```
-$ conda install -c conda-forge -c bioconda -c defaults referenceseeker
+
+```bash
+$ conda install -c bioconda referenceseeker
 $ referenceseeker --help
 ```
 
 ### GitHub
+
 Alternatively, you can use this raw GitHub repository:
+
 1. install necessary Python dependencies (if necessary)
 2. clone the latest version of the repository
 3. download and extract a databases
 
-```
+```bash
 $ pip3 install --user biopython
 $ git clone https://github.com/oschwengers/referenceseeker.git
 $ ./referenceseeker/bin/referenceseeker --help
 ```
 
 ### Test
-To test your installation we prepared a tiny mock database comprising 4 `Salmonella spp` genomes
-and a query assembly (SRA: SRR498276) in the `tests` directory:
-```
+
+To test your installation we prepared a tiny mock database comprising 4 `Salmonella spp` genomes and a query assembly (SRA: SRR498276) in the `tests` directory:
+
+```bash
 $ git clone https://github.com/oschwengers/referenceseeker.git
-$
-$ # BioConda installation
-$ referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
-$
-$ # GitHub installation
+
+  # GitHub installation
 $ ./referenceseeker/bin/referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
+
+  # BioConda installation
+$ referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
 ```
 
 Expected output:
-```
-#ID	Mash Distance	ANI	Con. DNA	Taxonomy ID	Assembly Status	Organism
-GCF_000439415.1	0.00003	100.00	99.55	1173427	complete	Salmonella enterica subsp. enterica serovar Bareilly str. CFSAN000189
-GCF_002760915.1	0.01000	99.00	89.86	149539	complete	Salmonella enterica subsp. enterica serovar Enteritidis 56-3991
-GCF_900205275.1	0.01522	98.61	83.13	90370	complete	Salmonella enterica subsp. enterica serovar Typhi
+
+```bash
+#ID    Mash Distance    ANI	Con. DNA    Taxonomy ID    Assembly Status    Organism
+GCF_000439415.1    0.00003    100.00    99.55    1173427    complete    Salmonella enterica subsp. enterica serovar Bareilly str. CFSAN000189
+GCF_002760915.1    0.01000    99.00     89.86    149539     complete    Salmonella enterica subsp. enterica serovar Enteritidis 56-3991
+GCF_900205275.1    0.01522    98.61     83.13    90370      complete    Salmonella enterica subsp. enterica serovar Typhi
 ```
 
 ## Usage
+
 Usage:
-```
+
+```bash
 usage: referenceseeker [--crg CRG] [--ani ANI] [--conserved-dna CONSERVED_DNA]
                        [--unfiltered] [--bidirectional] [--help] [--version]
                        [--verbose] [--threads THREADS]
@@ -200,70 +197,66 @@ Runtime & auxiliary options:
 ```
 
 ## Examples
+
 Simple:
-```
+
+```bash
 $ # referenceseeker <REFERENCE_SEEKER_DB> <GENOME>
 $ referenceseeker bacteria/ genome.fasta
 ```
 
 Expert: verbose output and increased output of candidate reference genomes using a defined number of threads:
-```
+
+```bash
 $ # referenceseeker --crg 500 --verbose --threads 8 <REFERENCE_SEEKER_DB> <GENOME>
 $ referenceseeker --crg 500 --verbose --threads 8 bacteria/ genome.fasta
 ```
 
 ## Databases
-ReferenceSeeker depends on custom databases comprising taxonomic genome informations as
-well as kmer hash profiles for each entry.
 
-### RefSeq based
-We provide the following pre-built databases based on RefSeq release 201 (2020-07-13)
-via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3992357.svg)](https://doi.org/10.5281/zenodo.3992357) :
+ReferenceSeeker depends on databases comprising taxonomic genome informations as well as kmer hash profiles for each entry.
 
-| Taxon | URL | # Genomes | Size Zipped | Size Unzipped |
+### Pre-built
+
+We provide pre-built databases based on public genome data hosted at Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4415843.svg)](https://doi.org/10.5281/zenodo.4415843) :
+
+#### RefSeq
+
+release: 205 (2021-04-01)
+
+| Taxon | URL | # Genomes | Size |
 | :---: | --- | ---: | :---: | :---: |
-| bacteria | <https://zenodo.org/record/3992357/files/bacteria.tar.gz?download=1> | 27,165 | 34.2 Gb | 111 Gb |
-| plasmids | <https://zenodo.org/record/3992357/files/plasmids.tar.gz?download=1> | 26,907 | 917 Mb | 2.7 Gb |
-| archaea | <https://zenodo.org/record/3992357/files/archaea.tar.gz?download=1> | 590 | 534 Mb | 1.7 Gb |
-| fungi | <https://zenodo.org/record/3992357/files/fungi.tar.gz?download=1> | 327 | 2.9 Gb | 9.3 Gb |
-| protozoa | <https://zenodo.org/record/3992357/files/protozoa.tar.gz?download=1> | 88 | 1 Gb | 3.4 Gb |
-| viruses | <https://zenodo.org/record/3992357/files/viral.tar.gz?download=1> | 10,012 | 697 Mb | 955 Mb |
+| bacteria | <https://zenodo.org/record/3992357/files/bacteria-refseq.tar.gz?download=1> | 30,941 | 40 Gb |
+| archaea | <https://zenodo.org/record/3992357/files/archaea-refseq.tar.gz?download=1> | 606 | 553 Mb |
+| fungi | <https://zenodo.org/record/3992357/files/fungi-refseq.tar.gz?download=1> | 347 | 3.3 Gb |
+| protozoa | <https://zenodo.org/record/3992357/files/protozoa-refseq.tar.gz?download=1> | 88 | 1.1 Gb |
+| viruses | <https://zenodo.org/record/3992357/files/viral-refseq.tar.gz?download=1> | 10,339 | 730 Mb |
 
-Updated database versions reflecting the latest RefSeq versions can be built
-with shell and nextflow scripts contained in this repository.
+#### GTDB
 
-Download and install Nextflow:
-```
-$ curl -fsSL get.nextflow.io | bash
-```
+release: v95 (2021-01-06)
 
-Clone this repo and build a database:
-```
-$ git clone git@github.com:oschwengers/referenceseeker.git
-$ export REFERENCE_SEEKER_HOME=$(realpath referenceseeker)
-$ sh $REFERENCE_SEEKER_HOME/db-scripts/build-db.sh <DB_TYPE_OPTION>
-```
+| Taxon | URL | # Genomes | Size |
+| :---: | --- | ---: | :---: | :---: |
+| bacteria | <https://zenodo.org/record/3992357/files/bacteria-gtdb.tar.gz?download=1> | 30,238 | 34 Gb |
+| archaea | <https://zenodo.org/record/3992357/files/archaea-gtdb.tar.gz?download=1> | 1,672 | 1.1 Gb |
 
-List of available database options:
-```
-$ sh build-db.sh
-	-b (bacteria)
-	-a (archaea)
-	-v (viruses)
-	-f (fungi)
-	-p (protozoa)
+#### Plasmids
 
-$ sh build-plasmids.sh
-```
+In addition to the genome based databases, we provide the following plasmid databases based on RefSeq and PLSDB:
+
+| DB | URL | # Plasmids | Size |
+| :---: | --- | ---: | :---: | :---: |
+| RefSeq | <https://zenodo.org/record/3992357/files/plasmids-refseq.tar.gz?download=1> | 32,611 | 1.1 Gb |
+| PLSDB | <https://zenodo.org/record/3992357/files/plasmids-plsdb.tar.gz?download=1> | 27,393 | 1.1 Gb |
 
 ### Custom database
-If above mentiond RefSeq based databases do not contain sufficiently-close related
-genomes or are just too large, ReferenceSeeker provides auxiliary commands
-in order to either create databases from scratch or to expand existing ones.
-Therefore, a second executable `referenceseeker_db` accepts `init` and `import` subcommands:
+
+If above mentiond RefSeq based databases do not contain sufficiently-close related genomes or are just too large, ReferenceSeeker provides auxiliary commands in order to either create databases from scratch or to expand existing ones. Therefore, a second executable `referenceseeker_db` accepts `init` and `import` subcommands:
 
 Usage:
-```
+
+```bash
 usage: referenceseeker_db [--help] [--version] {init,import} ...
 
 Rapid determination of appropriate reference genomes.
@@ -279,7 +272,8 @@ Runtime & auxiliary options:
 ```
 
 If a new database should be created, use `referenceseeker_db init`:
-```
+
+```bash
 usage: referenceseeker_db init [-h] [--output OUTPUT] --db DB
 
 optional arguments:
@@ -290,7 +284,8 @@ optional arguments:
 ```
 
 This new database or an existing one can be used to import genomes in Fasta, GenBank or EMBL format:
-```
+
+```bash
 usage: referenceseeker_db import [-h] --db DB --genome GENOME [--id ID]
                                  [--taxonomy TAXONOMY]
                                  [--status {complete,chromosome,scaffold,contig}]
@@ -312,7 +307,9 @@ optional arguments:
 ```
 
 ## Dependencies
+
 ReferenceSeeker needs the following dependencies:
+
 - Python (3.6, 3.7, 3.8), Biopython (>=1.71)
 - Mash (2.2) <https://github.com/marbl/Mash>
 - MUMmer (4.0.0-beta2) <https://github.com/gmarcais/mummer>
