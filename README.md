@@ -225,7 +225,7 @@ We provide pre-built databases based on public genome data hosted at Zenodo: [![
 release: 205 (2021-04-01)
 
 | Taxon | URL | # Genomes | Size |
-| :---: | --- | ---: | :---: | :---: |
+| :---: | --- | ---: | :---: |
 | bacteria | <https://zenodo.org/record/3992357/files/bacteria-refseq.tar.gz?download=1> | 30,941 | 40 Gb |
 | archaea | <https://zenodo.org/record/3992357/files/archaea-refseq.tar.gz?download=1> | 606 | 553 Mb |
 | fungi | <https://zenodo.org/record/3992357/files/fungi-refseq.tar.gz?download=1> | 347 | 3.3 Gb |
@@ -237,7 +237,7 @@ release: 205 (2021-04-01)
 release: v95 (2021-01-06)
 
 | Taxon | URL | # Genomes | Size |
-| :---: | --- | ---: | :---: | :---: |
+| :---: | --- | ---: | :---: |
 | bacteria | <https://zenodo.org/record/3992357/files/bacteria-gtdb.tar.gz?download=1> | 30,238 | 34 Gb |
 | archaea | <https://zenodo.org/record/3992357/files/archaea-gtdb.tar.gz?download=1> | 1,672 | 1.1 Gb |
 
@@ -246,7 +246,7 @@ release: v95 (2021-01-06)
 In addition to the genome based databases, we provide the following plasmid databases based on RefSeq and PLSDB:
 
 | DB | URL | # Plasmids | Size |
-| :---: | --- | ---: | :---: | :---: |
+| :---: | --- | ---: | :---: |
 | RefSeq | <https://zenodo.org/record/3992357/files/plasmids-refseq.tar.gz?download=1> | 32,611 | 1.1 Gb |
 | PLSDB | <https://zenodo.org/record/3992357/files/plasmids-plsdb.tar.gz?download=1> | 27,393 | 1.1 Gb |
 
