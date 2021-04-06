@@ -24,7 +24,7 @@ def run_mash(config, mash_output_path):
             universal_newlines=True
         )
         if(proc.returncode != 0):
-            sys.exit("ERROR: failed to execute Mash!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
+            sys.exit(f'ERROR: failed to execute Mash!\nexit={proc.returncode}\ncmd={cmd}')
 
 
 def parse_mash_results(config, mash_output_path):

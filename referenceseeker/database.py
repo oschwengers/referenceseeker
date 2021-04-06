@@ -19,25 +19,25 @@ def init(args):
         cwd_path = Path(args.output).resolve()
         db_path = cwd_path.joinpath(args.db)
         if(db_path.exists()):
-            print("detected existing database directory: %s" % db_path)
+            print(f'detected existing database directory: {db_path}')
             if(not db_path.is_dir()):
-                sys.exit("Database path (%s) exists but is not a directory!" % db_path)
+                sys.exit(f'Database path ({db_path}) exists but is not a directory!')
         else:
             db_path.mkdir(mode=0o770)
-            print("created database directory")
+            print('created database directory')
 
         db_tsv_path = db_path.joinpath('db.tsv')
         db_tsv_path.touch(mode=0o660)
-        print("created database genome information file (db.tsv)")
+        print('created database genome information file (db.tsv)')
 
         db_sketch_path = db_path.joinpath('db.msh')
         db_sketch_path.touch(mode=0o660)
-        print("created database genome kmer sketch file (db.msh)")
+        print('created database genome kmer sketch file (db.msh)')
     except:
-        print("Error: could not init database (%s) in output directory (%s)!" % (args.output, args.db), file=sys.stderr)
+        print(f'Error: could not init database ({args.output}) in output directory ({args.db})!', file=sys.stderr)
         raise
         sys.exit(-1)
-    print("\nSuccessfully initialized empty database at %s" % db_path)
+    print(f'\nSuccessfully initialized empty database at {db_path}')
     print("Use 'referenceseeker_db import' to import genomes into database")
 
 
@@ -51,26 +51,26 @@ def import_genome(config, args):
         if(genome_suffix in ['.fasta', '.fas', '.fsa', '.fna', '.fa']):
             # import fasta
             with genome_path.open() as fh_in:
-                sequences = SeqIO.parse(fh_in, "fasta")
+                sequences = SeqIO.parse(fh_in, 'fasta')
                 test_sequences(sequences)
         elif(genome_suffix in ['.genbank', '.gbff', '.gbk', '.gb']):
             # import genbank
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
             with input_path.open() as fh_in, genome_path.open('w') as fh_out:
-                sequences = SeqIO.parse(fh_in, "genbank")
+                sequences = SeqIO.parse(fh_in, 'genbank')
                 test_sequences(sequences)
-                SeqIO.write(sequences, fh_out, "fasta")
+                SeqIO.write(sequences, fh_out, 'fasta')
         elif(genome_suffix in ['.embl', '.ebl', '.el']):
             # import embl
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
             with input_path.open() as fh_in, genome_path.open('w') as fh_out:
-                sequences = SeqIO.parse(fh_in, "embl")
+                sequences = SeqIO.parse(fh_in, 'embl')
                 test_sequences(sequences)
-                SeqIO.write(sequences, fh_out, "fasta")
+                SeqIO.write(sequences, fh_out, 'fasta')
         else:
-            raise Exception("Unknown genome file extension (%s)" % genome_suffix)
+            raise Exception(f'Unknown genome file extension ({genome_suffix})')
 
         # extract genome id if it is empty
         if(genome_id is None):
@@ -79,8 +79,7 @@ def import_genome(config, args):
                 break
 
         # copy genome fasta file to database directory
-        # shutil.copyfile(str(genome_path), str(db_path.joinpath("%s.fna" % genome_id)))
-        genome_database_path = db_path.joinpath(f"{genome_id}.fna.gz")
+        genome_database_path = db_path.joinpath(f'{genome_id}.fna.gz')
         with genome_path.open() as fh_in, xopen(str(genome_database_path), mode='wb') as fh_out:
             for line in fh_in:
                 fh_out.write(bytes(line, 'utf-8'))
@@ -108,7 +107,7 @@ def import_genome(config, args):
             universal_newlines=True
         )
         if(proc.returncode != 0):
-            sys.exit("ERROR: failed to create genome kmer sketches via Mash!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
+            sys.exit(f'ERROR: failed to create genome kmer sketches via Mash!\nexit={proc.returncode}\ncmd={cmd}')
 
         existing_db_sketch_path = db_path.joinpath('db.msh')
         if(existing_db_sketch_path.stat().st_size == 0):
@@ -132,7 +131,7 @@ def import_genome(config, args):
                 universal_newlines=True
             )
             if(proc.returncode != 0):
-                sys.exit("ERROR: failed to import sketch to database via Mash!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
+                sys.exit(f'ERROR: failed to import sketch to database via Mash!\nexit={proc.returncode}\ncmd={cmd}')
             # replace old database sketch file by new db.msh
             shutil.move(str(tmp_path.joinpath('db.msh')), str(existing_db_sketch_path))
 
@@ -141,24 +140,21 @@ def import_genome(config, args):
 
         # add genome metainformation to db.tsv
         with db_path.joinpath('db.tsv').open(mode='a') as fh:
-            fh.write(
-                "%s\t%i\t%s\t%s\n" %
-                (genome_id, args.taxonomy, args.status, args.organism)
-            )
+            fh.write(f'{genome_id}\t{args.taxonomy}\t{args.status}\t{args.organism}\n')
     except Exception as e:
         print(e)
-        print("ERROR: could not import genome (%s/%s) into database (%s)!" % (args.organism, args.genome, args.db), file=sys.stderr)
+        print(f'ERROR: could not import genome ({args.organism}/{args.genome}) into database ({args.db})!', file=sys.stderr)
         sys.exit(-1)
-    print("\nSuccessfully imported genome (%s/%s) into database (%s)" % (args.organism, args.genome, db_path))
+    print('\nSuccessfully imported genome ({args.organism}/{args.genome}) into database ({db_path})')
 
 
 def test_sequences(sequences):
     sequence_ids = set()
     for record in sequences:
         if(len(record.seq) == 0):
-            raise Exception("Record %s with zero length sequence" % record.id)
+            raise Exception(f'Record {record.id} with zero length sequence')
         if(record.id in sequence_ids):
-            raise Exception("Duplicated record id: %s" % record.id)
+            raise Exception(f'Duplicated record id: {record.id}')
         else:
             sequence_ids.add(record.id)
 
@@ -174,13 +170,13 @@ def main():
         prog='referenceseeker_db',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Rapid determination of appropriate reference genomes.',
-        epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION,
+        epilog=f'Citation:\n{rc.CITATION}\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker',
         add_help=False
     )
     #  add common options
     group_runtime = parser.add_argument_group('Runtime & auxiliary options')
     group_runtime.add_argument('--help', '-h', action='help', help='Show this help message and exit')
-    group_runtime.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
+    group_runtime.add_argument('--version', '-V', action='version', version=f'%(prog)s {referenceseeker.__version__}')
 
     subparsers = parser.add_subparsers(dest='subcommand', help='sub-command help')
     #  add init sub-command options
@@ -205,7 +201,7 @@ def main():
         import_genome(config, args)
     else:
         parser.print_help()
-        sys.exit("Error: no subcommand provided!")
+        sys.exit('Error: no subcommand provided!')
 
 
 if __name__ == '__main__':

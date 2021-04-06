@@ -21,8 +21,8 @@ def align_query_genome(config, dna_fragments_path, dna_fragments, ref_genome_id)
     """
 
     tmp_dir = Path(tempfile.mkdtemp())
-    reference_genome_zipped_path = config['db_path'].joinpath("%s.fna.gz" % ref_genome_id)
-    reference_genome_path = tmp_dir.joinpath("%s.fna" % ref_genome_id)
+    reference_genome_zipped_path = config['db_path'].joinpath(f'{ref_genome_id}.fna.gz')
+    reference_genome_path = tmp_dir.joinpath(f'{ref_genome_id}.fna')
     with reference_genome_path.open(mode='w') as fh_out, xopen(str(reference_genome_zipped_path), threads=0) as fh_in:
         for line in fh_in:
             fh_out.write(line)
@@ -47,7 +47,7 @@ def align_reference_genome(config, query_genome_path, ref_genome_id):
     :rtype: A dict representing a reference genome and additionally comprising ANI / conserved DNA values.
     """
 
-    reference_genome_path = config['db_path'].joinpath("%s.fna.gz" % ref_genome_id)
+    reference_genome_path = config['db_path'].joinpath(f'{ref_genome_id}.fna.gz')
     tmp_dir = Path(tempfile.mkdtemp())
 
     dna_fragments_path = tmp_dir.joinpath('dna-fragments.fasta')
@@ -80,7 +80,7 @@ def execute_nucmer(config, tmp_dir, dna_fragments, query_path, reference_genome_
         universal_newlines=True
     )
     if(proc.returncode != 0):
-        sys.exit("ERROR: failed to execute nucmer!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
+        sys.exit(f'ERROR: failed to execute nucmer!\nexit={proc.returncode}\ncmd={cmd}')
 
     filtered_delta_path = tmp_dir.joinpath('out-filtered.delta')
     with filtered_delta_path.open(mode='w') as fh:
@@ -97,7 +97,7 @@ def execute_nucmer(config, tmp_dir, dna_fragments, query_path, reference_genome_
             stderr=sp.STDOUT
         )
         if(proc.returncode != 0):
-            sys.exit("ERROR: failed to execute delta-filter!\nexit=%d\ncmd=%s" % (proc.returncode, cmd))
+            sys.exit(f'ERROR: failed to execute delta-filter!\nexit={proc.returncode}\ncmd={cmd}')
 
     # parse nucmer output
     dna_fragment = None

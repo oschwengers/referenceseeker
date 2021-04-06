@@ -22,7 +22,7 @@ setup(
     author_email='oliver.schwengers@computational.bio.uni-giessen.de',
     url='https://github.com/oschwengers/referenceseeker',
     packages=['referenceseeker'],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     include_package_data=True,
     zip_safe=False,
     install_requires=[

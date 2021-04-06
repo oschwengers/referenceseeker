@@ -23,7 +23,7 @@ def main():
         prog='referenceseeker',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Rapid determination of appropriate reference genomes.',
-        epilog="Citation:\n%s\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker" % rc.CITATION,
+        epilog=f'Citation:\n{rc.CITATION}\n\nGitHub:\nhttps://github.com/oschwengers/referenceseeker',
         add_help=False
     )
     parser.add_argument('db', metavar='<database>', help='ReferenceSeeker database path')
@@ -37,7 +37,7 @@ def main():
 
     group_runtime = parser.add_argument_group('Runtime & auxiliary options')
     group_runtime.add_argument('--help', '-h', action='help', help='Show this help message and exit')
-    group_runtime.add_argument('--version', '-V', action='version', version='%(prog)s ' + referenceseeker.__version__)
+    group_runtime.add_argument('--version', '-V', action='version', version=f'%(prog)s {referenceseeker.__version__}')
     group_runtime.add_argument('--verbose', '-v', action='store_true', help='Print verbose information')
     group_runtime.add_argument('--threads', '-t', action='store', type=int, default=mp.cpu_count(), help='Number of used threads (default = number of available CPU cores)')
     args = parser.parse_args()
@@ -57,28 +57,28 @@ def main():
     if(not os.access(str(genome_path), os.R_OK)):
         sys.exit('ERROR: genome file not readable!')
     if(genome_path.stat().st_size == 0):
-        sys.exit('ERROR: genome file (%s) is empty!' % genome_path)
+        sys.exit(f'ERROR: genome file ({genome_path}) is empty!')
     genome_path = genome_path.resolve()
     config['genome_path'] = genome_path
 
     # print verbose information
     if(args.verbose):
-        print("ReferenceSeeker v%s" % referenceseeker.__version__)
+        print(f'ReferenceSeeker v{referenceseeker.__version__}')
         print('Options, parameters and arguments:')
-        print("\tuse bundled binaries: %s" % str(config['bundled-binaries']))
-        print("\tdb path: %s" % str(config['db_path']))
-        print("\tgenome path: %s" % str(config['genome_path']))
-        print("\ttmp path: %s" % str(config['tmp']))
-        print("\tunfiltered: %s" % str(config['unfiltered']))
-        print("\tbidirectional: %s" % str(config['bidirectional']))
-        print("\tANI: %0.2f" % config['ani'])
-        print("\tconserved DNA: %0.2f" % config['conserved_dna'])
-        print("\t# CRG: %d" % config['crg'])
-        print("\t# threads: %d" % config['threads'])
+        print(f"\tuse bundled binaries: {config['bundled-binaries']}")
+        print(f"\tdb path: {config['db_path']}")
+        print(f"\tgenome path: {config['genome_path']}")
+        print(f"\ttmp path: {config['tmp']}")
+        print(f"\tunfiltered: {config['unfiltered']}")
+        print(f"\tbidirectional: {config['bidirectional']}")
+        print(f"\tANI: {config['ani']:0.2f}")
+        print(f"\tconserved DNA: {config['conserved_dna']:0.2f}")
+        print(f"\t# CRG: {config['crg']}")
+        print(f"\t# threads: {config['threads']}")
     
     # import potentially gzipped query genome
     if(genome_path.suffix == '.gz'):
-        genome_unzipped_path = config['tmp'].joinpath(f"{genome_path.stem}.fna")
+        genome_unzipped_path = config['tmp'].joinpath(f'{genome_path.stem}.fna')
         with genome_unzipped_path.open(mode='w') as fh_out, xopen(str(genome_path), threads=0) as fh_in:
             for line in fh_in:
                 fh_out.write(line)
@@ -94,12 +94,12 @@ def main():
     # extract hits and store dist
     screened_ref_genome_ids, mash_distances = mash.parse_mash_results(config, mash_output_path)
     if(args.verbose):
-        print("\tscreened %d potential reference genome(s)" % len(screened_ref_genome_ids))
+        print(f'\tscreened {len(screened_ref_genome_ids)} potential reference genome(s)')
 
     # reduce Mash output to best hits (args.crg)
     if(len(screened_ref_genome_ids) > args.crg):
         if(args.verbose):
-            print("\treduce to best %d hits..." % args.crg)
+            print(f'\treduce to best {args.crg} hits...')
         tmp_screened_ref_genome_ids = sorted(screened_ref_genome_ids, key=lambda k: mash_distances[k])
         screened_ref_genome_ids = tmp_screened_ref_genome_ids[:args.crg]
 
@@ -165,20 +165,7 @@ def main():
         for id in filtered_reference_ids:  # print results to STDOUT
             ref_genome = ref_genomes[id]
             result = results[id]
-            print(
-                '%s\t%1.5f\t%2.2f\t%2.2f\t%2.2f\t%2.2f\t%s\t%s\t%s' %
-                (
-                    id,
-                    mash_distances[id],
-                    result[0][0] * 100,
-                    result[0][1] * 100,
-                    result[1][0] * 100,
-                    result[1][1] * 100,
-                    ref_genome['tax'],
-                    ref_genome['status'],
-                    ref_genome['name']
-                )
-            )
+            print(f"{id}\t{mash_distances[id]:1.5f}\t{(result[0][0] * 100):2.2f}\t{(result[0][1] * 100):2.2f}\t{(result[1][0] * 100):2.2f}\t{(result[1][1] * 100):2.2f}\t{ref_genome['tax']}\t{ref_genome['status']}\t{ref_genome['name']}")
     else:
         filtered_reference_ids = sorted(filtered_reference_ids, key=lambda k: (results[k][0][0] * results[k][0][1]), reverse=True)
         if(args.verbose):
@@ -187,18 +174,7 @@ def main():
         for id in filtered_reference_ids:  # print results to STDOUT
             ref_genome = ref_genomes[id]
             result = results[id][0]
-            print(
-                '%s\t%1.5f\t%2.2f\t%2.2f\t%s\t%s\t%s' %
-                (
-                    id,
-                    mash_distances[id],
-                    result[0] * 100,
-                    result[1] * 100,
-                    ref_genome['tax'],
-                    ref_genome['status'],
-                    ref_genome['name']
-                )
-            )
+            print(f"{id}\t{mash_distances[id]:1.5f}\t{(result[0] * 100):2.2f}\t{(result[1] * 100):2.2f}\t{ref_genome['tax']}\t{ref_genome['status']}\t{ref_genome['name']}")
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ import pytest
 from referenceseeker import ani as ra
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope='module')
 def test_fragment_matches():
     dna_fragment_matches = [
         {  # ANI: valid, conDNA: valid
