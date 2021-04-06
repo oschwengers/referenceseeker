@@ -1,0 +1,12 @@
+name: referenceseeker
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - biopython>=1.78
+  - mash>=2.1.0
+  - mummer4>=4.0.0beta2
+
+
+  
