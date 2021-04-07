@@ -7,7 +7,7 @@ dependencies:
   - biopython>=1.78
   - xopen>=1.1.0
   - mash>=2.3.0
-  - mummer4>=4.0.0beta2
+  - mummer4>=4.0.0rc1
 
 
   
