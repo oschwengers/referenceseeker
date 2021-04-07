@@ -4,7 +4,7 @@ from subprocess import run
 
 def test_referenceseeker_genome(tmpdir):
     # full test on genome
-    proc = run(["bin/referenceseeker", 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta'], capture_output=True, text=True)
+    proc = run(['bin/referenceseeker', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta'], capture_output=True, text=True)
     assert proc.returncode == 0
     assert proc.stdout != ''
 
@@ -25,7 +25,7 @@ def test_referenceseeker_genome(tmpdir):
 
 def test_referenceseeker_genome_zipped(tmpdir):
     # full test on genome
-    proc = run(["bin/referenceseeker", 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
+    proc = run(['bin/referenceseeker', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
     assert proc.returncode == 0
     assert proc.stdout != ''
 
@@ -46,7 +46,7 @@ def test_referenceseeker_genome_zipped(tmpdir):
 
 def test_referenceseeker_genome_bidirectional(tmpdir):
     # full test on genome
-    proc = run(["bin/referenceseeker", '--bidirectional', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta'], capture_output=True, text=True)
+    proc = run(['bin/referenceseeker', '--bidirectional', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta'], capture_output=True, text=True)
     assert proc.returncode == 0
     assert proc.stdout != ''
 
@@ -67,7 +67,7 @@ def test_referenceseeker_genome_bidirectional(tmpdir):
 
 def test_referenceseeker_genome_bidirectional_zipped(tmpdir):
     # full test on genome
-    proc = run(["bin/referenceseeker", '--bidirectional', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
+    proc = run(['bin/referenceseeker', '--bidirectional', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
     assert proc.returncode == 0
     assert proc.stdout != ''
 
