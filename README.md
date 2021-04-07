@@ -199,6 +199,15 @@ Runtime & auxiliary options:
 
 ## Examples
 
+Installation:
+
+```bash
+$ conda install -c bioconda referenceseeker
+$ wget https://zenodo.org/record/4415843/files/bacteria-refseq.tar.gz
+$ tar -xzf bacteria-refseq.tar.gz
+$ rm bacteria-refseq.tar.gz
+```
+
 Simple:
 
 ```bash
