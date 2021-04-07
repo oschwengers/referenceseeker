@@ -6,7 +6,7 @@ from referenceseeker import util as ru
 
 
 def test_build_dna_fragments(tmpdir):
-    genome_path = Path('tests/Salmonella_enterica_CFSAN000189.fasta').resolve()
+    genome_path = Path('test/data/Salmonella_enterica_CFSAN000189.fasta').resolve()
     dna_fragments_path = tmpdir / 'fragments.fna'
     dna_fragments = ru.build_dna_fragments(genome_path, dna_fragments_path)
 

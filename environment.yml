@@ -5,6 +5,7 @@ channels:
   - defaults
 dependencies:
   - biopython>=1.78
+  - xopen>=0.9.0
   - mash>=2.1.0
   - mummer4>=4.0.0beta2
 
