@@ -30,7 +30,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'referenceseeker=referenceseeker.referenceseeker:main',
+            'referenceseeker=referenceseeker.app:main',
             'referenceseeker_db=referenceseeker.database:main'
         ]
     },
