@@ -142,10 +142,10 @@ To test your installation we prepared a tiny mock database comprising 4 `Salmone
 $ git clone https://github.com/oschwengers/referenceseeker.git
 
   # GitHub installation
-$ ./referenceseeker/bin/referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
+$ ./referenceseeker/bin/referenceseeker referenceseeker/test/db referenceseeker/test/data/Salmonella_enterica_CFSAN000189.fasta
 
   # BioConda installation
-$ referenceseeker referenceseeker/tests/db referenceseeker/tests/Salmonella_enterica_CFSAN000189.fasta
+$ referenceseeker referenceseeker/test/db referenceseeker/test/data/Salmonella_enterica_CFSAN000189.fasta
 ```
 
 Expected output:
