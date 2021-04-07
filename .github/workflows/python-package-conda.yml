@@ -42,4 +42,4 @@ jobs:
         conda config --show
         printenv | sort
     - name: Run PyTest
-      run: pytest
+      run: python3 -m pytest
