@@ -162,7 +162,6 @@ def test_sequences(sequences):
 def main():
     #  setup path and test if necessary 3rd party executables are available
     config = {}
-    util.set_path(config)
     util.test_binaries(config)
 
     # parse options and arguments

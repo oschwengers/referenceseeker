@@ -126,11 +126,12 @@ Alternatively, you can use this raw GitHub repository:
 
 1. install necessary Python dependencies (if necessary)
 2. clone the latest version of the repository
-3. download and extract a databases
+3. install necessary 3rd party executables (Mash, MUMmer4)
 
 ```bash
 $ pip3 install --user biopython xopen
 $ git clone https://github.com/oschwengers/referenceseeker.git
+$ # install Mash & MUMmer
 $ ./referenceseeker/bin/referenceseeker --help
 ```
 
@@ -151,7 +152,7 @@ $ referenceseeker referenceseeker/test/db referenceseeker/test/data/Salmonella_e
 Expected output:
 
 ```bash
-#ID    Mash Distance    ANI	Con. DNA    Taxonomy ID    Assembly Status    Organism
+#ID    Mash Distance    ANI    Con. DNA    Taxonomy ID    Assembly Status    Organism
 GCF_000439415.1    0.00003    100.00    99.55    1173427    complete    Salmonella enterica subsp. enterica serovar Bareilly str. CFSAN000189
 GCF_002760915.1    0.01000    99.00     89.86    149539     complete    Salmonella enterica subsp. enterica serovar Enteritidis 56-3991
 GCF_900205275.1    0.01522    98.61     83.13    90370      complete    Salmonella enterica subsp. enterica serovar Typhi

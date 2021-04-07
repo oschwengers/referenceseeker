@@ -65,7 +65,6 @@ def main():
     if(args.verbose):
         print(f'ReferenceSeeker v{referenceseeker.__version__}')
         print('Options, parameters and arguments:')
-        print(f"\tuse bundled binaries: {config['bundled-binaries']}")
         print(f"\tdb path: {config['db_path']}")
         print(f"\tgenome path: {config['genome_path']}")
         print(f"\ttmp path: {config['tmp']}")

@@ -18,7 +18,6 @@ def run_mash(config, mash_output_path):
         proc = sp.run(
             cmd,
             cwd=str(config['tmp']),
-            env=config['env'],
             stdout=fh,
             stderr=sp.PIPE,
             universal_newlines=True

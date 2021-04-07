@@ -74,7 +74,6 @@ def setup_configuration(args):
 
     config = {
         'tmp': Path(tempfile.mkdtemp()),
-        'bundled-binaries': False,
         'threads': args.threads,
         'unfiltered': args.unfiltered,
         'bidirectional': args.bidirectional,
@@ -83,22 +82,11 @@ def setup_configuration(args):
         'conserved_dna': args.conserved_dna
     }
 
-    set_path(config)
-
     base_dir = Path(__file__).parent.parent
     db_path = base_dir.joinpath('db')
     if(os.access(str(db_path), os.R_OK & os.X_OK)):
         config['db'] = db_path
     return config
-
-
-def set_path(config):
-    config['env'] = os.environ.copy()
-    base_dir = Path(__file__).parent.parent
-    share_dir = base_dir.joinpath('share')
-    if(os.access(str(share_dir), os.R_OK & os.X_OK)):
-        config['env']['PATH'] = str(share_dir) + ':' + config['env']['PATH']
-        config['bundled-binaries'] = True
 
 
 def test_binaries(config):
@@ -108,39 +96,42 @@ def test_binaries(config):
     try:
         sp.check_call(
             ['mash', 'dist', '-h'],
-            env=config['env'],
             stdout=sp.DEVNULL,
             stderr=sp.DEVNULL
         )
     except FileNotFoundError:
         sys.exit('ERROR: \'Mash\' was not found!')
+    except sp.CalledProcessError as err:
+        sys.exit(f'ERROR: \'Mash\' test execution failed! error-code={err.returncode}')
     except:
-        sys.exit('ERROR: \'Mash\' was not exeutable!')
+        sys.exit('ERROR: \'Mash\' was not executable!')
 
     # test nucmer
     try:
         sp.check_call(
             ['nucmer', '--help'],
-            env=config['env'],
             stdout=sp.DEVNULL,
             stderr=sp.DEVNULL
         )
     except FileNotFoundError:
         sys.exit('ERROR: \'nucmer\' was not found!')
+    except sp.CalledProcessError as err:
+        sys.exit(f'ERROR: \'nucmer\' test execution failed! error-code={err.returncode}')
     except:
-        sys.exit('ERROR: \'nucmer\' was not exeutable!')
+        sys.exit('ERROR: \'nucmer\' was not executable!')
 
     # test delta-filter
     try:
         sp.check_call(
             ['delta-filter', '-h'],
-            env=config['env'],
             stdout=sp.DEVNULL,
             stderr=sp.DEVNULL
         )
     except FileNotFoundError:
         sys.exit('ERROR: \'delta-filter\' was not found!')
+    except sp.CalledProcessError as err:
+        sys.exit(f'ERROR: \'delta-filter\' test execution failed! error-code={err.returncode}')
     except:
-        sys.exit('ERROR: \'delta-filter\' was not exeutable!')
+        sys.exit('ERROR: \'delta-filter\' was not executable!')
 
     return
