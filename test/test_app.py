@@ -9,7 +9,7 @@ def test_referenceseeker_genome(tmpdir):
     assert proc.stdout != ''
 
     lines = proc.stdout.splitlines()
-    assert len(lines) == 4
+    assert len(lines) == 3
     assert lines[0][0] == '#'  # check if first line is header
     assert lines[1][0] != '#'  # check if second line is a non-header line
     
@@ -30,7 +30,7 @@ def test_referenceseeker_genome_zipped(tmpdir):
     assert proc.stdout != ''
 
     lines = proc.stdout.splitlines()
-    assert len(lines) == 4
+    assert len(lines) == 3
     assert lines[0][0] == '#'  # check if first line is header
     assert lines[1][0] != '#'  # check if second line is a non-header line
     
@@ -51,7 +51,7 @@ def test_referenceseeker_genome_bidirectional(tmpdir):
     assert proc.stdout != ''
 
     lines = proc.stdout.splitlines()
-    assert len(lines) == 4
+    assert len(lines) == 3
     assert lines[0][0] == '#'  # check if first line is header
     assert lines[1][0] != '#'  # check if second line is a non-header line
     
@@ -72,7 +72,7 @@ def test_referenceseeker_genome_bidirectional_zipped(tmpdir):
     assert proc.stdout != ''
 
     lines = proc.stdout.splitlines()
-    assert len(lines) == 4
+    assert len(lines) == 3
     assert lines[0][0] == '#'  # check if first line is header
     assert lines[1][0] != '#'  # check if second line is a non-header line
     
