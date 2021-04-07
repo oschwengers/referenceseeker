@@ -3,4 +3,4 @@
 SCRIPT_DIR=$(dirname $(realpath $0))
 RS_PATH=$(realpath "${SCRIPT_DIR}/..")
 export PYTHONPATH="${RS_PATH}:${PYTHONPATH}"
-python3 -m referenceseeker.referenceseeker "$@"
+python3 -m referenceseeker.app "$@"
