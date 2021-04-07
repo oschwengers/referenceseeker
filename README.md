@@ -311,8 +311,8 @@ optional arguments:
 
 ReferenceSeeker needs the following dependencies:
 
-- Python (3.6, 3.7, 3.8), Biopython (>=1.71), xopen(>=0.9.0)
-- Mash (2.2) <https://github.com/marbl/Mash>
+- Python (3.8, 3.9), Biopython (>=1.78), xopen(>=1.1.0)
+- Mash (2.3) <https://github.com/marbl/Mash>
 - MUMmer (4.0.0-beta2) <https://github.com/gmarcais/mummer>
 
 ReferenceSeeker has been tested against aforementioned versions.
