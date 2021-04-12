@@ -6,6 +6,7 @@
 ![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
 [![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)](http://bioconda.github.io/recipes/referenceseeker/README.html)
 ![Python package](https://github.com/oschwengers/referenceseeker/workflows/Python%20package/badge.svg?branch=master)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4415843.svg)](https://doi.org/10.5281/zenodo.4415843)
 
 # ReferenceSeeker: rapid determination of appropriate reference genomes
 
