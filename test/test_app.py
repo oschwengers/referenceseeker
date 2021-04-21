@@ -1,8 +1,11 @@
+import pytest
+
 from pathlib import Path
 from subprocess import run
 
 
-def test_referenceseeker_genome(tmpdir):
+@pytest.mark.slow
+def test_referenceseeker_genome():
     # full test on genome
     proc = run(['bin/referenceseeker', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta'], capture_output=True, text=True)
     assert proc.returncode == 0
@@ -23,7 +26,8 @@ def test_referenceseeker_genome(tmpdir):
     assert cols[5] in ['complete', 'chromosome', 'scaffold', 'contig']  # check assembly status column values
 
 
-def test_referenceseeker_genome_zipped(tmpdir):
+@pytest.mark.slow
+def test_referenceseeker_genome_zipped():
     # full test on genome
     proc = run(['bin/referenceseeker', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
     assert proc.returncode == 0
@@ -44,7 +48,8 @@ def test_referenceseeker_genome_zipped(tmpdir):
     assert cols[5] in ['complete', 'chromosome', 'scaffold', 'contig']  # check assembly status column values
 
 
-def test_referenceseeker_genome_bidirectional(tmpdir):
+@pytest.mark.slow
+def test_referenceseeker_genome_bidirectional():
     # full test on genome
     proc = run(['bin/referenceseeker', '--bidirectional', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta'], capture_output=True, text=True)
     assert proc.returncode == 0
@@ -65,7 +70,8 @@ def test_referenceseeker_genome_bidirectional(tmpdir):
     assert cols[7] in ['complete', 'chromosome', 'scaffold', 'contig']  # check assembly status column values
 
 
-def test_referenceseeker_genome_bidirectional_zipped(tmpdir):
+@pytest.mark.slow
+def test_referenceseeker_genome_bidirectional_zipped():
     # full test on genome
     proc = run(['bin/referenceseeker', '--bidirectional', 'test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
     assert proc.returncode == 0
