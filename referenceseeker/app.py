@@ -61,6 +61,13 @@ def main():
     genome_path = genome_path.resolve()
     config['genome_path'] = genome_path
 
+    if(config['crg'] <= 0):
+        sys.exit(f"ERROR: number of candidate reference genomes must be larger than 0! ({config['crg']})")
+    if(config['ani'] <= 0 or config['ani'] > 1):
+        sys.exit(f"ERROR: ANI must be in range (0,1]! ({config['ani']})")
+    if(config['conserved_dna'] <= 0 or config['conserved_dna'] > 1):
+        sys.exit(f"ERROR: conserved DNA must be in range (0,1]! ({config['conserved_dna']})")
+
     # print verbose information
     if(args.verbose):
         print(f'ReferenceSeeker v{referenceseeker.__version__}')
