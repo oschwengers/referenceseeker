@@ -44,7 +44,7 @@ def main():
 
     # setup global configuration
     config = util.setup_configuration(args)
-    util.test_binaries(config)
+    util.test_binaries()
 
     # check parameters
     db_path = Path(args.db)

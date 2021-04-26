@@ -89,7 +89,7 @@ def setup_configuration(args):
     return config
 
 
-def test_binaries(config):
+def test_binaries():
     """Test the proper installation of necessary 3rd party executables."""
 
     # test Mash

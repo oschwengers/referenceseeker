@@ -33,15 +33,15 @@ def init(args):
         db_sketch_path = db_path.joinpath('db.msh')
         db_sketch_path.touch(mode=0o660)
         print('created database genome kmer sketch file (db.msh)')
-    except:
+    except Exception as e:
+        print(e, file=sys.stderr)
         print(f'Error: could not init database ({args.output}) in output directory ({args.db})!', file=sys.stderr)
-        raise
         sys.exit(-1)
     print(f'\nSuccessfully initialized empty database at {db_path}')
     print("Use 'referenceseeker_db import' to import genomes into database")
 
 
-def import_genome(config, args):
+def import_genome(args):
     try:
         db_path = Path(args.db).resolve()
         genome_path = Path(args.genome).resolve()
@@ -101,7 +101,6 @@ def import_genome(config, args):
         proc = sp.run(
             cmd,
             cwd=str(tmp_path),
-            env=config['env'],
             stdout=sp.PIPE,
             stderr=sp.PIPE,
             universal_newlines=True
@@ -125,7 +124,6 @@ def import_genome(config, args):
             proc = sp.run(
                 cmd,
                 cwd=str(tmp_path),
-                env=config['env'],
                 stdout=sp.PIPE,
                 stderr=sp.PIPE,
                 universal_newlines=True
@@ -142,10 +140,10 @@ def import_genome(config, args):
         with db_path.joinpath('db.tsv').open(mode='a') as fh:
             fh.write(f'{genome_id}\t{args.taxonomy}\t{args.status}\t{args.organism}\n')
     except Exception as e:
-        print(e)
+        print(e, file=sys.stderr)
         print(f'ERROR: could not import genome ({args.organism}/{args.genome}) into database ({args.db})!', file=sys.stderr)
         sys.exit(-1)
-    print('\nSuccessfully imported genome ({args.organism}/{args.genome}) into database ({db_path})')
+    print(f'\nSuccessfully imported genome ({args.organism}/{args.genome}) into database ({db_path})')
 
 
 def test_sequences(sequences):
@@ -161,8 +159,7 @@ def test_sequences(sequences):
 
 def main():
     #  setup path and test if necessary 3rd party executables are available
-    config = {}
-    util.test_binaries(config)
+    util.test_binaries()
 
     # parse options and arguments
     parser = argparse.ArgumentParser(
@@ -197,7 +194,7 @@ def main():
     if(args.subcommand == 'init'):
         init(args)
     elif(args.subcommand == 'import'):
-        import_genome(config, args)
+        import_genome(args)
     else:
         parser.print_help()
         sys.exit('Error: no subcommand provided!')
