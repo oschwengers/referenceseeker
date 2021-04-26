@@ -55,9 +55,8 @@ def init(args):
         db_sketch_path.touch(mode=0o660)
         print('created database genome kmer sketch file (db.msh)')
     except Exception as e:
-        print(e, file=sys.stderr)
         print(f'Error: could not init database ({args.output}) in output directory ({args.db})!', file=sys.stderr)
-        sys.exit(-1)
+        raise e
     print(f'\nSuccessfully initialized empty database at {db_path}')
     print("Use 'referenceseeker_db import' to import genomes into database")
 
@@ -65,31 +64,40 @@ def init(args):
 def import_genome(args):
     try:
         db_path = Path(args.db).resolve()
-        genome_path = Path(args.genome).resolve()
+        check(db_path)
         tmp_path = Path(tempfile.mkdtemp())
-        genome_suffix = genome_path.suffix.lower()
         genome_id = args.id
+        genome_path = Path(args.genome).resolve()
+        genome_suffix = genome_path.suffix.lower()
+        if(genome_suffix == '.gz'):
+            genome_suffix = Path(genome_path.stem).suffix
         if(genome_suffix in ['.fasta', '.fas', '.fsa', '.fna', '.fa']):
             # import fasta
-            with genome_path.open() as fh_in:
-                sequences = SeqIO.parse(fh_in, 'fasta')
-                test_sequences(sequences)
+            input_path = genome_path
+            genome_path = tmp_path.joinpath('genome.fasta')
+            with xopen(str(input_path), threads=0) as fh_in, genome_path.open('w') as fh_out:
+                sequences_in = SeqIO.parse(fh_in, 'fasta')
+                sequences = test_sequences(sequences_in)
+                for id, seq in sequences:
+                    fh_out.write(f'>{id}\n{seq}\n')
         elif(genome_suffix in ['.genbank', '.gbff', '.gbk', '.gb']):
             # import genbank
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
-            with input_path.open() as fh_in, genome_path.open('w') as fh_out:
-                sequences = SeqIO.parse(fh_in, 'genbank')
-                test_sequences(sequences)
-                SeqIO.write(sequences, fh_out, 'fasta')
+            with xopen(str(input_path), threads=0) as fh_in, genome_path.open('w') as fh_out:
+                sequences_in = SeqIO.parse(fh_in, 'genbank')
+                sequences = test_sequences(sequences_in)
+                for id, seq in sequences:
+                    fh_out.write(f'>{id}\n{seq}\n')
         elif(genome_suffix in ['.embl', '.ebl', '.el']):
             # import embl
             input_path = genome_path
             genome_path = tmp_path.joinpath('genome.fasta')
-            with input_path.open() as fh_in, genome_path.open('w') as fh_out:
-                sequences = SeqIO.parse(fh_in, 'embl')
-                test_sequences(sequences)
-                SeqIO.write(sequences, fh_out, 'fasta')
+            with xopen(str(input_path), threads=0) as fh_in, genome_path.open('w') as fh_out:
+                sequences_in = SeqIO.parse(fh_in, 'embl')
+                sequences = test_sequences(sequences_in)
+                for id, seq in sequences:
+                    fh_out.write(f'>{id}\n{seq}\n')
         else:
             raise Exception(f'Unknown genome file extension ({genome_suffix})')
 
@@ -161,21 +169,23 @@ def import_genome(args):
         with db_path.joinpath('db.tsv').open(mode='a') as fh:
             fh.write(f'{genome_id}\t{args.taxonomy}\t{args.status}\t{args.organism}\n')
     except Exception as e:
-        print(e, file=sys.stderr)
         print(f'ERROR: could not import genome ({args.organism}/{args.genome}) into database ({args.db})!', file=sys.stderr)
-        sys.exit(-1)
+        raise e
     print(f'\nSuccessfully imported genome ({args.organism}/{args.genome}) into database ({db_path})')
 
 
-def test_sequences(sequences):
+def test_sequences(sequences_in):
     sequence_ids = set()
-    for record in sequences:
+    sequences = []
+    for record in sequences_in:
         if(len(record.seq) == 0):
             raise Exception(f'Record {record.id} with zero length sequence')
         if(record.id in sequence_ids):
             raise Exception(f'Duplicated record id: {record.id}')
         else:
+            sequences.append((record.id, str(record.seq)))
             sequence_ids.add(record.id)
+    return sequences
 
 
 def main():

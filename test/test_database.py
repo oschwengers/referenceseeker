@@ -24,6 +24,15 @@ def test_database(tmpdir):
         assert Path.exists(file_path)
         assert file_path.stat().st_size > 0
     
+    # import genome
+    proc = run(['bin/referenceseeker_db', 'import', '--db', f'{tmpdir}/test', '--genome', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'])
+    assert proc.returncode == 0
+
+    for file in ['db.tsv', 'db.msh']:  # check db files are not empty
+        file_path = db_path.joinpath(file)
+        assert Path.exists(file_path)
+        assert file_path.stat().st_size > 0
+    
     # test new database
     proc = run(['bin/referenceseeker', f'{tmpdir}/test', 'test/data/Salmonella_enterica_CFSAN000189.fasta.gz'], capture_output=True, text=True)
     assert proc.returncode == 0
