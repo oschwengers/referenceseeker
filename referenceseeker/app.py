@@ -12,9 +12,10 @@ from xopen import xopen
 
 import referenceseeker
 import referenceseeker.constants as rc
+import referenceseeker.ani as rani
+import referenceseeker.database as db
 import referenceseeker.mash as mash
 import referenceseeker.util as util
-import referenceseeker.ani as rani
 
 
 def main():
@@ -48,8 +49,7 @@ def main():
 
     # check parameters
     db_path = Path(args.db)
-    if(not os.access(str(db_path), os.R_OK)):
-        sys.exit('ERROR: database directory not readable!')
+    db.check(db_path)
     db_path = db_path.resolve()
     config['db_path'] = db_path
 

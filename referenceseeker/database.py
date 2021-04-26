@@ -1,6 +1,7 @@
 
 import argparse
 from pathlib import Path
+import os
 import shutil
 import subprocess as sp
 import sys
@@ -12,6 +13,26 @@ from xopen import xopen
 import referenceseeker
 import referenceseeker.constants as rc
 import referenceseeker.util as util
+
+
+def check(db_path):
+    """Check if database directory exists, is accessible and contains necessary files."""
+
+    if(db_path is None):
+        sys.exit('ERROR: database directory not provided nor detected! Please provide a valid path to the database directory.')
+
+    if(not os.access(str(db_path), os.R_OK & os.X_OK)):
+        sys.exit(f'ERROR: database directory ({db_path}) not readable/accessible!')
+
+    file_names = [
+        'db.tsv',
+        'db.msh'
+    ]
+
+    for file_name in file_names:
+        path = db_path.joinpath(file_name)
+        if(not os.access(str(path), os.R_OK) or not path.is_file()):
+            sys.exit(f'ERROR: database file ({file_name}) not readable!')
 
 
 def init(args):
