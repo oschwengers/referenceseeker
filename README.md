@@ -2,7 +2,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/oschwengers/referenceseeker/blob/master/LICENSE)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/referenceseeker.svg)
 ![GitHub release](https://img.shields.io/github/release/oschwengers/referenceseeker.svg)
-![PyPI](https://img.shields.io/pypi/v/referenceseeker.svg)
+[![PyPI](https://img.shields.io/pypi/v/referenceseeker.svg)](https://pypi.org/project/referenceseeker)
 ![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
 [![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)](http://bioconda.github.io/recipes/referenceseeker/README.html)
 ![Python package](https://github.com/oschwengers/referenceseeker/workflows/Python%20package/badge.svg?branch=master)
