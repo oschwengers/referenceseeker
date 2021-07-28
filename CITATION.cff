@@ -20,6 +20,7 @@ authors:
     orcid: https://orcid.org/0000-0002-7086-2568
     affiliation: Bioinformatics and Systems Biology, Justus Liebig University Giessen, Giessen, 35392, Germany
 title: "ReferenceSeeker: rapid determination of appropriate reference genome"
+doi: "10.21105/joss.01994"
 version: 1.7.3
 keywords: 
   - bioinformatics
