@@ -27,6 +27,7 @@ process sketch {
 
     errorStrategy 'ignore'
     maxRetries 3
+    conda 'mash=2.3'
 
     input:
     file(sequence) from fastaFiles
@@ -42,7 +43,7 @@ process sketch {
     script:
     """
     mv ${sequence} ${acc}
-    ${REFERENCE_SEEKER_HOME}/share/mash sketch -k 32 -s 1000 ${acc}
+    mash sketch -k 32 -s 1000 ${acc}
     cp -L ${acc} ${acc}.fna
     gzip ${acc}.fna
     """
