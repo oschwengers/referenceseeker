@@ -30,7 +30,7 @@ tar -xzf $METADATA
 DATA_PATH=$(readlink -f gtdb_genomes_reps_r95/)
 nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db-gtdb.nf --metadata ./*_metadata_r95.tsv --representatives $DATA_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
 
-$REFERENCE_SEEKER_HOME/share/mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
+mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
 
 rm -rf work/ .nextflow* sketches/ *.tsv *_metadata.tar.gz gtdb_genomes_reps.tar.gz
 
