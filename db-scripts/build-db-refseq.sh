@@ -1,5 +1,5 @@
 
-NCBI_PATH='ftp://ftp.ncbi.nlm.nih.gov/genomes'
+NCBI_PATH='https://ftp.ncbi.nlm.nih.gov/genomes'
 
 DOMAIN=''
 getopts "bavfp" opt;
