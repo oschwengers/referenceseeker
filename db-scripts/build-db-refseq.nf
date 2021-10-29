@@ -26,6 +26,7 @@ process download {
 
     tag { "${acc} - ${orgName}" }
 
+    executor 'local'
     maxForks 5
     errorStrategy 'ignore'
     maxRetries 3
