@@ -97,7 +97,7 @@ def test_cdna_failing(arguments, tmpdir):
         (['foo']),  # not integer
         (['-1']),  # smaller than zero
         (['0']),  # zero
-        (['1.1'])  # float
+        (['1.1']),  # float
         (['99']),  # smaller than min (100)
         (['1001'])  # larger than max (1000)
     ]
