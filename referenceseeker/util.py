@@ -44,11 +44,7 @@ def build_dna_fragments(genome_path, dna_fragments_path):
             while len(sequence) > (rc.FRAGMENT_SIZE + rc.MIN_FRAGMENT_SIZE):  # forestall fragments shorter than MIN_FRAGMENT_SIZE
                 dna_fragment = sequence[:rc.FRAGMENT_SIZE]
                 dna_fragment_idx += 1
-                fh_out.write('>')
-                fh_out.write(str(dna_fragment_idx))
-                fh_out.write('\n')
-                fh_out.write(str(dna_fragment))
-                fh_out.write('\n')
+                fh_out.write(f'>{dna_fragment_idx}\n{dna_fragment}\n')
                 dna_fragments[dna_fragment_idx] = {
                     'id': dna_fragment_idx,
                     'length': len(dna_fragment)
@@ -56,11 +52,7 @@ def build_dna_fragments(genome_path, dna_fragments_path):
                 sequence = sequence[rc.SLIDING_WINDOW:]
             dna_fragment = sequence
             dna_fragment_idx += 1
-            fh_out.write('>')
-            fh_out.write(str(dna_fragment_idx))
-            fh_out.write('\n')
-            fh_out.write(str(dna_fragment))
-            fh_out.write('\n')
+            fh_out.write(f'>{dna_fragment_idx}\n{dna_fragment}\n')
             dna_fragments[dna_fragment_idx] = {
                 'id': dna_fragment_idx,
                 'length': len(dna_fragment)
