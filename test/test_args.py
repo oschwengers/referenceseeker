@@ -87,3 +87,23 @@ def test_cdna_failing(arguments, tmpdir):
     cmd_line = ['bin/referenceseeker', '--conserved-dna'] + arguments + ['test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta']
     proc = run(cmd_line)
     assert proc.returncode != 0
+
+
+@pytest.mark.parametrize(
+    'arguments',
+    [
+        ([]),  # not provided
+        (['']),  # empty
+        (['foo']),  # not integer
+        (['-1']),  # smaller than zero
+        (['0']),  # zero
+        (['1.1'])  # float
+        (['99']),  # smaller than min (100)
+        (['1001'])  # larger than max (1000)
+    ]
+)
+def test_sliding_window_failing(arguments, tmpdir):
+    # test sliding_window arguments
+    cmd_line = ['bin/referenceseeker', '--sliding-window'] + arguments + ['test/db', 'test/data/Salmonella_enterica_CFSAN000189.fasta']
+    proc = run(cmd_line)
+    assert proc.returncode != 0
