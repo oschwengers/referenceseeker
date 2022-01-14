@@ -53,7 +53,7 @@ def build_dna_fragments(genome_path, dna_fragments_path):
                     'id': dna_fragment_idx,
                     'length': len(dna_fragment)
                 }
-                sequence = sequence[rc.FRAGMENT_SIZE:]
+                sequence = sequence[rc.SLIDING_WINDOW:]
             dna_fragment = sequence
             dna_fragment_idx += 1
             fh_out.write('>')
@@ -65,7 +65,6 @@ def build_dna_fragments(genome_path, dna_fragments_path):
                 'id': dna_fragment_idx,
                 'length': len(dna_fragment)
             }
-            # sequence = sequence[rc.FRAGMENT_SIZE:]
     return dna_fragments
 
 

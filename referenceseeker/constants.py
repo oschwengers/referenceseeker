@@ -5,6 +5,7 @@ UNFILTERED_MASH_DIST = '0.3'
 
 # DNA fragmentation constants
 FRAGMENT_SIZE = 1020
+SLIDING_WINDOW = 100
 MIN_FRAGMENT_SIZE = 100
 
 CITATION = '''Schwengers et al., (2020)
