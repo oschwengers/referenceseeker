@@ -27,7 +27,7 @@ def read_reference_genomes(config):
     return ref_genomes
 
 
-def build_dna_fragments(genome_path, dna_fragments_path):
+def build_dna_fragments(config, genome_path, dna_fragments_path):
     """Build DNA fragments.
 
     :param genome_path: Path to source DNA Fasta file.
@@ -49,7 +49,7 @@ def build_dna_fragments(genome_path, dna_fragments_path):
                     'id': dna_fragment_idx,
                     'length': len(dna_fragment)
                 }
-                sequence = sequence[rc.SLIDING_WINDOW:]
+                sequence = sequence[config['sliding_window']:]
             dna_fragment = sequence
             dna_fragment_idx += 1
             fh_out.write(f'>{dna_fragment_idx}\n{dna_fragment}\n')
@@ -70,7 +70,8 @@ def setup_configuration(args):
         'bidirectional': args.bidirectional,
         'crg': args.crg,
         'ani': args.ani,
-        'conserved_dna': args.conserved_dna
+        'conserved_dna': args.conserved_dna,
+        'sliding_window': args.sliding_window
     }
 
     base_dir = Path(__file__).parent.parent

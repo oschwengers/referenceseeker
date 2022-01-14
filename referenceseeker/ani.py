@@ -51,7 +51,7 @@ def align_reference_genome(config, query_genome_path, ref_genome_id):
     tmp_dir = Path(tempfile.mkdtemp())
 
     dna_fragments_path = tmp_dir.joinpath('dna-fragments.fasta')
-    dna_fragments = util.build_dna_fragments(reference_genome_path, dna_fragments_path)
+    dna_fragments = util.build_dna_fragments(config, reference_genome_path, dna_fragments_path)
 
     # perform global alignments via nucmer
     dna_fragment_matches = execute_nucmer(config, tmp_dir, dna_fragments, dna_fragments_path, query_genome_path)

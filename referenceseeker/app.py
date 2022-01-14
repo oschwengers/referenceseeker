@@ -33,6 +33,7 @@ def main():
     group_workflow.add_argument('--crg', '-r', action='store', type=int, default=100, help='Max number of candidate reference genomes to pass kmer prefilter (default = 100)')
     group_workflow.add_argument('--ani', '-a', action='store', type=float, default=0.95, help='ANI threshold (default = 0.95)')
     group_workflow.add_argument('--conserved-dna', '-c', action='store', dest='conserved_dna', type=float, default=0.69, help='Conserved DNA threshold (default = 0.69)')
+    group_workflow.add_argument('--sliding-window', '-w', action='store', dest='sliding_window', type=int, default=rc.SLIDING_WINDOW, choices=range(100, 1001), metavar='[100-1000]', help=f'Sliding window - the lower the more accurate but also slower (default = {rc.SLIDING_WINDOW})')
     group_workflow.add_argument('--unfiltered', '-u', action='store_true', help='Set kmer prefilter to extremely conservative values and skip species level ANI cutoffs (ANI >= 0.95 and conserved DNA >= 0.69')
     group_workflow.add_argument('--bidirectional', '-b', action='store_true', help='Compute bidirectional ANI/conserved DNA values (default = False)')
 
@@ -115,7 +116,7 @@ def main():
 
     # build dna fragments
     dna_fragments_path = config['tmp'].joinpath('dna-fragments.fasta')
-    dna_fragments = util.build_dna_fragments(genome_path, dna_fragments_path)
+    dna_fragments = util.build_dna_fragments(config, genome_path, dna_fragments_path)
 
     # align query fragments to reference genomes and compute ANI/conserved DNA
     results = {}
