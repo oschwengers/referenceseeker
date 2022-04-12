@@ -316,6 +316,19 @@ optional arguments:
                         Organism name (default = "NA")
 ```
 
+Example:
+
+If ReferenceSeeker is properly installed, clone this repository and change into its parent directoriy.
+
+```
+$ git clone https://github.com/oschwengers/referenceseeker.git
+$ cd referenceseeker
+$ referenceseeker_db init --db test-db --output ./
+$ referenceseeker_db import --db ./test-db --genome test/db/GCF_000439415.1.fna.gz --id GCF_000439415.1 --taxonomy 28901 --status complete --organism "Salmonella enterica subsp. enterica serovar Bareilly str. CFSAN000189"
+$ referenceseeker_db import --db ./test-db --genome test/db/GCF_002211925.1.fna.gz --id GCF_002211925.1 --organism "Salmonella bongori str. SA19983605"
+$ referenceseeker -v ./test-db ./test/data/Salmonella_enterica_CFSAN000189.fasta
+```
+
 ## Dependencies
 
 ReferenceSeeker needs the following dependencies:
