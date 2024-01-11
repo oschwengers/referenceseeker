@@ -51,6 +51,7 @@ process sketch {
     errorStrategy 'ignore'
     maxRetries 3
     conda 'mash=2.3'
+    container 'quay.io/biocontainers/mash:2.3--hd3113c8_6'
 
     input:
     tuple val(acc), val(taxId), val(orgName), val(status), path("${acc}.gz") from chDownloadedGenomes
