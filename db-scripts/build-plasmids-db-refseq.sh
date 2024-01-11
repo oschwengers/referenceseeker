@@ -11,9 +11,10 @@ zcat plasmid.* > plasmids.fna
 
 nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-plasmids-db-refseq.nf --plasmids plasmids.fna  ||  { echo "Nextflow failed!"; exit; }
 
-mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
+find sketches/ -type f -name '*.msh' -exec realpath {} + > sketches.fof
+mash paste -l db sketches.fof  ||  { echo "Mash failed!"; exit; }
 
-rm -rf work/ .nextflow* sketches/ plasmid.* plasmids.fna
+rm -rf work/ .nextflow* sketches/ plasmid.* sketches.fof plasmids.fna
 
 mv db.msh plasmids-refseq/
 

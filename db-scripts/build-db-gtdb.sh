@@ -31,9 +31,10 @@ gunzip metadata.tsv.gz
 DATA_PATH=$(readlink -f gtdb_genomes_reps_r*/database)
 nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db-gtdb.nf --metadata ./metadata.tsv --representatives $DATA_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
 
-mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
+find sketches/ -type f -name '*.msh' -exec realpath {} + > sketches.fof
+mash paste -l db sketches.fof  ||  { echo "Mash failed!"; exit; }
 
-rm -rf work/ .nextflow* sketches/ *.tsv *_metadata.tar.gz gtdb_genomes_reps.tar.gz
+rm -rf work/ .nextflow* sketches/ sketches.fof metadata.tsv gtdb_genomes_*
 
 mv db.msh $DOMAIN/
 
