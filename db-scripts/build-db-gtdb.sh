@@ -12,10 +12,10 @@ h|\?)
     exit 0
     ;;
 b)  DOMAIN="bacteria-gtdb"
-    METADATA="https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/bac120_metadata.tar.gz"
+    METADATA="https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/bac120_metadata.tsv.gz"
     ;;
 a)  DOMAIN="archaea-gtdb"
-    METADATA="https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/ar122_metadata.tar.gz"
+    METADATA="https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/ar53_metadata.tsv.gz"
     ;;
 \?)
     echo "Invalid option: -$OPTARG" >&2
@@ -25,10 +25,11 @@ esac
 
 echo "Download $DOMAIN database..."
 wget $METADATA
-tar -xzf $METADATA
+mv $METADATA metadata.tsv.gz
+gunzip metadata.tsv.gz
 
-DATA_PATH=$(readlink -f gtdb_genomes_reps_r95/)
-nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db-gtdb.nf --metadata ./*_metadata_r95.tsv --representatives $DATA_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
+DATA_PATH=$(readlink -f gtdb_genomes_reps_r*/database)
+nextflow run $REFERENCE_SEEKER_HOME/db-scripts/build-db-gtdb.nf --metadata ./metadata.tsv --representatives $DATA_PATH --domain $DOMAIN  ||  { echo "Nextflow failed!"; exit; }
 
 mash paste db sketches/*.msh  ||  { echo "Mash failed!"; exit; }
 
