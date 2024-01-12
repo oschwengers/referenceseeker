@@ -248,7 +248,7 @@ release: v214 (2024-01-11)
 
 | Taxon | URL | # Genomes | Size |
 | :---: | --- | ---: | :---: |
-| bacteria | <https://zenodo.org/record/4415843/files/bacteria-gtdb.tar.gz> | 80,789 | 82 Gb |
+| bacteria | n.a. due to storage quota resitrctions | 80,789 | 82 Gb |
 | archaea | <https://zenodo.org/record/4415843/files/archaea-gtdb.tar.gz> | 4,416 | 2.8 Gb |
 
 #### Plasmids
