@@ -6,7 +6,7 @@
 ![PyPI - Status](https://img.shields.io/pypi/status/referenceseeker.svg)
 [![Conda](https://img.shields.io/conda/v/bioconda/referenceseeker.svg)](http://bioconda.github.io/recipes/referenceseeker/README.html)
 ![Python package](https://github.com/oschwengers/referenceseeker/workflows/Python%20package/badge.svg?branch=master)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4415843.svg)](https://doi.org/10.5281/zenodo.4415843)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562004.svg)](https://doi.org/10.5281/zenodo.3562004)
 
 # ReferenceSeeker: rapid determination of appropriate reference genomes
 
@@ -228,28 +228,28 @@ ReferenceSeeker depends on databases comprising taxonomic genome informations as
 
 ### Pre-built
 
-We provide pre-built databases based on public genome data hosted at Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4415843.svg)](https://doi.org/10.5281/zenodo.4415843) :
+We provide pre-built databases based on public genome data hosted at Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3562004.svg)](https://doi.org/10.5281/zenodo.3562004) :
 
 #### RefSeq
 
-release: 205 (2021-04-01)
+release: 221 (2024-01-09)
 
 | Taxon | URL | # Genomes | Size |
 | :---: | --- | ---: | :---: |
-| bacteria | <https://zenodo.org/record/4415843/files/bacteria-refseq.tar.gz> | 30,941 | 40 Gb |
-| archaea | <https://zenodo.org/record/4415843/files/archaea-refseq.tar.gz> | 606 | 553 Mb |
-| fungi | <https://zenodo.org/record/4415843/files/fungi-refseq.tar.gz> | 347 | 3.3 Gb |
-| protozoa | <https://zenodo.org/record/4415843/files/protozoa-refseq.tar.gz> | 88 | 1.1 Gb |
-| viruses | <https://zenodo.org/record/4415843/files/viral-refseq.tar.gz> | 10,339 | 730 Mb |
+| bacteria | <https://zenodo.org/record/4415843/files/bacteria-refseq.tar.gz> | 50,226 | 59.6 Gb |
+| archaea | <https://zenodo.org/record/4415843/files/archaea-refseq.tar.gz> | 905 | 897 Mb |
+| fungi | <https://zenodo.org/record/4415843/files/fungi-refseq.tar.gz> | 557 | 5.9 Gb |
+| protozoa | <https://zenodo.org/record/4415843/files/protozoa-refseq.tar.gz> | 90 | 1.1 Gb |
+| viruses | <https://zenodo.org/record/4415843/files/viral-refseq.tar.gz> | 14,012 | 1 Mb |
 
 #### GTDB
 
-release: v95 (2021-01-06)
+release: v214 (2024-01-11)
 
 | Taxon | URL | # Genomes | Size |
 | :---: | --- | ---: | :---: |
-| bacteria | <https://zenodo.org/record/4415843/files/bacteria-gtdb.tar.gz> | 30,238 | 34 Gb |
-| archaea | <https://zenodo.org/record/4415843/files/archaea-gtdb.tar.gz> | 1,672 | 1.1 Gb |
+| bacteria | <https://zenodo.org/record/4415843/files/bacteria-gtdb.tar.gz> | 80,789 | 82 Gb |
+| archaea | <https://zenodo.org/record/4415843/files/archaea-gtdb.tar.gz> | 4,416 | 2.8 Gb |
 
 #### Plasmids
 
@@ -257,8 +257,8 @@ In addition to the genome based databases, we provide the following plasmid data
 
 | DB | URL | # Plasmids | Size |
 | :---: | --- | ---: | :---: |
-| RefSeq | <https://zenodo.org/record/4415843/files/plasmids-refseq.tar.gz> | 32,611 | 1.1 Gb |
-| PLSDB | <https://zenodo.org/record/4415843/files/plasmids-plsdb.tar.gz> | 27,393 | 1.1 Gb |
+| RefSeq | <https://zenodo.org/record/4415843/files/plasmids-refseq.tar.gz> | 81,674 | 2.6 Gb |
+| PLSDB | <https://zenodo.org/record/4415843/files/plasmids-plsdb.tar.gz> | 59,882 | 2.3 Gb |
 
 ### Custom database
 
