@@ -1,3 +1,4 @@
+nextflow.enable.dsl=1
 
 import java.nio.file.*
 
@@ -9,12 +10,12 @@ domain          = params.domain
 
 Channel.fromPath( metadata )
     .splitCsv( skip: 1, sep: '\t'  )
-    .filter( { it[15].toLowerCase() == 't' } )
+    .filter( { it[18].toLowerCase() == 't' } )
     .map( {
         def acc = it[0] - 'RS_' - 'GB_'
-        def orgName = it[16].split(';').last() - 's__'
+        def orgName = it[65].split(';').last() - 's__'
         def path = acc.substring(0,3) + '/' + acc.substring(4,7) + '/' + acc.substring(7,10) + '/' + acc.substring(10,13)
-        def status = it[45].toLowerCase()
+        def status = it[48].toLowerCase()
         return [ acc, '-', status, orgName, path ]
     } )
     .dump()
@@ -51,5 +52,5 @@ process sketch {
 }
 
 
-chDbEntries.map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" }
-    .collectFile( name: 'db.tsv', storeDir: "./${domain}/", newLine: true )
+chDbEntries.map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}\n" }
+    .collectFile( name: 'db.tsv', sort: false, tempDir: "${workDir}/", storeDir: "./${domain}/" )
