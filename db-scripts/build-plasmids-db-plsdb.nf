@@ -1,23 +1,9 @@
+nextflow.enable.dsl=2
 
 import java.nio.file.*
 
 
-plasmids        = params.plasmids
-
-
-Channel.fromPath(plasmids)
-    .into { fastaFiles; fastaEntries }
-
-fastaFiles
-    .splitFasta( by: 1, file: true)
-    .set { fastaFiles }
-
-fastaEntries
-    .splitFasta( record: [id: true, desc: true ] )
-    .map( {
-	    return [ it.id, '', it.desc, 'complete' ]
-    } )
-    .into { validGenomes; dbEntries }
+// params.plasmids
 
 
 process sketch {
@@ -30,16 +16,16 @@ process sketch {
     container 'quay.io/biocontainers/mash:2.3--hd3113c8_6'
 
     input:
-    file(sequence) from fastaFiles
-    set val(acc), val(taxId), val(orgName), val(status) from validGenomes
+    file(sequence)
+    set val(acc), val(taxId), val(orgName), val(status)
 
     output:
-    file("${acc}.msh") into outMash
-    file("${acc}.fna.gz") into outFasta
+    file("${acc}.msh")
+    file("${acc}.fna.gz")
 
-    publishDir pattern: '*.fna.gz', path: "./plasmids-plsdb/", mode: 'move'
-    publishDir pattern: '*.msh', path: './sketches/', mode: 'move'
-
+    publishDir pattern: "${acc}.msh", path: './sketches/', mode: 'move'
+    publishDir pattern: "${acc}.fna.gz", path: "./plasmids-plsdb/", mode: 'move'
+    
     script:
     """
     mv ${sequence} ${acc}
@@ -50,5 +36,20 @@ process sketch {
 }
 
 
-dbEntries.map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" }
-    .collectFile( name: 'db.tsv', storeDir: './plasmids-plsdb/', newLine: true )
+workflow {
+    
+    plasmidsFasta = Channel.fromPath(params.plasmids)
+
+    plasmidSequences = plasmidsFasta
+        | splitFasta( by: 1, file: true)
+    
+    plasmidRecords = plasmidsFasta
+        | splitFasta( record: [id: true, desc: true ] )
+        | map( { [ it.id, '', it.desc, 'complete' ] } )
+
+    sketch( plasmidSequences, plasmidRecords)
+
+    plasmidRecords
+        | map( { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" } )
+        | collectFile( name: 'db.tsv', storeDir: './plasmids-plsdb/', newLine: true )
+}

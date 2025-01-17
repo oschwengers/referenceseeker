@@ -1,25 +1,11 @@
+nextflow.enable.dsl=2
 
 import java.nio.file.*
 
 
-assemblySummary = params.ass_sum
-ncbiPath        = params.ncbiPath
-domain          = params.domain
-
-
-Channel.fromPath( assemblySummary )
-    .splitCsv( skip: 2, sep: '\t'  )
-    .filter( { (it[11].toLowerCase() == 'complete genome')  ||  (it[4].toLowerCase() == 'representative genome')  ||  (it[4].toLowerCase() == 'reference genome') } )
-    .map( {
-        def species = it[7]
-        def strain  = it[8] - 'strain='
-	def status  = it[11].split(' ')[0].toLowerCase()
-        if( species.contains( strain ) )
-            return [ it[0], it[5], species, status, it[19] - 'https://ftp.ncbi.nlm.nih.gov/genomes/' ]
-        else
-            return [ it[0], it[5], "${species} ${strain}", status, it[19] - 'https://ftp.ncbi.nlm.nih.gov/genomes/' ]
-    } )
-    .set { chValidGenomes }
+// params.ass_sum
+// params.ncbiPath
+// params.domain
 
 
 process download {
@@ -32,14 +18,14 @@ process download {
     maxRetries 3
 
     input:
-    tuple val(acc), val(taxId), val(orgName), val(status), val(path) from chValidGenomes
+    tuple val(acc), val(taxId), val(orgName), val(status), val(path)
 
     output:
-    tuple val(acc), val(taxId), val(orgName), val(status), path("${acc}.gz") into chDownloadedGenomes
+    tuple val(acc), val(taxId), val(orgName), val(status), path("${acc}.gz")
 
     script:
     """
-    wget -O ${acc}.gz ${ncbiPath}/${path}/${path.split('/').last()}_genomic.fna.gz
+    wget -O ${acc}.gz ${params.ncbiPath}/${path}/${path.split('/').last()}_genomic.fna.gz
     """
 }
 
@@ -54,16 +40,16 @@ process sketch {
     container 'quay.io/biocontainers/mash:2.3--hd3113c8_6'
 
     input:
-    tuple val(acc), val(taxId), val(orgName), val(status), path("${acc}.gz") from chDownloadedGenomes
+    tuple val(acc), val(taxId), val(orgName), val(status), path("${acc}.gz")
 
     output:
-    tuple val(acc), val(taxId), val(status), val(orgName) into chDbEntries
-    file("${acc}.msh") into outMash
-    file("${acc}.fna.gz") into outFasta
+    tuple val(acc), val(taxId), val(status), val(orgName), emit: results
+    file("${acc}.msh")
+    file("${acc}.fna.gz")
 
-    publishDir pattern: '*.fna.gz', path: "./${domain}-refseq/", mode: 'move'
-    publishDir pattern: '*.msh', path: './sketches/',  mode: 'move'
-
+    publishDir pattern: "${acc}.msh", path: './sketches/',  mode: 'move'
+    publishDir pattern: "${acc}.fna.gz", path: "./${params.omain}-refseq/", mode: 'move'
+    
     script:
     """
     gunzip -c ${acc}.gz > ${acc}
@@ -74,5 +60,25 @@ process sketch {
 }
 
 
-chDbEntries.map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" }
-    .collectFile( name: 'db.tsv', storeDir: "./${domain}-refseq/", newLine: true )
+workflow {
+
+    processedGenomes = Channel.fromPath( params.assemblySummary )
+        | splitCsv( skip: 2, sep: '\t'  )
+        | filter( { (it[11].toLowerCase() == 'complete genome')  ||  (it[4].toLowerCase() == 'representative genome')  ||  (it[4].toLowerCase() == 'reference genome') } )
+        | map( {
+            def species = it[7]
+            def strain  = it[8] - 'strain='
+	        def status  = it[11].split(' ')[0].toLowerCase()
+            if( species.contains( strain ) )
+                return [ it[0], it[5], species, status, it[19] - 'https://ftp.ncbi.nlm.nih.gov/genomes/' ]
+            else
+                return [ it[0], it[5], "${species} ${strain}", status, it[19] - 'https://ftp.ncbi.nlm.nih.gov/genomes/' ]
+        } )
+        | download
+        | sketch
+
+    processedGenomes.results
+        | map { "${it[0]}\t${it[1]}\t${it[2]}\t${it[3]}" }
+        | collectFile( name: 'db.tsv', storeDir: "./${params.domain}-refseq/", newLine: true )
+
+}
