@@ -342,3 +342,7 @@ ReferenceSeeker has been tested against aforementioned versions.
 ## Citation
 
 > Schwengers et al., (2020). ReferenceSeeker: rapid determination of appropriate reference genomes. Journal of Open Source Software, 5(46), 1994, https://doi.org/10.21105/joss.01994
+
+## deNBI
+
+The maintenance of ReferenceSeeker is supported by [deNBI](https://www.denbi.de). To monitor the quality of this service, please find a service monitoring survey [here](https://www.surveymonkey.de/r/denbi-service?sc=bigi&tool=referenceseeker).
