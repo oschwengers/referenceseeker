@@ -24,6 +24,7 @@
   - [Custom](#custom-database)
 - [Dependencies](#dependencies)
 - [Citation](#citation)
+- [deNBI](#denbi)
 
 ## Description
 
