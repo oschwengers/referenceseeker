@@ -24,7 +24,7 @@
   - [Custom](#custom-database)
 - [Dependencies](#dependencies)
 - [Citation](#citation)
-- [feedback](#feedback)
+- [Feedback](#feedback)
 
 ## Description
 
@@ -344,7 +344,7 @@ ReferenceSeeker has been tested against aforementioned versions.
 
 > Schwengers et al., (2020). ReferenceSeeker: rapid determination of appropriate reference genomes. Journal of Open Source Software, 5(46), 1994, https://doi.org/10.21105/joss.01994
 
-## feedback
+## Feedback
 
 We highly wellcome and appreciate feedback of all kind!
 
