@@ -24,7 +24,7 @@
   - [Custom](#custom-database)
 - [Dependencies](#dependencies)
 - [Citation](#citation)
-- [deNBI](#denbi)
+- [feedback](#feedback)
 
 ## Description
 
@@ -344,6 +344,14 @@ ReferenceSeeker has been tested against aforementioned versions.
 
 > Schwengers et al., (2020). ReferenceSeeker: rapid determination of appropriate reference genomes. Journal of Open Source Software, 5(46), 1994, https://doi.org/10.21105/joss.01994
 
-## deNBI
+## feedback
 
-The maintenance of ReferenceSeeker is supported by [deNBI](https://www.denbi.de). To monitor the quality of this service, please find a service monitoring survey [here](https://www.surveymonkey.de/r/denbi-service?sc=bigi&tool=referenceseeker).
+We highly wellcome and appreciate feedback of all kind!
+
+So, if you run into any issues with ReferenceSeeker, we'd be happy to hear about it! Please, start the pipeline with -v (verbose) and do not hesitate to file an issue here on GitHub including as much of the following as possible:
+
+- a detailed description of the issue
+- the ReferenceSeeker cmd line output
+- a reproducible example of the issue with a small dataset that you can share (helps us identify whether the issue is specific to a particular computer, operating system, and/or dataset).
+
+The maintenance of ReferenceSeeker is supported by [deNBI](https://www.denbi.de). If you would like to provide (non-technical) feedback, please find a service monitoring survey [here](https://www.surveymonkey.de/r/denbi-service?sc=bigi&tool=referenceseeker).
